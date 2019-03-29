@@ -1,0 +1,11 @@
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fa-times-thin:before {
+	content: '\00d7';
+}
+  

@@ -1,0 +1,6 @@
+{
+  "name": "ReceiveOrder",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ReceiveOrder.js"
+}

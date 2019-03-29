@@ -1,0 +1,6 @@
+{
+  "name": "Website",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Website.js"
+}
