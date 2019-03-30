@@ -848,7 +848,10 @@ class SearchCaterer extends Component {
               <FormGroup>
                 <h6>Delivered To</h6>
                 <AutoCompleteAddress 
-                  borderRadius = {5}
+                  borderTopRightRadius={5}
+                  borderBottomRightRadius = {5}
+                  borderTopLeftRadius={5}
+                  borderBottomLeftRadius={5}
                   borderColor = 'rgba(211,211,211, 0.5)'
                   paddingLeft = {10}
                   paddingRight = {10}

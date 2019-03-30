@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, CardBody, Table, Label} from 'reactstrap';
+import { Row, Col, Card, CardBody, Table, Label, Container} from 'reactstrap';
 import './styles.css'
 
 class Testimonial extends Component {
@@ -98,19 +98,18 @@ class Testimonial extends Component {
     return (
       <section style={{ backgroundColor: 'white', padding: 0, paddingBottom: 20}} id="Testimonial" className="white">
 
-        <div className="container">
-          <div className="row center-align">
-            <div className="col m3"></div>
-            <div className="center-align">
-              <h2 style={{fontSize: 34}}>They love FoodieBee</h2>
-            </div>
-            <div className="col m3"></div>
-          </div>
+        <Container>
+          <Row style={{paddingTop: 20, flex: 1, display: 'flex'}} className="justify-content-center">
+
+          <Col xs="12" style={{textAlign: 'center'}}>
+            <h2 style={{fontSize: 34}}>They love FoodieBee</h2>
+          </Col>
 
           {this.renderItems()}
 
+          </Row>
          
-        </div>
+        </Container>
       </section>
     );
   }

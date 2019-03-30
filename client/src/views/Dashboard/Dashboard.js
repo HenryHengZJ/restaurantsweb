@@ -410,7 +410,7 @@ class Dashboard extends Component {
 
           <Col xs="12" sm="10" md="6" lg="6">
 
-            <Card onMouseEnter={() => this.toggle('profileEdit')} onMouseLeave={() => this.toggle('profileEdit')} style={{ textAlign: "center", height: 200, marginTop: -250 }} >
+            <Card onMouseEnter={() => this.toggle('profileEdit')} onMouseLeave={() => this.toggle('profileEdit')} style={{ textAlign: "center", marginTop: -250 }} >
               <CardBody>
                 <img style={ { objectFit:'cover', width: 80, height: 80 }} src={'https://www.brandcrowd.com/gallery/brands/pictures/picture14867764381797.png'}  />
                 <Label style={ { marginLeft: 10 }} className="h4">Flannery Restaurant</Label>
@@ -447,7 +447,7 @@ class Dashboard extends Component {
         </div>
 
         <Row style= {{marginTop: 25}} className="justify-content-center">
-          <Col xs="6" >
+          <Col xs="12" md="6">
             <Card onMouseEnter={() => this.toggle('orderEdit')} onMouseLeave={() => this.toggle('orderEdit')}>
               {this.renderChartTitle('Orders', '15', '51')}
               <CardBody>
@@ -456,7 +456,7 @@ class Dashboard extends Component {
             </Card>
           </Col>
 
-          <Col xs="6">
+          <Col xs="12" md="6">
             <Card onMouseEnter={() => this.toggle('salesEdit')} onMouseLeave={() => this.toggle('salesEdit')}>
               {this.renderChartTitle('Sales', '20', '€475.45')}
               <CardBody>
@@ -467,7 +467,7 @@ class Dashboard extends Component {
         </Row>
 
         <Row style= {{marginTop: 0}} className="justify-content-center">
-          <Col xs="6" >
+          <Col xs="12" md="6">
             <Card onMouseEnter={() => this.toggle('menuitemEdit')} onMouseLeave={() => this.toggle('menuitemEdit')}>
               <CardHeader style={{backgroundColor: 'white'}}>
                 <Label style={ { marginTop:10, marginLeft: 10}} className="h6">Top Selling Items</Label>
@@ -486,7 +486,7 @@ class Dashboard extends Component {
             </Card>
           </Col>
 
-          <Col xs="6">
+          <Col xs="12" md="6">
             <Card onMouseEnter={() => this.toggle('customerEdit')} onMouseLeave={() => this.toggle('customerEdit')}>
               {this.renderPieChartTitle('Customer', '20', '44')}
               <CardBody>

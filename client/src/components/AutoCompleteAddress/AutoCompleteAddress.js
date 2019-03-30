@@ -29,6 +29,10 @@ class AutoCompleteAddress extends React.Component {
   render() {
     const {
       borderRadius,
+      borderTopLeftRadius,
+      borderBottomLeftRadius,
+      borderTopRightRadius,
+      borderBottomRightRadius,
       borderColor,
       paddingLeft,
       paddingRight,
@@ -40,6 +44,10 @@ class AutoCompleteAddress extends React.Component {
     } = this.props;
 
     const borderRadiusVal = borderRadius || 0;
+    const borderTopLeftRadiusVal = borderTopLeftRadius || borderRadiusVal;
+    const borderBottomLeftRadiusVal = borderBottomLeftRadius || borderRadiusVal;
+    const borderTopRightRadiusVal = borderTopRightRadius || borderRadiusVal;
+    const borderBottomRightRadiusVal = borderBottomRightRadius || borderRadiusVal;
     const borderColorVal = borderColor || 'gray';
     const paddingLeftVal = paddingLeft || 0;
     const paddingRightVal = paddingRight || 0;
@@ -55,7 +63,7 @@ class AutoCompleteAddress extends React.Component {
         id="autocomplete"
         placeholder="Enter delivery address"
         type="text"
-        style={{ height: heightVal, borderWidth: 1, borderRadius: borderRadiusVal, borderColor: borderColorVal, paddingLeft: paddingLeftVal, paddingRight: paddingRightVal, paddingTop: paddingTopVal, paddingBottom: paddingBottomVal, width: '100%', flex:1, display:'flex', fontSize: fontSizeVal, color: colorVal}} 
+        style={{ borderTopRightRadius: borderTopRightRadiusVal, borderBottomRightRadius: borderBottomRightRadiusVal, borderTopLeftRadius: borderTopLeftRadiusVal, borderBottomLeftRadius: borderBottomLeftRadiusVal, height: heightVal, borderWidth: 1, borderColor: borderColorVal, paddingLeft: paddingLeftVal, paddingRight: paddingRightVal, paddingTop: paddingTopVal, paddingBottom: paddingBottomVal, width: '100%', flex:1, display:'flex', fontSize: fontSizeVal, color: colorVal}} 
       />
     );
   }
@@ -64,6 +72,10 @@ class AutoCompleteAddress extends React.Component {
 AutoCompleteAddress.propTypes = {
   height: PropTypes.number,
   borderRadius: PropTypes.number,
+  borderTopLeftRadius: PropTypes.number,
+  borderBottomLeftRadius: PropTypes.number,
+  borderTopRightRadius: PropTypes.number,
+  borderBottomRightRadius: PropTypes.number,
   borderColor: PropTypes.string,
   paddingLeft: PropTypes.number,
   paddingRight: PropTypes.number,

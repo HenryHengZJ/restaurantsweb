@@ -1505,7 +1505,7 @@ class CatererDetail extends Component {
 
               <Col xs="12" sm="10" md="6" lg="6">
                 <Card
-                  style={{ textAlign: "center", height: 200, marginTop: -250 }}
+                  style={{ textAlign: "center", marginTop: -250 }}
                 >
                   <CardBody>
                     <img

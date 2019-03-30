@@ -1,6 +1,6 @@
 import React from 'react';
 import corporate_lunch2 from '../../assets/img/corporate_lunch2.jpg';
-import { Button, Row, Col, FormGroup, Form, Label, Input, Dropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
+import { Button, Row, Col, InputGroup, InputGroupAddon, FormGroup, Form, Label, Input, Dropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
 import './styles.css'
 import AutoCompleteAddress from '../../components/AutoCompleteAddress/AutoCompleteAddress'
 import PropTypes from 'prop-types';
@@ -51,23 +51,31 @@ class Hero extends React.Component {
 
             <Col style={{textAlign: 'center'}} xs="12">
               <Row >
-                <Col style={{padding: 0,}} xs="1" md="1" lg="3"/>
-                <Col style={{padding: 0,}} xs="8" md="8" lg="5">
-                  <AutoCompleteAddress 
-                    borderRadius = {5}
-                    borderColor = 'transparent'
-                    paddingLeft = {20}
-                    paddingRight = {20}
-                    paddingTop = {10}
-                    paddingBottom = {10}
-                    fontSize = {16}
-                    color = 'black'
-                    onPlaceChanged={this.showPlaceDetails.bind(this)} />
+                <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
+                <Col style={{padding: 0,}} xs="10" sm="10" md="6" lg="6">
+                  <InputGroup >
+                    <AutoCompleteAddress 
+                      borderTopRightRadius={0}
+                      borderBottomRightRadius = {0}
+                      borderTopLeftRadius={5}
+                      borderBottomLeftRadius={5}
+                      borderColor = 'transparent'
+                      paddingLeft = {20}
+                      paddingRight = {20}
+                      paddingTop = {10}
+                      paddingBottom = {10}
+                      fontSize = {16}
+                      color = 'black'
+                      onPlaceChanged={this.showPlaceDetails.bind(this)} />     
+
+                      <InputGroupAddon addonType="prepend">
+                        <Button onClick={e => this.props.searchAddress(e)} block style={{height: '100%', fontWeight: '600', borderTopRightRadius: 5, borderBottomRightRadius: 5,}} className="bg-primary" color="primary">SEARCH</Button>
+                      </InputGroupAddon>
+                  </InputGroup>
+                  
                 </Col>
-                <Col style={{padding: 0,}} xs="2" md="2" lg="1">
-                  <Button onClick={e => this.props.searchAddress(e)} block style={{height: '100%', fontWeight: '600', }} className="bg-primary" color="primary">SEARCH</Button>
-                </Col>
-                <Col style={{padding: 0,}} xs="1" md="1" lg="3"/>
+              
+                <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
               </Row>
             </Col>
           </Row>

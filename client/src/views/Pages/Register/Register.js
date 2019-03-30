@@ -5,6 +5,16 @@ import Footer from '../../../components/Footer/Footer';
 
 
 class Register extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  signIn(e) {
+    e.preventDefault()
+    this.props.history.push('/login')
+  }
+
   render() {
     return (
 
@@ -13,7 +23,7 @@ class Register extends Component {
       <div className="app justify-content-center align-items-center">
        
         <Container>
-          <Row className="justify-content-center">
+          <Row style={{flex: 1, display: 'flex'}} className="justify-content-center">
             <Col md="9" lg="7" xl="6">
               <Card  style={{boxShadow: '1px 1px 3px #9E9E9E'}} className="p-4">
                 <CardBody className="p-4">

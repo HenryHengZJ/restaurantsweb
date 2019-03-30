@@ -48,7 +48,7 @@ class Login extends Component {
       <div className="app justify-content-center align-items-center">
        
         <Container>
-          <Row style={{marginTop: 20}} className="justify-content-center">
+          <Row style={{marginTop: 20, flex: 1, display: 'flex'}} className="justify-content-center">
            
               <Col xs="12" md="6">
                 <Card style={{boxShadow: '1px 1px 3px #9E9E9E'}} className="p-4">
