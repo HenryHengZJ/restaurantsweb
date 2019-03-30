@@ -53,7 +53,7 @@ class Testimonial extends Component {
 
     for(let i = 0; i < testimonial.length; i++){
       itemsarray.push(
-        <Col xs="12" sm="6" md="4" lg="4">
+        <Col xs="6" sm="6" md="4" lg="4">
           <Card style={{ backgroudColor: 'rgba(220,220,220, 0.5)', borderWidth: 0, borderColor: 'white', boxShadow: 'none'}}>
           <CardBody style={{padding: 0}}>
 
@@ -71,7 +71,7 @@ class Testimonial extends Component {
                       <img style={{ objectFit:'cover', width: 'auto', height: '100%', display: 'inline' }} src={testimonial[i].src}/>
                     </div>
                   </td>
-                  <td style={{width: '85%'}}>
+                  <td style={{textAlign:'start', width: '85%'}}>
                     <p>
                     <b>{testimonial[i].name}</b><br />
                     {testimonial[i].position}<br />
@@ -88,7 +88,7 @@ class Testimonial extends Component {
     }
 
     return(
-      <Row style={{marginTop: 50, flex: 1, textAlign: 'center', alignItems: 'center', justifyContent: 'center'}}>
+      <Row style={{ marginLeft:10, marginRight:10, marginTop: 50, flex: 1, textAlign: 'center', alignItems: 'center', justifyContent: 'center'}}>
         {itemsarray}
       </Row>
     )

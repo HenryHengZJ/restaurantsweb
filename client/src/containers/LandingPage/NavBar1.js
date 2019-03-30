@@ -30,7 +30,7 @@ class NavBar1 extends Component {
   render() {
     return (
       <div>
-        <Navbar style={{padding: 0, margin: 0, backgroundColor: this.state.isOpen ? '#696969' : 'transparent', boxShadow: 'none'}} dark expand="md">
+        <Navbar style={{padding: 0, margin: 0, marginRight:0, backgroundColor: this.state.isOpen ? '#696969' : 'transparent', boxShadow: 'none'}} dark expand="md">
           <NavbarBrand style={{padding: 0, margin: 0,}} href="/">
             <img style={{objectFit: 'cover', height: 50, width: 160, marginLeft: 20, marginTop: 10}} src={require('../../assets/img/brandlogo_dark.png')}/>
           </NavbarBrand>
