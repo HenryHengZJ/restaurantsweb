@@ -4,7 +4,7 @@ import './styles.css'
 
 const Footer = () => {
   return (
-    <Row style={{padding:15, backgroundColor: '#696969'}} className="justify-content-center">
+    <Row style={{padding:15, margin:0, backgroundColor: '#696969'}} className="justify-content-center">
       <p style={{textAlign: 'center'}}>
         <b style={{color:'white'}}>FoodieBee © 2019 All Rights Reserved</b><br />
         <a style={{color:'white'}} href="">Terms of Use</a>

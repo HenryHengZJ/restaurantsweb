@@ -31,7 +31,7 @@ class Hero extends React.Component {
         id="hero"
         style={{ height: 600, marginTop: -70, backgroundImage: 'url(' + corporate_lunch2 + ')', backgroundSize: 'cover'}}
       >
-          <Row style={{marginTop: 150, display:'flex',}} >
+          <Row style={{margin:0, marginTop: 150, display:'flex',}} >
             
             <Col style={{textAlign: 'center', color: 'white',}} xs="12">
               <h2 style={{fontSize: 40}}>

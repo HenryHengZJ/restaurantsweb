@@ -1293,7 +1293,7 @@ class CatererDetail extends Component {
     return <Row>{menuarray}</Row>;
   }
 
-  renderCategory(menuitem, i1) {
+  renderCategory(menuitem) {
     var categoryarray = [];
 
     var categorytab = menuitem;
@@ -1304,8 +1304,6 @@ class CatererDetail extends Component {
           {this.renderCategoryItems(
             categorytab[i].items,
             categorytab[i].categoryname,
-            i1,
-            i,
           )}
         </Col>
       );
@@ -1314,7 +1312,7 @@ class CatererDetail extends Component {
     return <Row>{categoryarray}</Row>;
   }
 
-  renderCategoryItems(items, categoryname, i1, i2) {
+  renderCategoryItems(items, categoryname) {
     var itemsarray = [];
 
     for (let i = 0; i < items.length; i++) {

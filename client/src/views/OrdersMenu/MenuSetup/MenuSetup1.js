@@ -29,20 +29,7 @@ class MenuSetup extends Component {
     this.addNewSelectionItem = this.addNewSelectionItem.bind(this);
 
     this.state = {
-      activeTab: 'Appetizer',
-      menutitle: [
-        "Appetizer",
-        "Breakfast",
-        "Sandwiches",
-        "Salads",
-        "Catering",
-        "Entrees",
-        "Lunches",
-        "Pizza",
-        "Sides",
-        "Desserts",
-        "Beverages"
-      ],
+      activeTab: 'appetizer',
       totalTabs: ['appetizer', 'breakfast', 'sandwiches', 'salads', 'catering', 'entrees', 'lunches', 'sides', 'desserts', 'beverages'],
       breakfast: [
         {
@@ -555,57 +542,12 @@ class MenuSetup extends Component {
           ]
         }*/
       ],
-      activeMenu: null,
-      menuModalOpen: false,
       categoryModal: false,
       newItemModal: false,
       selectionModal: false,
       newCategoryName: '',
       dishtype: '',
     };
-  }
-
-  componentDidMount() {
-    this.restructureMenu();
-  }
-
-  restructureMenu = () => {
-    var finalresult = [];
-
-    var result = this.state.fetchedmenu.reduce(function(r, a) {
-      r[a.categorytag] = r[a.categorytag] || [];
-      r[a.categorytag].push(a);
-      return r;
-    }, Object.create(null));
-
-    for (var key in result) {
-      var result2 = result[key].reduce(function(r, a) {
-        r[a.categoryname] = r[a.categoryname] || [];
-        r[a.categoryname].push(a);
-        return r;
-      }, Object.create(null));
-
-      var parentObject = {
-        menutitle: key,
-        menuitem: []
-      };
-
-      for (var key2 in result2) {
-        var childObject = {
-          categoryname: key2,
-          items: result2[key2]
-        };
-        parentObject["menuitem"].push(childObject);
-      }
-
-      finalresult.push(parentObject);
-    }
-
-    console.log(JSON.stringify(finalresult));
-
-    this.setState({
-      menu: finalresult
-    });
   }
   
   toggle(tab) {
@@ -640,42 +582,15 @@ class MenuSetup extends Component {
 
   //Button Click Event///////////////////////////////////////////////////////////////////////
 
-  navItemClicked = activeTab => {
-    this.setState({
-      activeTab: activeTab,
-    });
-  };
-
-  menuItemClicked = (_id) => {
-    var itemindex = this.state.fetchedmenu.findIndex(x => x._id==_id);
-    this.setState({
-      menuModalOpen: !this.state.menuModalOpen,
-      activeMenu: this.state.fetchedmenu[itemindex]
-    });
-  };
-
   addNewCategory() {
-    var menuarray = this.state.menu;
-    var menuindex = menuarray.findIndex(x => x.menutitle==this.state.activeTab);
-  
+    var activeArray = this.findActiveArray(this.state.activeTab)
     var addItem = {
       categoryname: this.state.newCategoryName,
       items: [],
     }
-
-    if (menuindex >= 0) {
-      menuarray[menuindex].menuitem.unshift(addItem)
-    }
-    else {
-      var addMenu = {
-        menutitle: this.state.activeTab,
-        menuitem: [ addItem ]
-      }
-      menuarray.unshift(addMenu)
-    }
+    activeArray.unshift(addItem)
 
     this.setState({
-      menu: menuarray,
       categoryModal: !this.state.categoryModal,
     })
   }
@@ -741,69 +656,30 @@ class MenuSetup extends Component {
 
   //Render functions///////////////////////////////////////////////////////////////////////
 
-  renderTabPane() {
+  renderTabPane(activeTab) {
 
-    var tabarray = [];
+    var tabToDisplay = this.findActiveArray(activeTab)
 
-    var menutitle = this.state.menutitle
+    var categoryarray = [];
 
-    for(let i = 0; i < menutitle.length; i++){
-      tabarray.push(
-        <TabPane tabId={menutitle[i]}>
-          <Row>
-            <Col style={{marginTop:0, marginBottom: 30}} xs="12">
-              <Button style={{fontSize: 17, fontWeight: '600'}} onClick={this.toggleNewCategoryModal} color="primary" className="btn-pill">  <i className="fa fa-plus fa-1x" aria-hidden="true"/>&nbsp; Add New Category</Button>
-            </Col>
-            <Col xs="12">
-            {this.renderMenu(menutitle[i])}
-            </Col>
-          </Row>
+  //  alert(tabToDisplay.length)
+
+    for(let i = 0; i < tabToDisplay.length; i++){
+      categoryarray.push(
+        <TabPane tabId={i + 1}>
+          {this.renderCategoryItems(tabToDisplay[i].items, tabToDisplay[i].categoryname)}
         </TabPane>
       )
     } 
 
     return(
-      <TabContent style={{borderWidth: 0, paddingLeft: 20, paddingRight: 20, paddingTop: 0}} activeTab={this.state.activeTab} >
-        {tabarray}
-      </TabContent >
+      <Row >
+        <Col style={{marginLeft: 15, marginRight: 15}} >
+          <Button style={{marginLeft: 15, marginTop: 20, marginBottom: 10}} onClick={this.toggleNewCategoryModal} color="primary" className="btn-pill">Add New Category</Button>
+          {categoryarray}
+        </Col>
+      </Row>
     )
-  }
-
-  renderMenu(menutitle) {
-    var menuindex = this.state.menu.findIndex(x => x.menutitle == menutitle);
-    var selectedmenutab;
-    var categoryarray = [];
-    if (menuindex >= 0) {
-      selectedmenutab = this.state.menu[menuindex].menuitem;
-      for (let i = 0; i < selectedmenutab.length; i++) {
-        categoryarray.push(
-          <Col xs="12">
-            {this.renderCategoryItems(
-              selectedmenutab[i].items,
-              selectedmenutab[i].categoryname, 
-            )}
-          </Col>
-        );
-      }
-    }
-    else {
-      for (let i = 0; i < 1; i++) {
-        categoryarray.push(
-          <Col style={{padding: 0}} xs="12">
-            <Label style={{marginBottom: 10, marginRight:5, marginLeft:15}} className="h5">{menutitle}</Label>
-            <a
-              style={{marginTop: -5, cursor: 'pointer', opacity: 0.6}} 
-              className="card-header-action"
-              onClick={() => alert('Edit Category Name: ' + menutitle)}
-            >
-              <i className="fa fa-pencil" />
-            </a>
-            {this.renderEmptyItem()}
-          </Col>
-        );
-      }
-    }
-    return <Row>{categoryarray}</Row>;
   }
 
   renderCategoryItems(items, categoryname) {
@@ -813,7 +689,7 @@ class MenuSetup extends Component {
     for(let i = 0; i < items.length; i++){
       itemsarray.push(
         <Col xs="12" sm="6" md="6" lg="4">
-          <Card  onClick={() => this.menuItemClicked(items[i]._id)} style={{ cursor: "pointer" }}>
+          <Card>
             <CardHeader style={{padding: 0, margin: 0, borderWidth: 0, backgroundColor: 'white', marginRight: 10}}  >
             <div className="card-header-actions">
               <a
@@ -828,27 +704,24 @@ class MenuSetup extends Component {
             <CardBody style={{cursor: 'pointer', marginTop: 0, marginBottom: 10, padding: 0, height: "100%"}} onMouseOver="" onClick={() => alert(items[i] + ' + ' + categoryname)}>
               <Col>
                 <div class="row">
-                  <div>
-                    <Dotdotdot clamp={1}>
-                      <h5 style={{ textAlign: "start", marginLeft: 15, marginRight:15,color: '#20a8d8', cursor: "pointer", overflow: "hidden" }}>
-                        {items[i].title}
-                      </h5>
-                    </Dotdotdot>
-                  </div>
+                  <Col style={{padding: 0,}}>
+                    <Label style={{ display: "inline-block", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: 150, width: "100%", textAlign: "start",cursor: 'pointer', marginLeft: 15, color: '#20a8d8'}} className="h5">{items[i].title}</Label>
+                  </Col>
                   <Col style={{paddingRight: 20,}}>
                     <Label
                       style={{
                         cursor: "pointer",
                         textAlign: "end",
+                        marginLeft: 15,
                       }}
                       className="h5 float-right"
                     >
-                      €{Number(items[i].priceperunit).toFixed(2)}
+                      {items[i].price}
                     </Label>
                   </Col>
                 </div>
                 <div class="row">
-                  <Label style={{ opacity: 0.7, cursor: 'pointer', marginLeft: 15, fontfStyle: 'italic',}}> Serves {items[i].serveperunit}</Label>
+                  <Label style={{ opacity: 0.7, cursor: 'pointer', marginLeft: 15, fontfStyle: 'italic',}}> Serves {items[i].serve}</Label>
                   {items[i].minquantity > 1 ? 
                     <Label
                       style={{
@@ -858,12 +731,12 @@ class MenuSetup extends Component {
                         fontfStyle: "italic"
                       }}
                     >
-                    | Minimum {items[i].minimumquantity}
+                    | Minimum {items[i].minquantity}
                     </Label>
                     :
                     null
                   }
-                  {typeof items[i].markitem === 'undefined' ? null : this.renderMarkAsIcon(items[i].markitem)}
+                  {this.renderMarkAsIcon(items[i].markas)}
                 </div>
                 <div style={{ marginTop: 10 }}>
                   <Dotdotdot clamp={2}>
@@ -966,7 +839,7 @@ class MenuSetup extends Component {
               <Card style={{cursor: 'pointer', borderColor: this.state.dishtype == 'single' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('single')}>
                 <CardHeader>
                   <div class="container">
-                    <h6 style={{ textAlign: "center" }}>Plate / Box (Single) </h6>
+                    <h6 style={{ textAlign: "center" }}>Single Dish</h6>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -984,7 +857,7 @@ class MenuSetup extends Component {
               <Card style={{cursor: 'pointer', borderColor: this.state.dishtype == 'bulk' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('bulk')}>
                 <CardHeader>
                   <div class="container">
-                    <h6 style={{ textAlign: "center" }}>Platter / Tray (Bulk}</h6>
+                    <h6 style={{ textAlign: "center" }}>Platter / Tray</h6>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -1419,56 +1292,98 @@ class MenuSetup extends Component {
     }
     return <Row>{selectionitemarray}</Row>;
   }
-
-  renderNavItem(menutitle) {
-    return (
-      <NavItem>
-        <NavLink
-          onClick={() => this.navItemClicked(menutitle)}
-          style={{
-            paddingRight: 20,
-            paddingLeft: 20,
-            fontWeight: "600",
-            color: this.state.activeTab === menutitle ? "#20a8d8" : "black",
-            fontSize: 15
-          }}
-          href="#"
-        >
-          {" "}
-          {menutitle}
-        </NavLink>
-        <div
-          style={{
-            height: 2,
-            width: "100%",
-            backgroundColor:
-              this.state.activeTab === menutitle ? "#20a8d8" : "transparent"
-          }}
-        />
-      </NavItem>
-    );
-  }
   
-  renderNav() {
-    var totaltabsarray = [];
-    for (let i = 0; i < this.state.menutitle.length; i++) {
-      totaltabsarray.push(
-        this.renderNavItem(this.state.menutitle[i])
-      )
-    }
-    return <Nav  style={{padding:20}}  className="float-left" pills>{totaltabsarray}</Nav>;
-  }
-
   render() {
 
     return (
-      <div style={{backgroundColor: 'white'}} className="animated fadeIn">
-        <Row style={{marginBottom: 30}}>
-          <Col xs="12">
-            {this.renderNav()}
-          </Col>
-          <Col xs="12">
-            {this.renderTabPane()}
+      <div className="animated fadeIn">
+        <Row>
+          <Col xs="12" md="12" className="mb-4">
+            <Nav tabs>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'appetizer' })}
+                  onClick={() => { this.toggle('appetizer'); }}
+                >
+                  Appetizer
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'breakfast' })}
+                  onClick={() => { this.toggle('breakfast'); }}
+                >
+                  Breakfast
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'sandwiches' })}
+                  onClick={() => { this.toggle('sandwiches'); }}
+                >
+                  Sandwiches
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'salads' })}
+                  onClick={() => { this.toggle('salads'); }}
+                >
+                  Salads
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'catering' })}
+                  onClick={() => { this.toggle('catering'); }}
+                >
+                  Catering
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'entrees' })}
+                  onClick={() => { this.toggle('entrees'); }}
+                >
+                  Entrees
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'lunches' })}
+                  onClick={() => { this.toggle('lunches'); }}
+                >
+                  Lunches
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'sides' })}
+                  onClick={() => { this.toggle('sides'); }}
+                >
+                  Sides
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'desserts' })}
+                  onClick={() => { this.toggle('desserts'); }}
+                >
+                  Desserts
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({ active: this.state.activeTab === 'beverages' })}
+                  onClick={() => { this.toggle('beverages'); }}
+                >
+                  Beverages
+                </NavLink>
+              </NavItem>
+            </Nav>
+            <TabContent activeTab={this.state.activeTab}>
+              {this.renderTabPane(this.state.activeTab)}
+            </TabContent>
           </Col>
         </Row>
 

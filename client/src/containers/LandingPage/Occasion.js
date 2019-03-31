@@ -88,7 +88,7 @@ class Occasion extends Component {
     return (
       <section  style={{backgroundColor: 'white'}} id="occasion" className="white">
         <div className="container">
-          <div className="row">
+          <div style={{margin:0}} className="row">
             <div style={{height:1, opacity: 0.2, backgroundColor: 'black', borderWidth: 1}} className="col l1"></div>
             <div style={{marginTop: 60}} className="center-align">
               <h2 style={{textAlign: 'center', fontSize: 34}}>Catering for various occasions</h2>
