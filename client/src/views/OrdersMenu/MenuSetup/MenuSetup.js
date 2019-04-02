@@ -5,7 +5,8 @@ import {Badge, Form, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Colla
 import classnames from 'classnames';
 import './MenuSetup.css'
 import Dotdotdot from "react-dotdotdot";
-
+import Checkbox from '@material-ui/core/Checkbox';
+import CurrencyInput from 'react-currency-input';
 
 const glutenfreeIcon = require('../../../assets/img/glutenfree1.png');
 const hotIcon = require('../../../assets/img/fire.png');
@@ -13,6 +14,7 @@ const spicyIcon = require('../../../assets/img/pepper.png');
 const vegeIcon = require('../../../assets/img/lettuce.png');
 const healthyIcon = require('../../../assets/img/fruit.png');
 const halalicon = require('../../../assets/img/halalsign.png');
+const closeIcon = require('../../../assets/img/close.png');
 
 class MenuSetup extends Component {
 
@@ -22,11 +24,18 @@ class MenuSetup extends Component {
     this.toggle = this.toggle.bind(this);
     this.toggleNewCategoryModal = this.toggleNewCategoryModal.bind(this);
     this.toggleNewItemModal = this.toggleNewItemModal.bind(this);
-    this.toggleNewSelectionModal = this.toggleNewSelectionModal.bind(this);
     this.handleCategoryNameChange = this.handleCategoryNameChange.bind(this);
     this.addNewCategory = this.addNewCategory.bind(this); 
     this.addNewItem = this.addNewItem.bind(this);
-    this.addNewSelectionItem = this.addNewSelectionItem.bind(this);
+    this.handleSelectionTitleChange = this.handleSelectionTitleChange.bind(this);
+    this.handleSelectionDescripChange = this.handleSelectionDescripChange.bind(this);
+    this.handleSelectionPriceChange = this.handleSelectionPriceChange.bind(this);
+    this.handleSelectionMinQuantityChange = this.handleSelectionMinQuantityChange.bind(this);
+    this.handleSelectionServeChange = this.handleSelectionServeChange.bind(this);
+    this.handleSelectionCategoryChange = this.handleSelectionCategoryChange.bind(this);
+    this.handleSelectionMaxNumChange = this.handleSelectionMaxNumChange.bind(this);
+    this.handleSelectionItemTitleChange = this.handleSelectionItemTitleChange.bind(this);
+    this.handleSelectionItemPriceChange = this.handleSelectionItemPriceChange.bind(this);
 
     this.state = {
       activeTab: 'Appetizer',
@@ -43,6 +52,8 @@ class MenuSetup extends Component {
         "Desserts",
         "Beverages"
       ],
+      markitem: ['Hot', 'Spicy', 'Halal', 'Gluten Free', 'Vegetarian', 'Healthy'],
+      servecount: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,30,40,50,60,70,80,90,100],
       totalTabs: ['appetizer', 'breakfast', 'sandwiches', 'salads', 'catering', 'entrees', 'lunches', 'sides', 'desserts', 'beverages'],
       breakfast: [
         {
@@ -555,13 +566,22 @@ class MenuSetup extends Component {
           ]
         }*/
       ],
-      activeMenu: null,
       menuModalOpen: false,
       categoryModal: false,
-      newItemModal: false,
+      menuModalOpen: false,
       selectionModal: false,
+      isNewItemButtonActive: false,
+      updateItem: false,
       newCategoryName: '',
-      dishtype: '',
+      selectedDishType: '',
+      selectedItemTitle: '',
+      selectedItemDescrip: '',
+      selectedItemPrice: 0,
+      selectedItemServe: 1,
+      selectedItemMinimumQuantity: 1,
+      selectedItemSelection: [],
+      selectedMarkItemAs: [],
+      selectedItemSelectionInnerItems: null,
     };
   }
 
@@ -627,14 +647,41 @@ class MenuSetup extends Component {
 
   toggleNewItemModal() {
     this.setState({
-      newItemModal: !this.state.newItemModal,
-      dishtype: ''
+      menuModalOpen: !this.state.menuModalOpen,
+      updateItem: false,
+      selectedDishType: '',
+      selectedItemTitle: '',
+      selectedItemDescrip: '',
+      selectedItemPrice: 0,
+      selectedItemServe: 1,
+      selectedItemMinimumQuantity: 1,
+      selectedItemSelection: [],
+      selectedMarkItemAs: [],
     });
   }
 
-  toggleNewSelectionModal() {
+  editSelection = ( categoryname, maxnum, items) => {
+    var selectionitem_new = []
+    for (let i = 0; i < items.length; i ++) {
+      selectionitem_new.push(items[i])
+    }
+    
+    var inneritems = {
+      selectioncategory: categoryname,
+      selectionmaxnum: maxnum,
+      selectionitem: selectionitem_new
+    }
+
     this.setState({
       selectionModal: !this.state.selectionModal,
+      selectedItemSelectionInnerItems: inneritems
+    })
+  }
+
+  toggleNewSelectionModal = () => {
+    this.setState({
+      selectionModal: !this.state.selectionModal,
+      selectedItemSelectionInnerItems: null,
     });
   }
 
@@ -648,10 +695,20 @@ class MenuSetup extends Component {
 
   menuItemClicked = (_id) => {
     var itemindex = this.state.fetchedmenu.findIndex(x => x._id==_id);
-    this.setState({
-      menuModalOpen: !this.state.menuModalOpen,
-      activeMenu: this.state.fetchedmenu[itemindex]
-    });
+    if (itemindex >= 0) {
+      this.setState({
+        menuModalOpen: !this.state.menuModalOpen,
+        updateItem: true,
+        selectedDishType: this.state.fetchedmenu[itemindex].dishtype,
+        selectedItemTitle: this.state.fetchedmenu[itemindex].title,
+        selectedItemDescrip: this.state.fetchedmenu[itemindex].descrip,
+        selectedItemPrice: this.state.fetchedmenu[itemindex].priceperunit,
+        selectedItemServe: this.state.fetchedmenu[itemindex].serveperunit,
+        selectedItemMinimumQuantity: this.state.fetchedmenu[itemindex].minimumquantity,
+        selectedItemSelection: typeof this.state.fetchedmenu[itemindex].selection == 'undefined' ? [] : this.state.fetchedmenu[itemindex].selection,
+        selectedMarkItemAs: typeof this.state.fetchedmenu[itemindex].markitem == 'undefined' ? [] : this.state.fetchedmenu[itemindex].markitem,
+      });
+    }
   };
 
   addNewCategory() {
@@ -684,45 +741,37 @@ class MenuSetup extends Component {
     alert('add new')
   }
 
-  selectDishType = (dishtype) => {
+  selectDishType = (selectedDishType) => {
     this.setState({
-      dishtype: dishtype,
+      selectedDishType: selectedDishType,
     })
   }
 
-  addNewSelectionItem() {
+  addNewSelectionItem = (selectioncategory, selectionmaxnum) => {
+    var inneritems = this.state.selectedItemSelectionInnerItems
     var newitem = {
       selectionitemtitle: '',
-      selectionitemprice: ''
+      selectionitemprice: 0
     }
-    var newselectionarray = this.state.selectionitems
-    newselectionarray.unshift(newitem)
-
+    var newSelectionItem= {
+      selectioncategory: selectioncategory,
+      selectionmaxnum: selectionmaxnum,
+      selectionitem: [newitem]
+    }
+    if (inneritems !== null) {
+      inneritems.selectionitem.push(newitem)
+    }
+    else if (inneritems === null) {
+      inneritems = newSelectionItem
+    }
+    
     this.setState({
-      selectionitems: newselectionarray,
+      selectedItemSelectionInnerItems: inneritems,
     })
   }
 
+
   //Other functions///////////////////////////////////////////////////////////////////////
-
-  capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  findActiveArray = (activeTab) => {
-    var arrayToReturn;
-    if (activeTab == 'appetizer') { arrayToReturn = this.state.appetizer }
-    else if (activeTab == 'breakfast') { arrayToReturn = this.state.breakfast }
-    else if (activeTab == 'sandwiches') { arrayToReturn = this.state.sandwiches }
-    else if (activeTab == 'salads') { arrayToReturn = this.state.salads }
-    else if (activeTab == 'catering') { arrayToReturn = this.state.catering }
-    else if (activeTab == 'entrees') { arrayToReturn = this.state.entrees }
-    else if (activeTab == 'lunches') { arrayToReturn = this.state.lunches }
-    else if (activeTab == 'sides') { arrayToReturn = this.state.sides }
-    else if (activeTab == 'desserts') { arrayToReturn = this.state.desserts }
-    else if (activeTab == 'beverages') { arrayToReturn = this.state.beverages }
-    return arrayToReturn
-  }
 
   findIcon = (iconname) => {
     var iconPath;
@@ -734,12 +783,210 @@ class MenuSetup extends Component {
     else if (iconname == 'Healthy') { iconPath = healthyIcon }
     return iconPath
   }
+ 
+  checkAllInput = () => {
+    const {selectedDishType, selectedItemTitle, selectedItemDescrip, selectedItemPrice, selectedItemServe, selectedItemMinimumQuantity, selectedItemSelection, selectedMarkItemAs} = this.state
+    if (selectedItemTitle != "" && selectedItemDescrip != "") {
+      //Activate Next Button
+      this.setState({ 
+        isNewItemButtonActive: true, 
+      });
+    }
+    else {
+      this.setState({ 
+        isNewItemButtonActive: false, 
+      });
+    }
+  }
+
+  //Handle Input Chaneg//////////////////////////////////////////////////////////////////////
+
+  handleCheckBoxChange = (e, markeditem) => {
+
+    var selectedMarkItemAs = this.state.selectedMarkItemAs
+    var index = selectedMarkItemAs.findIndex(x => x==markeditem);
+    
+    //If selectioncategory exist
+    if (index >=0) {
+      selectedMarkItemAs.splice(index, 1)
+    }
+    //If selectioncategory not exist
+    else {
+      selectedMarkItemAs.push(markeditem)
+    }
+
+    this.setState({ 
+      selectedMarkItemAs: selectedMarkItemAs, 
+    })
+  }
 
   handleCategoryNameChange(e) {
     this.setState({ newCategoryName: e.target.value });
   }
 
+  handleSelectionTitleChange(e) {
+    this.setState({ 
+      selectedItemTitle: e.target.value,
+    },() => {
+      this.checkAllInput()
+    })
+  }
+
+  handleSelectionDescripChange(e) {
+    this.setState({ 
+      selectedItemDescrip: e.target.value,
+    },() => {
+      this.checkAllInput()
+    })
+  }
+
+  handleSelectionPriceChange(e, value) {
+    
+    this.setState({ 
+      selectedItemPrice: Number(value).toFixed(2),
+    },() => {
+      this.checkAllInput()
+    })
+  }
+
+  handleSelectionMinQuantityChange(e) {
+    this.setState({ 
+      selectedItemMinimumQuantity: e.target.value,
+    },() => {
+      this.checkAllInput()
+    })
+  }
+
+  handleSelectionServeChange(e) {
+    this.setState({ 
+      selectedItemServe: e.target.value,
+    },() => {
+      this.checkAllInput()
+    })
+  }
+
+  handleSelectionCategoryChange(e) {
+    var inneritems = this.state.selectedItemSelectionInnerItems
+    var newSelectionItem= {
+      selectioncategory: e.target.value,
+      selectionmaxnum: 1,
+      selectionitem: []
+    }
+    if (inneritems === null) {
+      inneritems = newSelectionItem
+    }
+    else {
+      inneritems.selectioncategory = e.target.value
+    }
+    this.setState({ 
+      selectedItemSelectionInnerItems: inneritems,
+    })
+  }
+
+  handleSelectionMaxNumChange(e) {
+    var inneritems = this.state.selectedItemSelectionInnerItems
+    var newSelectionItem= {
+      selectioncategory: '',
+      selectionmaxnum: e.target.value,
+      selectionitem: []
+    }
+    if (inneritems === null) {
+      inneritems = newSelectionItem;
+    }
+    else {
+      inneritems.selectionmaxnum = e.target.value
+    }
+    this.setState({ 
+      selectedItemSelectionInnerItems: inneritems,
+    })
+  }
+
+  handleSelectionItemTitleChange(e, index) {
+    var inneritems = this.state.selectedItemSelectionInnerItems;
+    var innerselectionitems = {
+      selectionitemtitle: e.target.value,
+      selectionitemprice: 0
+    }
+    var newSelectionItem= {
+      selectioncategory: '',
+      selectionmaxnum: 1,
+      selectionitem: [innerselectionitems]
+    } 
+
+    if (inneritems === null) {
+      inneritems = newSelectionItem;
+    }
+    else {
+      inneritems.selectionitem[index].selectionitemtitle = e.target.value 
+    }
+    this.setState({ 
+      selectedItemSelectionInnerItems: inneritems,
+    })
+  }
+
+  handleSelectionItemPriceChange(e, value, index) {
+    var inneritems = this.state.selectedItemSelectionInnerItems
+    var innerselectionitems = {
+      selectionitemtitle: '',
+      selectionitemprice: value
+    }
+    var newSelectionItem= {
+      selectioncategory: '',
+      selectionmaxnum: 1,
+      selectionitem: [innerselectionitems]
+    } 
+
+    if (inneritems === null) {
+      inneritems = newSelectionItem;
+    }
+    else {
+      inneritems.selectionitem[index].selectionitemprice = value
+    }
+    this.setState({ 
+      selectedItemSelectionInnerItems: inneritems,
+    })
+  }
+
   //Render functions///////////////////////////////////////////////////////////////////////
+
+  renderNavItem(menutitle) {
+    return (
+      <NavItem>
+        <NavLink
+          onClick={() => this.navItemClicked(menutitle)}
+          style={{
+            paddingRight: 20,
+            paddingLeft: 20,
+            fontWeight: "600",
+            color: this.state.activeTab === menutitle ? "#20a8d8" : "black",
+            fontSize: 15
+          }}
+          href="#"
+        >
+          {" "}
+          {menutitle}
+        </NavLink>
+        <div
+          style={{
+            height: 2,
+            width: "100%",
+            backgroundColor:
+              this.state.activeTab === menutitle ? "#20a8d8" : "transparent"
+          }}
+        />
+      </NavItem>
+    );
+  }
+  
+  renderNav() {
+    var totaltabsarray = [];
+    for (let i = 0; i < this.state.menutitle.length; i++) {
+      totaltabsarray.push(
+        this.renderNavItem(this.state.menutitle[i])
+      )
+    }
+    return <Nav  style={{padding:20}}  className="float-left" pills>{totaltabsarray}</Nav>;
+  }
 
   renderTabPane() {
 
@@ -825,7 +1072,7 @@ class MenuSetup extends Component {
               </a>
             </div>
             </CardHeader>
-            <CardBody style={{cursor: 'pointer', marginTop: 0, marginBottom: 10, padding: 0, height: "100%"}} onMouseOver="" onClick={() => alert(items[i] + ' + ' + categoryname)}>
+            <CardBody style={{cursor: 'pointer', marginTop: 0, marginBottom: 10, padding: 0, height: "100%"}}>
               <Col>
                 <div class="row">
                   <div>
@@ -938,13 +1185,269 @@ class MenuSetup extends Component {
     )
   }
 
+  renderForm() {
+    var selectedItemTitle = this.state.selectedItemTitle
+    var selectedItemDescrip = this.state.selectedItemDescrip
+    var selectedItemPrice = this.state.selectedItemPrice
+    var selectedItemServe = this.state.selectedItemServe
+    var selectedItemMinimumQuantity = this.state.selectedItemMinimumQuantity
+    var selectedItemSelection = this.state.selectedItemSelection
+    var selectedMarkItemAs = this.state.selectedMarkItemAs
+    var selectedDishType = this.state.selectedDishType
+    return (
+      <Collapse isOpen={selectedDishType == "" ? false : true}>
+        <Form action="" method="post" className="form-horizontal">
+          <FormGroup row>
+            <Col md="3">
+              <h6>Title</h6>
+            </Col>
+            <Col xs="12" md="9">
+              <Input onChange={(e) => this.handleSelectionTitleChange(e)} value={selectedItemTitle} style={{color: 'black'}} type="text" placeholder="Title of the the dish" />
+              <FormText className="help-block">
+                Please enter title of your dish
+              </FormText>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col md="3">
+              <h6>Description</h6>
+            </Col>
+            <Col xs="12" md="9">
+              <Input onChange={(e) => this.handleSelectionDescripChange(e)} value={selectedItemDescrip} style={{color: 'black'}} type="textarea" rows="3" placeholder="Description of the dish" />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="6">
+              <FormGroup>
+                <h6 htmlFor="appendedPrependedInput">Price</h6>
+                <div className="controls">
+                  <InputGroup className="input-prepend">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>€</InputGroupText>
+                    </InputGroupAddon>
+                    <CurrencyInput
+                      style={{borderWidth: 1, borderColor: 'rgba(211,211,211,0.3)',paddingLeft:10, color: 'black'}}
+                      value={selectedItemPrice}
+                      onChange={(e, value) => this.handleSelectionPriceChange(e, value)}
+                      placeholder="0.00"
+                      required
+                    />
+                  </InputGroup>
+                </div>
+              </FormGroup>
+            </Col>
+            <Col xs="6">
+              <FormGroup>
+                <h6>Unit</h6>
+                {this.state.selectedDishType == 'bulk' ? 
+                <Input style={{color: 'black'}} type="select">
+                  <option>per platter</option>
+                  <option>per tray</option>
+                </Input>
+                :
+                <Input style={{color: 'black'}} type="select">
+                  <option>per plate</option>
+                  <option>per box</option>
+                </Input>
+                }
+              </FormGroup>
+            </Col>
+          </FormGroup>
+
+          {this.state.selectedDishType == 'bulk' ? 
+          <FormGroup row>
+            <Col xs="6">
+              <FormGroup>
+                <h6>Serve</h6>
+                <Input onChange={(e) => this.handleSelectionServeChange(e)} value={selectedItemServe} style={{color: 'black'}} type="select" placeholder="1">
+                  {this.state.servecount.map(serve =>
+                    <option style={{color:'black'}} key={serve} value={serve}>{serve}</option>
+                  )}
+                </Input>
+              </FormGroup>
+            </Col>
+            <Col xs="6">
+              <FormGroup>
+                <h6>Unit</h6>
+                <Input style={{color: 'black'}} type="select">
+                  <option>per platter</option>
+                  <option>per tray</option>
+                </Input>
+              </FormGroup>
+            </Col>
+          </FormGroup>
+          : null }
+
+          {this.state.selectedDishType == 'single' ? 
+          <FormGroup row>
+            <Col xs="6">
+              <FormGroup>
+                <h6>Minimum Quantity</h6>
+                <Input onChange={(e) => this.handleSelectionMinQuantityChange(e)} value={selectedItemMinimumQuantity} style={{color: 'black'}} type="select" placeholder="1">
+                  {this.state.servecount.map(minimumquantity =>
+                    <option style={{color:'black'}} key={minimumquantity} value={minimumquantity}>{minimumquantity}</option>
+                  )}
+                </Input>
+              </FormGroup>
+            </Col>
+            <Col xs="6">
+              <FormGroup>
+                <h6>Unit</h6>
+                <Input style={{color: 'black'}} type="select">
+                  <option>per plate</option>
+                  <option>per box</option>
+                </Input>
+              </FormGroup>
+            </Col>
+          </FormGroup>
+          : null }
+          
+          {this.renderSelection(selectedItemSelection)}
+
+          <Button block color="primary" onClick={() => this.toggleNewSelectionModal()}>Add Selections (Toppings / Sides)</Button>
+
+          <h6
+            style={{
+              fontWeight: "600",
+              color: "black",
+              marginBottom: 10,
+              marginTop: 30
+            }}
+          >
+            Mark Item As
+          </h6>
+          {this.renderFormMarkItem(selectedMarkItemAs)}
+        </Form>
+      </Collapse>
+    );
+  }
+
+  renderSelection(selection) {
+    var selectionarray = [];
+    for (let i = 0; i < selection.length; i++) {
+      selectionarray.push(
+        <Card>
+          {this.renderEditSelectionHeader(selection, i)}
+          <CardBody>
+            {this.renderSelectionItems(selection[i].selectionitem)}
+          </CardBody>
+        </Card>
+      );
+    }
+    return <FormGroup>{selectionarray}</FormGroup>;
+  }
+
+  renderSelectionHeader(selection, i) {
+    return (
+      <CardHeader>
+        <Label style={{fontWeight: '600', color: 'black'}}>Select {selection[i].selectioncategory}</Label>
+        <div className="card-header-actions">
+          <a
+            style={{cursor: 'pointer'}} onMouseOver=""
+            className="card-header-action btn btn-close"
+            onClick={() => this.editSelection(selection[i].selectioncategory, selection[i].selectionmaxnum, selection[i].selectionitem)}
+          >
+            <i className="fa fa-pencil" />
+          </a>
+        </div>
+      </CardHeader>
+    )
+  }
+
+  renderEditSelectionHeader(selection, i) {
+    return (
+      <CardHeader>
+        <FormGroup row>
+          <Col xs="4">
+            <h6 style={{marginTop: 5}}>Selection Category</h6>
+          </Col>
+          <Col xs="8">
+            <Input value={selection[i].selectioncategory} style={{color: 'black'}} type="text" placeholder="Selection Category" />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Col xs="4">
+            <h6 style={{marginTop: 5}}>Selection Limit</h6>
+          </Col>
+          <Col xs="8">
+            <Input value={selection[i].selectionmaxnum} style={{color: 'black'}} type="select" placeholder="1" >
+              {this.state.servecount.map(limit =>
+                <option style={{color:'black'}} key={limit} value={limit}>{limit}</option>
+              )}
+            </Input>
+          </Col>
+        </FormGroup>
+      </CardHeader>
+    )
+  }
+
+  renderSelectionItems(selectionitem) {
+    var selectionitemarray = [];
+    for (let i = 0; i < selectionitem.length; i++) {
+      selectionitemarray.push(
+        <Col xs="12" sm="6" md="6">
+          {selectionitem[i].selectionitemprice === 0 ? (
+            <Label>{selectionitem[i].selectionitemtitle}</Label>
+          ) : (
+            <Label>
+              {selectionitem[i].selectionitemtitle} (+€
+              {Number(selectionitem[i].selectionitemprice).toFixed(2)})
+            </Label>
+          )}
+        </Col>
+      );
+    }
+    return <Row>{selectionitemarray}</Row>;
+  }
+
+  renderFormMarkItem(markeditem) {
+    var itemsarray = [];
+    var markitem = this.state.markitem
+    for (let i = 0; i < markitem.length; i++) {
+      itemsarray.push(
+        <Col xs="6">
+        <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="checkbox">
+          <Checkbox
+            checked={markeditem.includes(markitem[i])}
+            onChange={(e) => this.handleCheckBoxChange(e, markitem[i])}
+            value={markitem[i]}
+            style={{padding:0, marginRight: 10}}
+          />
+          <Label check className="form-check-label">
+            {markitem[i]}
+          </Label>
+          <img
+            style={{
+              marginLeft: 5,
+              marginRight: 20,
+              height: 25,
+              width: 25,
+              objectFit: "cover"
+            }}
+            src={this.findIcon(markitem[i])}
+            alt=""
+          />
+        </FormGroup>
+        </Col>
+      );
+    }
+
+    return (
+      <Row>
+        {itemsarray}
+      </Row>
+    );
+  }
+
+  //Render Modal///////////////////////////////////////////////////////////////////////
+
   renderAddNewCategoryModal() {
     return(
       <Modal isOpen={this.state.categoryModal} toggle={this.toggleNewCategoryModal}>
         <ModalHeader toggle={this.toggleNewCategoryModal}>Add New Category</ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Input style={{marginTop: 10, color: 'black'}} value={this.state.newCategoryName} onChange={(e) => this.handleCategoryNameChange(e)} type="text" placeholder={this.capitalizeFirstLetter(this.state.activeTab)} />
+            <Input style={{marginTop: 10, color: 'black'}} value={this.state.newCategoryName} onChange={(e) => this.handleCategoryNameChange(e)} type="text" placeholder={this.state.activeTab} />
           </FormGroup>
         </ModalBody>
         <ModalFooter>
@@ -956,14 +1459,15 @@ class MenuSetup extends Component {
   }
 
   renderAddNewItemModal() {
+    var selectedDishType = this.state.selectedDishType;
     return(
-      <Modal isOpen={this.state.newItemModal} toggle={this.toggleNewItemModal}>
+      <Modal isOpen={this.state.menuModalOpen} toggle={this.toggleNewItemModal}>
         <ModalHeader toggle={this.toggleNewItemModal}>Add New Item</ModalHeader>
         <ModalBody>
           <Label>How do you want to sell your dish?</Label>
           <Row>
             <Col>
-              <Card style={{cursor: 'pointer', borderColor: this.state.dishtype == 'single' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('single')}>
+              <Card style={{cursor: 'pointer', borderColor: selectedDishType == 'single' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('single')}>
                 <CardHeader>
                   <div class="container">
                     <h6 style={{ textAlign: "center" }}>Plate / Box (Single) </h6>
@@ -981,7 +1485,7 @@ class MenuSetup extends Component {
               </Card>
             </Col>
             <Col>
-              <Card style={{cursor: 'pointer', borderColor: this.state.dishtype == 'bulk' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('bulk')}>
+              <Card style={{cursor: 'pointer', borderColor: selectedDishType == 'bulk' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('bulk')}>
                 <CardHeader>
                   <div class="container">
                     <h6 style={{ textAlign: "center" }}>Platter / Tray (Bulk}</h6>
@@ -1003,7 +1507,7 @@ class MenuSetup extends Component {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" >
-            Add
+            {this.state.updateItem ? 'Save' : 'Add'}
           </Button>{" "}
           <Button color="secondary" onClick={this.toggleNewItemModal}>
             Cancel
@@ -1012,362 +1516,160 @@ class MenuSetup extends Component {
       </Modal>
     )
   }
-
-  renderForm() {
-    return (
-      <Collapse isOpen={this.state.dishtype == ""? false : true}>
-        <Form action="" method="post" className="form-horizontal">
-          <FormGroup row>
-            <Col md="3">
-              <Label>Title</Label>
-            </Col>
-            <Col xs="12" md="9">
-              <Input style={{color: 'black'}} type="text" placeholder="Title of the the dish" />
-              <FormText className="help-block">
-                Please enter title of your dish
-              </FormText>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col md="3">
-              <Label>Description</Label>
-            </Col>
-            <Col xs="12" md="9">
-              <Input style={{color: 'black'}} type="textarea" rows="3" placeholder="Description of the dish" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="6">
-              <FormGroup>
-                <Label htmlFor="appendedPrependedInput">Price</Label>
-                <div className="controls">
-                  <InputGroup className="input-prepend">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>€</InputGroupText>
-                    </InputGroupAddon>
-                    <Input style={{color: 'black'}} size="16" type="text" placeholder="8"/>
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText> . </InputGroupText>
-                    </InputGroupAddon>
-                    <Input size="16" type="text" placeholder="00"/>
-                  </InputGroup>
-                </div>
-              </FormGroup>
-            </Col>
-            <Col xs="6">
-              <FormGroup>
-                <Label>Unit</Label>
-                {this.state.dishtype == 'bulk' ? 
-                <Input style={{color: 'black'}} type="select">
-                  <option>per platter</option>
-                  <option>per tray</option>
-                </Input>
-                :
-                <Input style={{color: 'black'}} disabled type="select">
-                  <option>per dish</option>
-                </Input>
-                }
-              </FormGroup>
-            </Col>
-          </FormGroup>
-
-          {this.state.dishtype == 'bulk' ? 
-          <FormGroup row>
-            <Col xs="6">
-              <FormGroup>
-                <Label>Serve</Label>
-                <Input style={{color: 'black'}} type="text" placeholder="1"></Input>
-              </FormGroup>
-            </Col>
-            <Col xs="6">
-              <FormGroup>
-                <Label>Unit</Label>
-                <Input style={{color: 'black'}} type="select">
-                  <option>per platter</option>
-                  <option>per tray</option>
-                </Input>
-              </FormGroup>
-            </Col>
-          </FormGroup>
-          : null }
-
-          {this.state.dishtype == 'single' ? 
-          <FormGroup row>
-            <Col xs="6">
-              <FormGroup>
-                <Label>Minimum Quantity</Label>
-                <Input style={{color: 'black'}} type="text" placeholder="1"></Input>
-              </FormGroup>
-            </Col>
-            <Col xs="6">
-              <FormGroup>
-                <Label>Unit</Label>
-                <Input style={{color: 'black'}} disabled type="select">
-                  <option>per order</option>
-                </Input>
-              </FormGroup>
-            </Col>
-          </FormGroup>
-          : null }
-          
-          {this.renderSelection(this.state.items[0].selection)}
-          {this.renderMarkAs()}
-        </Form>
-        <Button outline color="primary" className="btn-pill" onClick={this.toggleNewSelectionModal}>Add Toppings / Sides</Button>
-      </Collapse>
-    );
-  }
   
-  renderMarkAs() {
-    return (
-      <FormGroup row>
-        <Col md="12">
-          <Label>Mark Item As</Label>
-        </Col>
-        <Col md="12">
-          <FormGroup style={{ marginBottom: 10 }} check inline>
-            <Input
-              className="form-check-input"
-              type="checkbox"
-              id="inline-checkbox1"
-              name="inline-checkbox1"
-              value="option1"
-            />
-            <Label
-              className="form-check-label"
-              check
-              htmlFor="inline-checkbox1"
-            >
-              Hot
-            </Label>
-            <img
-              style={{
-                marginLeft: 5,
-                marginRight: 20,
-                height: 25,
-                width: 25,
-                objectFit: "cover"
-              }}
-              src={hotIcon}
-              alt=""
-            />
-          </FormGroup>
-          <FormGroup style={{ marginBottom: 10 }} check inline>
-            <Input
-              className="form-check-input"
-              type="checkbox"
-              id="inline-checkbox2"
-              name="inline-checkbox2"
-              value="option2"
-            />
-            <Label
-              className="form-check-label"
-              check
-              htmlFor="inline-checkbox2"
-            >
-              Spicy
-            </Label>
-            <img
-              style={{
-                marginLeft: 5,
-                marginRight: 20,
-                height: 25,
-                width: 25,
-                objectFit: "cover"
-              }}
-              src={spicyIcon}
-              alt=""
-            />
-          </FormGroup>
-          <FormGroup style={{ marginBottom: 10 }} check inline>
-            <Input
-              className="form-check-input"
-              type="checkbox"
-              id="inline-checkbox3"
-              name="inline-checkbox3"
-              value="option3"
-            />
-            <Label
-              className="form-check-label"
-              check
-              htmlFor="inline-checkbox3"
-            >
-              Vegetarian
-            </Label>
-            <img
-              style={{
-                marginLeft: 5,
-                marginRight: 20,
-                height: 25,
-                width: 25,
-                objectFit: "cover"
-              }}
-              src={vegeIcon}
-              alt=""
-            />
-          </FormGroup>
-          <FormGroup style={{ marginBottom: 10 }} check inline>
-            <Input
-              className="form-check-input"
-              type="checkbox"
-              id="inline-checkbox4"
-              name="inline-checkbox4"
-              value="option4"
-            />
-            <Label
-              className="form-check-label"
-              check
-              htmlFor="inline-checkbox4"
-            >
-              Healthy
-            </Label>
-            <img
-              style={{
-                marginLeft: 5,
-                marginRight: 20,
-                height: 25,
-                width: 25,
-                objectFit: "cover"
-              }}
-              src={healthyIcon}
-              alt=""
-            />
-          </FormGroup>
-          <FormGroup check inline>
-            <Input
-              className="form-check-input"
-              type="checkbox"
-              id="inline-checkbox5"
-              name="inline-checkbox5"
-              value="option5"
-            />
-            <Label
-              className="form-check-label"
-              check
-              htmlFor="inline-checkbox5"
-            >
-              Gluten Free
-            </Label>
-            <img
-              style={{
-                marginLeft: 5,
-                marginRight: 20,
-                height: 25,
-                width: 25,
-                objectFit: "cover"
-              }}
-              src={glutenfreeIcon}
-              alt=""
-            />
-          </FormGroup>
-          <FormGroup style={{ marginBottom: 10 }} check inline>
-            <Input
-              className="form-check-input"
-              type="checkbox"
-              id="inline-checkbox6"
-              name="inline-checkbox6"
-              value="option6"
-            />
-            <Label
-              className="form-check-label"
-              check
-              htmlFor="inline-checkbox6"
-            >
-              Halal
-            </Label>
-            <img
-              style={{
-                marginLeft: 5,
-                marginRight: 20,
-                height: 25,
-                width: 25,
-                objectFit: "cover"
-              }}
-              src={halalicon}
-              alt=""
-            />
-          </FormGroup>
-        </Col>
-      </FormGroup>
-    )
-  }
-
   renderNewSelectionModal() {
-   
+    var selectedItemSelectionInnerItems = this.state.selectedItemSelectionInnerItems;
+
+    var selectioncategory = '';
+    var selectionmaxnum = 1;
+    var selectionitem = [];
+
+    if (selectedItemSelectionInnerItems !== null) {
+     // alert(JSON.stringify(selectedItemSelectionInnerItems))
+      selectioncategory = selectedItemSelectionInnerItems.selectioncategory
+      selectionmaxnum = selectedItemSelectionInnerItems.selectionmaxnum
+      selectionitem = selectedItemSelectionInnerItems.selectionitem
+    }
+
     return(
-      <Modal isOpen={this.state.selectionModal} toggle={this.toggleNewSelectionModal}>
-        <ModalHeader toggle={this.toggleNewSelectionModal}>Add New Selection</ModalHeader>
+      <Modal isOpen={this.state.selectionModal} toggle={() => this.toggleNewSelectionModal()}>
+        <ModalHeader toggle={() => this.toggleNewSelectionModal()}>Add New Selection</ModalHeader>
         <ModalBody>
           <FormGroup row>
-            <Col md="2">
-              <Label>Select</Label>
+            <Col md="3">
+              <h6 style={{marginTop:5}}>Select</h6>
             </Col>
-            <Col xs="12" md="10">
-              <Input type="text" placeholder="Sides / Toppings / Main" />
+            <Col xs="12" md="9">
+              <Input onChange={(e) => this.handleSelectionCategoryChange(e)} style={{color: 'black'}} value={selectioncategory} type="text" placeholder="Sides / Toppings / Main" />
             </Col>
           </FormGroup>
-          {this.renderSelectionItemModal(this.state.selectionitems)}
-          <Button outline color="primary" className="btn-pill" onClick={() => this.addNewSelectionItem()}>Add Selection</Button>
+          <FormGroup row>
+            <Col md="3">
+              <h6 style={{marginTop:5}}>Selection Limit</h6>
+            </Col>
+            <Col xs="12" md="9">
+              <Input onChange={(e) => this.handleSelectionMaxNumChange(e)} style={{color: 'black'}} value={selectionmaxnum} type="select">
+                {this.state.servecount.map(limit =>
+                  <option style={{color:'black'}} key={limit} value={limit}>{limit}</option>
+                )}
+              </Input>
+            </Col>
+          </FormGroup>
+          {this.renderSelectionItemModal(selectionitem)}
+          <Button disabled={selectioncategory === '' ? true : false } color="primary" className="btn-pill" onClick={() => this.addNewSelectionItem(selectioncategory, selectionmaxnum)}>Add Selection</Button>
         </ModalBody>
         <ModalFooter>
-          <Button disabled={this.state.newCategoryName == '' ? true : false} color="primary" >Save</Button>
-          <Button color="secondary" onClick={this.toggleNewSelectionModal}>Cancel</Button>
+          <Button color="primary" >Save</Button>
+          <Button color="secondary" onClick={() => this.toggleNewSelectionModal()}>Cancel</Button>
         </ModalFooter>
       </Modal>
     )
   }
 
-  renderSelectionItemModal(selectionitems) {
+  renderSelectionItemModal(selectionitem) {
 
     var itemsarray = [];
 
-    if (selectionitems.length > 0) {
-      for(let i = 0; i < selectionitems.length; i++){
+    var selectionitems = selectionitem
+
+    if (selectionitem.length > 0) {
+      for(let i = 0; i < selectionitem.length; i++){
         itemsarray.push(
-          <FormGroup row>
-            <Col xs="6">
+          <Row>
+            <Col xs="5">
               <FormGroup>
-                <Col style={{padding: 0, margin: 0}}>
-                  <Input style={{marginBottom: 10}} type="text" placeholder="Selection 1"></Input>
-                </Col>
+                <div>
+                  <Input onChange={(e) => this.handleSelectionItemTitleChange(e, i)}  value={selectionitems[i] == null ? '' : selectionitems[i].selectionitemtitle} style={{ color:'black'}} type="text" placeholder="Selection 1"></Input>
+                </div>
               </FormGroup>
             </Col>
             <Col xs="6">
               <FormGroup>
-                <Col style={{padding: 0, margin: 0}}>
-                  <Input style={{marginBottom: 10}} type="text" placeholder="0"></Input>
-                </Col>
+                <div>
+                  <InputGroup className="input-prepend">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>€</InputGroupText>
+                    </InputGroupAddon>
+                    <CurrencyInput
+                      style={{borderWidth: 1, borderColor: 'rgba(211,211,211,0.3)', paddingLeft:10, color: 'black'}}
+                      value={selectionitems[i] == null ? '' : Number(selectionitems[i].selectionitemprice).toFixed(2)}
+                      onChange={(e, value) => this.handleSelectionItemPriceChange(e, value, i)}
+                      placeholder="0.00"
+                      required
+                    />
+                  </InputGroup>
+                </div>
               </FormGroup>
             </Col>
-          </FormGroup>
+
+            <Col style={{padding: 0}} xs="1">
+              <img
+                style={{
+                  cursor: "pointer",
+                  height: 10,
+                  width: 10,
+                  objectFit: "cover",
+                  marginTop:10,
+                }}
+             
+                src={closeIcon}
+                alt=""
+              />
+            </Col>
+            
+          </Row>
         )
       }
     }
-    else {
+    else if (selectionitem.length == 0) {
       itemsarray.push(
         <FormGroup row>
-          <Col xs="6">
+          <Col xs="5">
             <FormGroup>
-              <Label>Selections</Label>
-              <Col style={{padding: 0, margin: 0}}>
-                <Input style={{marginBottom: 10}} type="text" placeholder="Selection 1"></Input>
-              </Col>
+              <div>
+                <Input onChange={(e) => this.handleSelectionItemTitleChange(e, -1)} value={''} style={{ color:'black'}} type="text" placeholder="Selection 1"></Input>
+              </div>
             </FormGroup>
           </Col>
           <Col xs="6">
             <FormGroup>
-              <Label>Price</Label>
-              <Col style={{padding: 0, margin: 0}}>
-                <Input style={{marginBottom: 10}} type="text" placeholder="0"></Input>
-              </Col>
+              <div>
+                <InputGroup className="input-prepend">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>€</InputGroupText>
+                  </InputGroupAddon>
+                  <CurrencyInput
+                    style={{borderWidth: 1, borderColor: 'rgba(211,211,211,0.3)', paddingLeft:10, color: 'black'}}
+                    value={Number(0).toFixed(2)}
+                    onChange={(e, value) => this.handleSelectionItemPriceChange(e, value, -1)}
+                    placeholder="0.00"
+                    required
+                  />
+                </InputGroup>
+              </div>
             </FormGroup>
+          </Col>
+          <Col style={{padding: 0}} xs="1">
+            <img
+              style={{
+                cursor: "pointer",
+                height: 10,
+                width: 10,
+                objectFit: "cover",
+                marginTop:10,
+              }}
+            
+              src={closeIcon}
+              alt=""
+            />
           </Col>
         </FormGroup>
       )
     }
+    
 
     return(
-      <Row>
+      <Row style={{marginTop:20}}>
         <Col>
         {itemsarray}
         </Col>
@@ -1375,89 +1677,6 @@ class MenuSetup extends Component {
     )
   }
 
-  renderSelection(selection) {
-    var selectionarray = [];
-    for (let i = 0; i < selection.length; i++) {
-      selectionarray.push(
-        <Card>
-          <CardHeader>
-            Select {selection[i].selectioncategory}
-            <div className="card-header-actions">
-              <a
-                style={{cursor: 'pointer'}} onMouseOver=""
-                className="card-header-action btn btn-close"
-                onClick={() => alert('Selection')}
-              >
-                <i className="fa fa-pencil" />
-              </a>
-            </div>
-          </CardHeader>
-          <CardBody>
-            {this.renderSelectionItems(selection[i].selectionitem)}
-          </CardBody>
-        </Card>
-      );
-    }
-    return <FormGroup>{selectionarray}</FormGroup>;
-  }
-
-  renderSelectionItems(selectionitem) {
-    var selectionitemarray = [];
-    for (let i = 0; i < selectionitem.length; i++) {
-      selectionitemarray.push(
-        <Col xs="12" sm="6" md="6">
-          {selectionitem[i].selectionitemprice === "" ? (
-            <Label>{selectionitem[i].selectionitemtitle}</Label>
-          ) : (
-            <Label>
-              {selectionitem[i].selectionitemtitle} (+
-              {selectionitem[i].selectionitemprice})
-            </Label>
-          )}
-        </Col>
-      );
-    }
-    return <Row>{selectionitemarray}</Row>;
-  }
-
-  renderNavItem(menutitle) {
-    return (
-      <NavItem>
-        <NavLink
-          onClick={() => this.navItemClicked(menutitle)}
-          style={{
-            paddingRight: 20,
-            paddingLeft: 20,
-            fontWeight: "600",
-            color: this.state.activeTab === menutitle ? "#20a8d8" : "black",
-            fontSize: 15
-          }}
-          href="#"
-        >
-          {" "}
-          {menutitle}
-        </NavLink>
-        <div
-          style={{
-            height: 2,
-            width: "100%",
-            backgroundColor:
-              this.state.activeTab === menutitle ? "#20a8d8" : "transparent"
-          }}
-        />
-      </NavItem>
-    );
-  }
-  
-  renderNav() {
-    var totaltabsarray = [];
-    for (let i = 0; i < this.state.menutitle.length; i++) {
-      totaltabsarray.push(
-        this.renderNavItem(this.state.menutitle[i])
-      )
-    }
-    return <Nav  style={{padding:20}}  className="float-left" pills>{totaltabsarray}</Nav>;
-  }
 
   render() {
 

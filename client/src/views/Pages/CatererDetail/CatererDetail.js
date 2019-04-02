@@ -46,6 +46,7 @@ const spicyIcon = require('../../../assets/img/pepper.png');
 const vegeIcon = require('../../../assets/img/lettuce.png');
 const healthyIcon = require('../../../assets/img/fruit.png');
 const halalicon = require('../../../assets/img/halalsign.png');
+const closeIcon = require('../../../assets/img/close.png');
 
 class CatererDetail extends Component {
   constructor(props) {
@@ -1095,9 +1096,7 @@ class CatererDetail extends Component {
                 objectFit: "cover"
               }}
               onClick={() => this.cartItemDelete(i)}
-              src={
-                "http://www.sclance.com/pngs/close-icon-png/close_icon_png_289219.png"
-              }
+              src={closeIcon}
               alt=""
             />
           </td>
