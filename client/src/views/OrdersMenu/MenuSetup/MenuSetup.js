@@ -1,44 +1,81 @@
-import React, { Component } from 'react';
-import {Badge, Form, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Collapse, FormGroup, FormText, FormFeedback,
-  CardBody, Card, CardHeader, Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Input, InputGroup, InputGroupAddon, 
-  InputGroupText} from 'reactstrap';
-import classnames from 'classnames';
-import './MenuSetup.css'
+import React, { Component } from "react";
+import {
+  Badge,
+  Form,
+  Col,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+  Collapse,
+  FormGroup,
+  FormText,
+  FormFeedback,
+  CardBody,
+  Card,
+  CardHeader,
+  Button,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText
+} from "reactstrap";
+import classnames from "classnames";
+import "./MenuSetup.css";
 import Dotdotdot from "react-dotdotdot";
-import Checkbox from '@material-ui/core/Checkbox';
-import CurrencyInput from 'react-currency-input';
+import Checkbox from "@material-ui/core/Checkbox";
+import CurrencyInput from "react-currency-input";
+import { ObjectID } from 'bson';
 
-const glutenfreeIcon = require('../../../assets/img/glutenfree1.png');
-const hotIcon = require('../../../assets/img/fire.png');
-const spicyIcon = require('../../../assets/img/pepper.png');
-const vegeIcon = require('../../../assets/img/lettuce.png');
-const healthyIcon = require('../../../assets/img/fruit.png');
-const halalicon = require('../../../assets/img/halalsign.png');
-const closeIcon = require('../../../assets/img/close.png');
+const glutenfreeIcon = require("../../../assets/img/glutenfree1.png");
+const hotIcon = require("../../../assets/img/fire.png");
+const spicyIcon = require("../../../assets/img/pepper.png");
+const vegeIcon = require("../../../assets/img/lettuce.png");
+const healthyIcon = require("../../../assets/img/fruit.png");
+const halalicon = require("../../../assets/img/halalsign.png");
+const closeIcon = require("../../../assets/img/close.png");
+const dropDownIcon = require("../../../assets/img/dropdown.png");
+const dropUpIcon = require("../../../assets/img/dropup.png");
 
 class MenuSetup extends Component {
-
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
     this.toggleNewCategoryModal = this.toggleNewCategoryModal.bind(this);
     this.toggleNewItemModal = this.toggleNewItemModal.bind(this);
+    this.toggleDeleteItemModal = this.toggleDeleteItemModal.bind(this);
     this.handleCategoryNameChange = this.handleCategoryNameChange.bind(this);
-    this.addNewCategory = this.addNewCategory.bind(this); 
-    this.addNewItem = this.addNewItem.bind(this);
-    this.handleSelectionTitleChange = this.handleSelectionTitleChange.bind(this);
-    this.handleSelectionDescripChange = this.handleSelectionDescripChange.bind(this);
-    this.handleSelectionPriceChange = this.handleSelectionPriceChange.bind(this);
-    this.handleSelectionMinQuantityChange = this.handleSelectionMinQuantityChange.bind(this);
-    this.handleSelectionServeChange = this.handleSelectionServeChange.bind(this);
-    this.handleSelectionCategoryChange = this.handleSelectionCategoryChange.bind(this);
-    this.handleSelectionMaxNumChange = this.handleSelectionMaxNumChange.bind(this);
-    this.handleSelectionItemTitleChange = this.handleSelectionItemTitleChange.bind(this);
-    this.handleSelectionItemPriceChange = this.handleSelectionItemPriceChange.bind(this);
+    this.addNewMenuCategory = this.addNewMenuCategory.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleDescripChange = this.handleDescripChange.bind(this);
+    this.handlePriceChange = this.handlePriceChange.bind(this);
+    this.handleMinQuantityChange = this.handleMinQuantityChange.bind(this);
+    this.handleServeChange = this.handleServeChange.bind(this);
+    this.handleSelectionCategoryChange = this.handleSelectionCategoryChange.bind(
+      this
+    );
+    this.handleSelectionMaxNumChange = this.handleSelectionMaxNumChange.bind(
+      this
+    );
+    this.handleSelectionItemTitleChange = this.handleSelectionItemTitleChange.bind(
+      this
+    );
+    this.handleSelectionItemPriceChange = this.handleSelectionItemPriceChange.bind(
+      this
+    );
+
+    this.myRef = React.createRef()   // Create a ref object 
 
     this.state = {
-      activeTab: 'Appetizer',
+      activeTab: "Appetizer",
       menutitle: [
         "Appetizer",
         "Breakfast",
@@ -52,233 +89,47 @@ class MenuSetup extends Component {
         "Desserts",
         "Beverages"
       ],
-      markitem: ['Hot', 'Spicy', 'Halal', 'Gluten Free', 'Vegetarian', 'Healthy'],
-      servecount: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,30,40,50,60,70,80,90,100],
-      totalTabs: ['appetizer', 'breakfast', 'sandwiches', 'salads', 'catering', 'entrees', 'lunches', 'sides', 'desserts', 'beverages'],
-      breakfast: [
-        {
-          categoryname: 'Breakfast',
-          items: [
-            {
-              title: 'Irish Breakfast',
-              descrip: 'Tomato sauce, oregano, mozzarella and fresh basil',
-              serve: '1',
-              markas: ['Hot'],
-              price: '€9.00'
-            },
-          ]
-        }
+      markitem: [
+        "Hot",
+        "Spicy",
+        "Halal",
+        "Gluten Free",
+        "Vegetarian",
+        "Healthy"
       ],
-      sandwiches: [
-        {
-          categoryname: 'Sandwiches',
-          items: []
-        }
-      ],
-      salads: [
-        {
-          categoryname: 'Salads',
-          items: []
-        }
-      ],
-      catering: [
-        {
-          categoryname: 'Catering',
-          items: []
-        }
-      ],
-      entrees: [
-        {
-          categoryname: 'Entrees',
-          items: []
-        }
-      ],
-      lunches: [
-        {
-          categoryname: 'Lunches',
-          items: []
-        }
-      ],
-      sides: [
-        {
-          categoryname: 'Sides',
-          items: []
-        }
-      ],
-      desserts: [
-        {
-          categoryname: 'Desserts',
-          items: []
-        }
-      ],
-      beverages: [
-        {
-          categoryname: 'Beverages',
-          items: []
-        }
-      ],
-      selectionitems: [],
-      items: [
-        {
-          title: "Chicken Masala",
-          descrip: "Tomato sauce, oregano, mozzarella and fresh basil",
-          dishtype: "single",
-          minimumquantity: 10,
-          serveperunit: 1,
-          priceperunit: 8.00,
-          markitem: ['Hot', 'Spicy'],
-          selection: 
-          [
-            {
-              selectioncategory: 'Starter',
-              selectionmaxnum: 2,
-              selectionitem: 
-              [
-                {
-                  selectionitemtitle: 'Pork Rib',
-                  selectionitemprice: 2.00
-                },
-                {
-                  selectionitemtitle: 'Sring Roll',
-                  selectionitemprice: 1.00
-                },
-                {
-                  selectionitemtitle: 'Chicken wings',
-                  selectionitemprice: 2.00
-                },
-                {
-                  selectionitemtitle: 'Hot & Sour Soup',
-                  selectionitemprice: 0
-                }
-              ]
-            },
-            {
-              selectioncategory: 'Sauce',
-              selectionmaxnum: 1,
-              selectionitem: 
-              [
-                {
-                  selectionitemtitle: 'Chili',
-                  selectionitemprice: 1.00
-                },
-                {
-                  selectionitemtitle: 'Curry',
-                  selectionitemprice: 1.50
-                },
-                {
-                  selectionitemtitle: 'Garlic Dip',
-                  selectionitemprice: 1.00
-                }
-              ]
-            }
-          ]
-        },
-      ],
-      appetizer: [
-        {
-          categoryname: 'LALA',
-          items: [
-            {
-              title: 'Hot Dog',
-              descrip: 'Tomato sauce, oregano, mozzarella and fresh basil',
-              serve: 4,
-              minquantity: 5,
-              markas: ['Hot', 'Spicy'],
-              price: '€3.00'
-            },
-            {
-              title: 'Pizza Prosciutto',
-              descrip: 'Tomato sauce, mozzarella, prosciutto',
-              serve: 6,
-              minquantity: 1,
-              markas: ['Halal', 'Healthy'],
-              price: '€11.00'
-            },
-            {
-              title: 'Pizza Prosciutto',
-              descrip: 'Tomato sauce, mozzarella, prosciutto',
-              serve: 6,
-              minquantity: 1,
-              markas: ['Vegetarian', 'Hot'],
-              price: '€11.00'
-            },
-          ],
-        },
-        {
-          categoryname: 'App',
-          items: [
-            {
-              title: 'Hot Dog',
-              descrip: 'Tomato sauce, oregano, mozzarella and fresh basil',
-              serve: 4,
-              minquantity: 5,
-              markas: ['Hot'],
-              price: '€3.00'
-            },
-            {
-              title: 'Pizza Prosciutto',
-              descrip: 'Tomato sauce, mozzarella, prosciutto',
-              serve: 6,
-              minquantity: 1,
-              markas: ['Spicy', 'Hot'],
-              price: '€11.00'
-            },
-            {
-              title: 'Pizza Prosciutto',
-              descrip: 'Tomato sauce, mozzarella, prosciutto',
-              serve: 6,
-              minquantity: 1,
-              markas: [],
-              price: '€11.00'
-            },
-          ],
-        },
-        {
-          categoryname: 'Appetizer',
-          items: [
-            {
-              title: 'Pizza Margherita',
-              descrip: 'Tomato sauce, oregano, mozzarella and fresh basil. Tomato sauce, mozzarella, prosciutto',
-              serve: 4,
-              minquantity: 2,
-              markas: [],
-              price: '€7.00'
-            },
-            {
-              title: 'Pizza Prosciutto',
-              descrip: 'Tomato sauce, mozzarella, prosciutto',
-              serve: 6,
-              minquantity: 1,
-              markas: ['Vegetarian', 'Hot'],
-              price: '€11.00'
-            },
-          ],
-        },
-        {
-          categoryname: 'Fruity Combo',
-          items: [
-            {
-              title: 'Hot Dog Combo Wombo',
-              descrip: 'Tomato sauce, oregano, mozzarella and fresh basil',
-              serve: 3,
-              minquantity: 3,
-              markas: ['Vegetarian', 'Hot', 'Spicy', 'Halal'],
-              price: '€12.00'
-            },
-            {
-              title: 'Pizza Prosciutto',
-              descrip: 'Tomato sauce, mozzarella, prosciutto',
-              serve: 6,
-              minquantity: 5,
-              markas: [],
-              price: '€11.00'
-            },
-          ],
-        },
+      servecount: [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
       ],
       fetchedmenu: [
         {
-          _id: '1',
+          _id: "1",
           title: "Hot Dog",
           categoryname: "Appetizer",
           categorytag: "Appetizer",
@@ -288,7 +139,7 @@ class MenuSetup extends Component {
           serveperunit: 1,
           minimumquantity: 1,
           markitem: ["Hot", "Spicy"],
-          priceperunit: 4.50,
+          priceperunit: 4.5,
           selection: [
             {
               selectioncategory: "Starter",
@@ -296,19 +147,19 @@ class MenuSetup extends Component {
               selectionitem: [
                 {
                   selectionitemtitle: "Pork Rib",
-                  selectionitemprice: 2.00
+                  selectionitemprice: 2.0
                 },
                 {
                   selectionitemtitle: "Sring Roll",
-                  selectionitemprice: 1.00
+                  selectionitemprice: 1.0
                 },
                 {
                   selectionitemtitle: "Fried Ball",
-                  selectionitemprice: 1.00
+                  selectionitemprice: 1.0
                 },
                 {
                   selectionitemtitle: "Hot n Sour Soup",
-                  selectionitemprice: 1.50
+                  selectionitemprice: 1.5
                 }
               ]
             },
@@ -318,18 +169,18 @@ class MenuSetup extends Component {
               selectionitem: [
                 {
                   selectionitemtitle: "Pita Bread",
-                  selectionitemprice: 0.00
+                  selectionitemprice: 0.0
                 },
                 {
                   selectionitemtitle: "Tortilla Bread",
-                  selectionitemprice: 0.00
+                  selectionitemprice: 0.0
                 }
               ]
             }
-          ],
+          ]
         },
         {
-          _id: '2',
+          _id: "2",
           title: "Breakfast Prosciutto",
           categoryname: "Appetizer",
           categorytag: "Appetizer",
@@ -338,10 +189,26 @@ class MenuSetup extends Component {
           serveperunit: 6,
           minimumquantity: 1,
           markitem: ["Halal", "Healthy"],
-          priceperunit: 28.00,
+          priceperunit: 28.0,
+          selection: [
+            {
+              selectioncategory: "Roll",
+              selectionmaxnum: 1,
+              selectionitem: [
+                {
+                  selectionitemtitle: "Baguette",
+                  selectionitemprice: 1.0
+                },
+                {
+                  selectionitemtitle: "Sandwich",
+                  selectionitemprice: 1.0
+                }
+              ]
+            }
+          ]
         },
         {
-          _id: '3',
+          _id: "3",
           title: "Meatball with Swedish Pork Rib",
           categoryname: "Appetizer",
           categorytag: "Appetizer",
@@ -350,11 +217,11 @@ class MenuSetup extends Component {
           serveperunit: 4,
           minimumquantity: 1,
           markitem: [],
-          priceperunit: 15.00,
-          selection: [],
+          priceperunit: 15.0,
+          selection: []
         },
         {
-          _id: '4',
+          _id: "4",
           title: "Fried Rice Ball",
           categoryname: "Appetizer",
           categorytag: "Appetizer",
@@ -363,11 +230,11 @@ class MenuSetup extends Component {
           serveperunit: 4,
           minimumquantity: 1,
           markitem: ["Vegetarian", "Hot"],
-          priceperunit: 15.00,
-          selection: [],
+          priceperunit: 15.0,
+          selection: []
         },
         {
-          _id: '5',
+          _id: "5",
           title: "Tortilla Wrap",
           categoryname: "Morning wraps",
           categorytag: "Appetizer",
@@ -376,11 +243,11 @@ class MenuSetup extends Component {
           serveperunit: 4,
           minimumquantity: 2,
           markitem: ["Hot"],
-          priceperunit: 12.00,
-          selection: [],
+          priceperunit: 12.0,
+          selection: []
         },
         {
-          _id: '6',
+          _id: "6",
           title: "Mexican Burrito",
           categoryname: "Morning wraps",
           categorytag: "Appetizer",
@@ -389,11 +256,11 @@ class MenuSetup extends Component {
           serveperunit: 1,
           minimumquantity: 4,
           markitem: ["Spicy", "Hot"],
-          priceperunit: 5.00,
-          selection: [],
+          priceperunit: 5.0,
+          selection: []
         },
         {
-          _id: '7',
+          _id: "7",
           title: "Cheese Egg",
           categoryname: "Supa Breakfast",
           categorytag: "Breakfast",
@@ -403,11 +270,11 @@ class MenuSetup extends Component {
           serveperunit: 4,
           minimumquantity: 1,
           markitem: ["Hot", "Spicy"],
-          priceperunit: 10.00,
-          selection: [],
+          priceperunit: 10.0,
+          selection: []
         },
         {
-          _id: '8',
+          _id: "8",
           title: "English Breakfast with Tea",
           categoryname: "Supa Breakfast",
           categorytag: "Breakfast",
@@ -416,8 +283,8 @@ class MenuSetup extends Component {
           serveperunit: 6,
           minimumquantity: 1,
           markitem: ["Hot", "Healthy"],
-          priceperunit: 22.00,
-          selection: [],
+          priceperunit: 22.0,
+          selection: []
         }
       ],
       menu: [
@@ -568,20 +435,31 @@ class MenuSetup extends Component {
       ],
       menuModalOpen: false,
       categoryModal: false,
-      menuModalOpen: false,
+      updateCategory: false,
       selectionModal: false,
-      isNewItemButtonActive: false,
+      deleteModalOpen: false,
       updateItem: false,
-      newCategoryName: '',
-      selectedDishType: '',
-      selectedItemTitle: '',
-      selectedItemDescrip: '',
+      newMenuCategoryName: "",
+      oldMenuCategoryName: "",
+      selectedDishType: "",
+      selectedItemTitle: "",
+      isTitleEmpty: false,
+      selectedItemDescrip: "",
+      isDescripEmpty: false,
       selectedItemPrice: 0,
+      isPriceEmpty: false,
       selectedItemServe: 1,
+      isServeEmpty: false,
       selectedItemMinimumQuantity: 1,
+      isMinimumQuantityEmpty: false,
       selectedItemSelection: [],
+      isItemSelectionEmpty: false,
       selectedMarkItemAs: [],
-      selectedItemSelectionInnerItems: null,
+      selectedItemId: "",
+      selectedCategoryName: "",
+      selectedCategoryTag: "",
+      toBeReplaceItemArray: [],
+      deleteItemFunctionName: "",
     };
   }
 
@@ -621,13 +499,11 @@ class MenuSetup extends Component {
       finalresult.push(parentObject);
     }
 
-    console.log(JSON.stringify(finalresult));
-
     this.setState({
       menu: finalresult
     });
-  }
-  
+  };
+
   toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
@@ -636,52 +512,48 @@ class MenuSetup extends Component {
     }
   }
 
+  toggleSelection = index => {
+    var selectedSelectionArray = this.state.selectedItemSelection.slice();
+    var selectedSelectionJson = JSON.parse(
+      JSON.stringify(selectedSelectionArray[index])
+    );
+
+    if (typeof selectedSelectionJson.selectionisOpen === "undefined") {
+      selectedSelectionJson.selectionisOpen = true;
+    } else {
+      selectedSelectionJson.selectionisOpen = !selectedSelectionJson.selectionisOpen;
+    }
+
+    selectedSelectionArray.splice(index, 1, selectedSelectionJson);
+
+    this.setState({
+      selectedItemSelection: selectedSelectionArray
+    });
+  };
+
   //Toggle Modal///////////////////////////////////////////////////////////////////////
 
   toggleNewCategoryModal() {
     this.setState({
       categoryModal: !this.state.categoryModal,
-      newCategoryName: ''
+      newMenuCategoryName: "",
+      oldMenuCategoryName: "",
+      updateCategory: false
     });
   }
 
   toggleNewItemModal() {
     this.setState({
       menuModalOpen: !this.state.menuModalOpen,
-      updateItem: false,
-      selectedDishType: '',
-      selectedItemTitle: '',
-      selectedItemDescrip: '',
-      selectedItemPrice: 0,
-      selectedItemServe: 1,
-      selectedItemMinimumQuantity: 1,
-      selectedItemSelection: [],
-      selectedMarkItemAs: [],
+      updateItem: false
     });
   }
 
-  editSelection = ( categoryname, maxnum, items) => {
-    var selectionitem_new = []
-    for (let i = 0; i < items.length; i ++) {
-      selectionitem_new.push(items[i])
-    }
-    
-    var inneritems = {
-      selectioncategory: categoryname,
-      selectionmaxnum: maxnum,
-      selectionitem: selectionitem_new
-    }
-
+  toggleDeleteItemModal() {
     this.setState({
-      selectionModal: !this.state.selectionModal,
-      selectedItemSelectionInnerItems: inneritems
-    })
-  }
-
-  toggleNewSelectionModal = () => {
-    this.setState({
-      selectionModal: !this.state.selectionModal,
-      selectedItemSelectionInnerItems: null,
+      deleteModalOpen: !this.state.deleteModalOpen,
+      toBeReplaceItemArray: [],
+      deleteItemFunctionName: ''
     });
   }
 
@@ -689,262 +561,508 @@ class MenuSetup extends Component {
 
   navItemClicked = activeTab => {
     this.setState({
-      activeTab: activeTab,
+      activeTab: activeTab
     });
   };
 
-  menuItemClicked = (_id) => {
-    var itemindex = this.state.fetchedmenu.findIndex(x => x._id==_id);
+  selectDishType = selectedDishType => {
+    this.setState({
+      selectedDishType: selectedDishType
+    });
+  };
+
+  menuItemClicked = _id => {
+    var itemindex = this.state.fetchedmenu.findIndex(x => x._id == _id);
+
     if (itemindex >= 0) {
-      this.setState({
-        menuModalOpen: !this.state.menuModalOpen,
-        updateItem: true,
-        selectedDishType: this.state.fetchedmenu[itemindex].dishtype,
-        selectedItemTitle: this.state.fetchedmenu[itemindex].title,
-        selectedItemDescrip: this.state.fetchedmenu[itemindex].descrip,
-        selectedItemPrice: this.state.fetchedmenu[itemindex].priceperunit,
-        selectedItemServe: this.state.fetchedmenu[itemindex].serveperunit,
-        selectedItemMinimumQuantity: this.state.fetchedmenu[itemindex].minimumquantity,
-        selectedItemSelection: typeof this.state.fetchedmenu[itemindex].selection == 'undefined' ? [] : this.state.fetchedmenu[itemindex].selection,
-        selectedMarkItemAs: typeof this.state.fetchedmenu[itemindex].markitem == 'undefined' ? [] : this.state.fetchedmenu[itemindex].markitem,
-      });
+      this.setState(
+        {
+          menuModalOpen: !this.state.menuModalOpen,
+          updateItem: true,
+          selectedItemId: this.state.fetchedmenu[itemindex]._id,
+          selectedDishType: this.state.fetchedmenu[itemindex].dishtype,
+          selectedItemTitle: this.state.fetchedmenu[itemindex].title,
+          selectedItemDescrip: this.state.fetchedmenu[itemindex].descrip,
+          selectedItemPrice: this.state.fetchedmenu[itemindex].priceperunit,
+          selectedItemServe: this.state.fetchedmenu[itemindex].serveperunit,
+          selectedItemMinimumQuantity: this.state.fetchedmenu[itemindex].minimumquantity,
+          selectedCategoryName: this.state.fetchedmenu[itemindex].categoryname,
+          selectedCategoryTag: this.state.fetchedmenu[itemindex].categorytag,
+          selectedItemSelection:
+            typeof this.state.fetchedmenu[itemindex].selection == "undefined"
+              ? []
+              : this.state.fetchedmenu[itemindex].selection,
+          selectedMarkItemAs:
+            typeof this.state.fetchedmenu[itemindex].markitem == "undefined"
+              ? []
+              : this.state.fetchedmenu[itemindex].markitem
+        },
+        () => {this.clearFormFeedback()}
+      );
     }
   };
 
-  addNewCategory() {
-    var menuarray = this.state.menu;
-    var menuindex = menuarray.findIndex(x => x.menutitle==this.state.activeTab);
-  
-    var addItem = {
-      categoryname: this.state.newCategoryName,
-      items: [],
+  addNewItemClicked = (menutitle, categoryname) => {
+    this.setState(
+      {
+        menuModalOpen: !this.state.menuModalOpen,
+        updateItem: false,
+        selectedItemId: "",
+        selectedDishType: "",
+        selectedItemTitle: "",
+        selectedItemDescrip: "",
+        selectedItemPrice: 0,
+        selectedItemServe: 1,
+        selectedItemMinimumQuantity: 1,
+        selectedCategoryName: categoryname,
+        selectedCategoryTag: menutitle,
+        selectedItemSelection: [],
+        selectedMarkItemAs:[]
+      }, () => {this.clearFormFeedback()}
+    )
+  }
+
+  clearFormFeedback = () => {
+    this.setState(
+      {
+        isTitleEmpty: false,
+        isDescripEmpty: false,
+        isPriceEmpty: false,
+        isServeEmpty: false,
+        isMinimumQuantityEmpty: false,
+        isItemSelectionEmpty: false,
+      }
+    )
+  }
+
+  saveMenuCategoryName = () => {
+    var newcategoryname = this.state.newMenuCategoryName;
+    var oldcategoryname = this.state.oldMenuCategoryName;
+ //   alert(categoryname)
+    var menuSliced = this.state.fetchedmenu.slice();
+    for (let i = 0; i < this.state.fetchedmenu.length; i++) {
+      if (menuSliced[i].categoryname === oldcategoryname) {
+        menuSliced[i].categoryname = newcategoryname
+      }
     }
+    this.setState({
+      fetchedmenu: menuSliced,
+      categoryModal: false
+    }, () => {
+      this.restructureMenu()
+    })
+  }
+
+  editMenuCategoryName = (categoryname) => {
+    this.setState({
+      categoryModal: !this.state.categoryModal,
+      newMenuCategoryName: categoryname,
+      oldMenuCategoryName: categoryname,
+      updateCategory: true
+    })
+  }
+
+  addNewMenuCategory() {
+    var menuarray = this.state.menu;
+    var menuindex = menuarray.findIndex(
+      x => x.menutitle == this.state.activeTab
+    );
+
+    var addItem = {
+      categoryname: this.state.newMenuCategoryName,
+      items: []
+    };
 
     if (menuindex >= 0) {
-      menuarray[menuindex].menuitem.unshift(addItem)
-    }
-    else {
+      menuarray[menuindex].menuitem.push(addItem);
+    } else {
       var addMenu = {
         menutitle: this.state.activeTab,
-        menuitem: [ addItem ]
-      }
-      menuarray.unshift(addMenu)
+        menuitem: [addItem]
+      };
+      menuarray.push(addMenu);
     }
 
     this.setState({
       menu: menuarray,
-      categoryModal: !this.state.categoryModal,
+      categoryModal: !this.state.categoryModal
+    },() => {
+      setTimeout(function() { //Start the timer
+        this.scrollToMyRef()
+      }.bind(this), 500)
     })
   }
 
-  addNewItem() {
-    alert('add new')
-  }
+  deleteMenuItem = (_id) => {
+    var menuSliced = this.state.fetchedmenu.slice();
+    var index = menuSliced.findIndex(x => x._id == _id);
+    menuSliced.splice(index, 1);
 
-  selectDishType = (selectedDishType) => {
     this.setState({
-      selectedDishType: selectedDishType,
+     // fetchedmenu: menuSliced,
+      toBeReplaceItemArray: menuSliced,
+      deleteModalOpen: !this.state.deleteModalOpen,
+      deleteItemFunctionName: "deleteMenuItem"
+    },() => {
+      this.restructureMenu()
     })
   }
 
-  addNewSelectionItem = (selectioncategory, selectionmaxnum) => {
-    var inneritems = this.state.selectedItemSelectionInnerItems
+  addNewSelectionCategory = () => {
+    var selectedItemSelection = this.state.selectedItemSelection.slice();
     var newitem = {
-      selectionitemtitle: '',
+      selectionitemtitle: "",
       selectionitemprice: 0
-    }
-    var newSelectionItem= {
-      selectioncategory: selectioncategory,
-      selectionmaxnum: selectionmaxnum,
+    };
+    var newSelectionItem = {
+      selectioncategory: "",
+      selectionmaxnum: 1,
+      selectionisOpen: true,
       selectionitem: [newitem]
+    };
+    //If selection existed
+    if (selectedItemSelection !== null) {
+      selectedItemSelection.push(newSelectionItem);
+    } else if (selectedItemSelection === null) {
+      selectedItemSelection = [newSelectionItem];
     }
-    if (inneritems !== null) {
-      inneritems.selectionitem.push(newitem)
-    }
-    else if (inneritems === null) {
-      inneritems = newSelectionItem
-    }
-    
-    this.setState({
-      selectedItemSelectionInnerItems: inneritems,
-    })
-  }
 
+    this.setState({
+      selectedItemSelection: selectedItemSelection
+    });
+  };
+
+  deleteSelectionCategory = index => {
+    var selectedItemSelection = this.state.selectedItemSelection.slice();
+    selectedItemSelection.splice(index, 1);
+
+    this.setState({
+      //selectedItemSelection: selectedItemSelection,
+      toBeReplaceItemArray: selectedItemSelection,
+      deleteModalOpen: !this.state.deleteModalOpen,
+      deleteItemFunctionName: "deleteSelectionCategory"
+    });
+  };
+
+  addNewSelectionItem = outerindex => {
+    var selectedItemSelection = this.state.selectedItemSelection.slice();
+    var selectedSelectionJson = JSON.parse(
+      JSON.stringify(selectedItemSelection[outerindex])
+    );
+
+    var newitem = {
+      selectionitemtitle: "",
+      selectionitemprice: 0
+    };
+
+    selectedSelectionJson.selectionitem.push(newitem);
+    selectedItemSelection.splice(outerindex, 1, selectedSelectionJson);
+
+    this.setState({
+      selectedItemSelection: selectedItemSelection
+    });
+  };
+
+  deleteSelectionItem = (outerindex, innerindex) => {
+    var selectedItemSelection = this.state.selectedItemSelection.slice();
+    var selectedSelectionJson = JSON.parse(
+      JSON.stringify(selectedItemSelection[outerindex])
+    );
+
+    selectedSelectionJson.selectionitem.splice(innerindex, 1);
+    selectedItemSelection.splice(outerindex, 1, selectedSelectionJson);
+
+    this.setState({
+     // selectedItemSelection: selectedItemSelection,
+      toBeReplaceItemArray: selectedItemSelection,
+      deleteModalOpen: !this.state.deleteModalOpen,
+      deleteItemFunctionName: "deleteSelectionItem"
+    });
+  };
 
   //Other functions///////////////////////////////////////////////////////////////////////
 
-  findIcon = (iconname) => {
+  scrollToMyRef = () => {
+    this.myRef.current.scrollIntoView({ behavior: 'smooth' })
+  }   
+
+  findIcon = iconname => {
     var iconPath;
-    if (iconname == 'Hot') { iconPath = hotIcon }
-    else if (iconname == 'Spicy') { iconPath = spicyIcon }
-    else if (iconname == 'Halal') { iconPath = halalicon }
-    else if (iconname == 'Gluten Free') { iconPath = glutenfreeIcon }
-    else if (iconname == 'Vegetarian') { iconPath = vegeIcon }
-    else if (iconname == 'Healthy') { iconPath = healthyIcon }
-    return iconPath
-  }
- 
-  checkAllInput = () => {
-    const {selectedDishType, selectedItemTitle, selectedItemDescrip, selectedItemPrice, selectedItemServe, selectedItemMinimumQuantity, selectedItemSelection, selectedMarkItemAs} = this.state
-    if (selectedItemTitle != "" && selectedItemDescrip != "") {
-      //Activate Next Button
-      this.setState({ 
-        isNewItemButtonActive: true, 
+    if (iconname == "Hot") {
+      iconPath = hotIcon;
+    } else if (iconname == "Spicy") {
+      iconPath = spicyIcon;
+    } else if (iconname == "Halal") {
+      iconPath = halalicon;
+    } else if (iconname == "Gluten Free") {
+      iconPath = glutenfreeIcon;
+    } else if (iconname == "Vegetarian") {
+      iconPath = vegeIcon;
+    } else if (iconname == "Healthy") {
+      iconPath = healthyIcon;
+    }
+    return iconPath;
+  };
+
+  checkInput = () => {
+    const {
+      selectedDishType,
+      selectedItemTitle,
+      selectedItemDescrip,
+      selectedItemPrice,
+      selectedItemServe,
+      selectedItemMinimumQuantity,
+      selectedItemSelection,
+      selectedMarkItemAs,
+      selectedItemId,
+      selectedCategoryName,
+      selectedCategoryTag,
+      updateItem
+    } = this.state;
+
+    if (selectedItemTitle === "") {
+      this.setState({
+        isTitleEmpty: true
+      });
+    } else if (selectedItemDescrip === "") {
+      this.setState({
+        isDescripEmpty: true
+      });
+    } else if (this.checkSelection() === true) {
+      this.setState({
+        isItemSelectionEmpty: true
       });
     }
     else {
-      this.setState({ 
-        isNewItemButtonActive: false, 
-      });
-    }
-  }
+      if (updateItem) {
+        //Update Item
+        var slicedMenu = this.state.fetchedmenu.slice();
+        var index = slicedMenu.findIndex(x => x._id == selectedItemId);
+        var menuItemJson = JSON.parse(JSON.stringify(slicedMenu[index]));
+        menuItemJson.dishtype = selectedDishType;
+        menuItemJson.title = selectedItemTitle;
+        menuItemJson.descrip = selectedItemDescrip;
+        menuItemJson.priceperunit = selectedItemPrice;
+        menuItemJson.serveperunit = selectedItemServe;
+        menuItemJson.minimumquantity = selectedItemMinimumQuantity;
+      
+        if (selectedItemSelection.length > 0) {
+          menuItemJson.selection = selectedItemSelection;
+        }
 
-  //Handle Input Chaneg//////////////////////////////////////////////////////////////////////
+        if (selectedMarkItemAs.length > 0) {
+          menuItemJson.markitem = selectedMarkItemAs;
+        }
+      
+        slicedMenu.splice(index, 1, menuItemJson);
+     
+        this.setState({
+          fetchedmenu: slicedMenu,
+          menuModalOpen: !this.state.menuModalOpen
+        }, () => {
+          this.restructureMenu()
+        })
+      }
+      else {
+        //Add item
+        var newMenuItem = {
+          _id: new ObjectID().toString(),
+          title: selectedItemTitle,
+          categoryname: selectedCategoryName,
+          categorytag: selectedCategoryTag,
+          descrip: selectedItemDescrip,
+          dishtype: selectedDishType,
+          serveperunit: selectedItemServe,
+          minimumquantity: selectedItemMinimumQuantity,
+          priceperunit: selectedItemPrice,
+        }
+
+        if (selectedItemSelection.length > 0) {
+          newMenuItem.selection = selectedItemSelection;
+        }
+
+        if (selectedMarkItemAs.length > 0) {
+          newMenuItem.markitem = selectedMarkItemAs;
+        }
+
+        var slicedMenu = this.state.fetchedmenu.slice();
+        slicedMenu.push(newMenuItem)
+        alert(JSON.stringify(newMenuItem))
+
+        this.setState({
+          fetchedmenu: slicedMenu,
+          menuModalOpen: !this.state.menuModalOpen
+        }, () => {
+          this.restructureMenu()
+        })
+      }
+    }
+  };
+
+  checkSelection = () => {
+    const { selectedItemSelection } = this.state;
+    var selectedSelectionArray = selectedItemSelection.slice();
+
+    for (let i = 0; i < selectedSelectionArray.length; i++) {
+      if (selectedSelectionArray[i].selectioncategory === "") {
+        return true;
+      }
+      var selectedSelectionItemArray = selectedSelectionArray[
+        i
+      ].selectionitem.slice();
+      for (let x = 0; x < selectedSelectionItemArray.length; x++) {
+        if (selectedSelectionItemArray[x].selectionitemtitle === "") {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  //Handle Input Change//////////////////////////////////////////////////////////////////////
 
   handleCheckBoxChange = (e, markeditem) => {
+    var selectedMarkItemAs = this.state.selectedMarkItemAs.slice();
+    var index = selectedMarkItemAs.findIndex(x => x == markeditem);
 
-    var selectedMarkItemAs = this.state.selectedMarkItemAs
-    var index = selectedMarkItemAs.findIndex(x => x==markeditem);
-    
-    //If selectioncategory exist
-    if (index >=0) {
-      selectedMarkItemAs.splice(index, 1)
+    //If selectedmarkitem exist
+    if (index >= 0) {
+      selectedMarkItemAs.splice(index, 1);
     }
-    //If selectioncategory not exist
+    //If selectedmarkitem not exist
     else {
-      selectedMarkItemAs.push(markeditem)
+      selectedMarkItemAs.push(markeditem);
     }
 
-    this.setState({ 
-      selectedMarkItemAs: selectedMarkItemAs, 
-    })
-  }
+    this.setState({
+      selectedMarkItemAs: selectedMarkItemAs
+    });
+  };
 
   handleCategoryNameChange(e) {
-    this.setState({ newCategoryName: e.target.value });
+    this.setState({ newMenuCategoryName: e.target.value });
   }
 
-  handleSelectionTitleChange(e) {
-    this.setState({ 
-      selectedItemTitle: e.target.value,
-    },() => {
-      this.checkAllInput()
-    })
+  handleTitleChange(e) {
+    this.setState({
+      selectedItemTitle: e.target.value
+    });
   }
 
-  handleSelectionDescripChange(e) {
-    this.setState({ 
-      selectedItemDescrip: e.target.value,
-    },() => {
-      this.checkAllInput()
-    })
+  handleDescripChange(e) {
+    this.setState({
+      selectedItemDescrip: e.target.value
+    });
   }
 
-  handleSelectionPriceChange(e, value) {
-    
-    this.setState({ 
-      selectedItemPrice: Number(value).toFixed(2),
-    },() => {
-      this.checkAllInput()
-    })
+  handlePriceChange(e, value) {
+    this.setState({
+      selectedItemPrice: Number(value).toFixed(2)
+    });
   }
 
-  handleSelectionMinQuantityChange(e) {
-    this.setState({ 
-      selectedItemMinimumQuantity: e.target.value,
-    },() => {
-      this.checkAllInput()
-    })
+  handleMinQuantityChange(e) {
+    this.setState({
+      selectedItemMinimumQuantity: e.target.value
+    });
   }
 
-  handleSelectionServeChange(e) {
-    this.setState({ 
-      selectedItemServe: e.target.value,
-    },() => {
-      this.checkAllInput()
-    })
+  handleServeChange(e) {
+    this.setState({
+      selectedItemServe: e.target.value
+    });
   }
 
-  handleSelectionCategoryChange(e) {
-    var inneritems = this.state.selectedItemSelectionInnerItems
-    var newSelectionItem= {
-      selectioncategory: e.target.value,
-      selectionmaxnum: 1,
-      selectionitem: []
+  handleSelectionCategoryChange(e, index) {
+    var selectedSelectionArray = this.state.selectedItemSelection.slice();
+    var selectedSelectionJson = JSON.parse(
+      JSON.stringify(selectedSelectionArray[index])
+    );
+
+    if (typeof selectedSelectionJson.selectioncategory === "undefined") {
+      selectedSelectionJson.selectioncategory = e.target.value;
+    } else {
+      selectedSelectionJson.selectioncategory = e.target.value;
     }
-    if (inneritems === null) {
-      inneritems = newSelectionItem
-    }
-    else {
-      inneritems.selectioncategory = e.target.value
-    }
-    this.setState({ 
-      selectedItemSelectionInnerItems: inneritems,
-    })
+
+    selectedSelectionArray.splice(index, 1, selectedSelectionJson);
+
+    this.setState({
+      selectedItemSelection: selectedSelectionArray
+    });
   }
 
-  handleSelectionMaxNumChange(e) {
-    var inneritems = this.state.selectedItemSelectionInnerItems
-    var newSelectionItem= {
-      selectioncategory: '',
-      selectionmaxnum: e.target.value,
-      selectionitem: []
+  handleSelectionMaxNumChange(e, index) {
+    var selectedSelectionArray = this.state.selectedItemSelection.slice();
+    var selectedSelectionJson = JSON.parse(
+      JSON.stringify(selectedSelectionArray[index])
+    );
+
+    if (typeof selectedSelectionJson.selectionmaxnum === "undefined") {
+      selectedSelectionJson.selectionmaxnum = e.target.value;
+    } else {
+      selectedSelectionJson.selectionmaxnum = e.target.value;
     }
-    if (inneritems === null) {
-      inneritems = newSelectionItem;
-    }
-    else {
-      inneritems.selectionmaxnum = e.target.value
-    }
-    this.setState({ 
-      selectedItemSelectionInnerItems: inneritems,
-    })
+
+    selectedSelectionArray.splice(index, 1, selectedSelectionJson);
+
+    this.setState({
+      selectedItemSelection: selectedSelectionArray
+    });
   }
 
-  handleSelectionItemTitleChange(e, index) {
-    var inneritems = this.state.selectedItemSelectionInnerItems;
-    var innerselectionitems = {
-      selectionitemtitle: e.target.value,
-      selectionitemprice: 0
-    }
-    var newSelectionItem= {
-      selectioncategory: '',
-      selectionmaxnum: 1,
-      selectionitem: [innerselectionitems]
-    } 
+  handleSelectionItemTitleChange(e, outerindex, innerindex) {
+    var selectedSelectionArray = this.state.selectedItemSelection.slice();
+    var selectedSelectionJson = JSON.parse(
+      JSON.stringify(selectedSelectionArray[outerindex])
+    );
+    var selectedSelectionItemArray = selectedSelectionArray[
+      outerindex
+    ].selectionitem.slice();
+    var selectedSelectionItemJson = JSON.parse(
+      JSON.stringify(selectedSelectionItemArray[innerindex])
+    );
 
-    if (inneritems === null) {
-      inneritems = newSelectionItem;
+    if (typeof selectedSelectionItemJson.selectionitemtitle === "undefined") {
+      selectedSelectionItemJson.selectionitemtitle = e.target.value;
+    } else {
+      selectedSelectionItemJson.selectionitemtitle = e.target.value;
     }
-    else {
-      inneritems.selectionitem[index].selectionitemtitle = e.target.value 
-    }
-    this.setState({ 
-      selectedItemSelectionInnerItems: inneritems,
-    })
+
+    selectedSelectionItemArray.splice(innerindex, 1, selectedSelectionItemJson);
+    selectedSelectionJson.selectionitem = selectedSelectionItemArray;
+    selectedSelectionArray.splice(outerindex, 1, selectedSelectionJson);
+
+    this.setState({
+      selectedItemSelection: selectedSelectionArray
+    });
   }
 
-  handleSelectionItemPriceChange(e, value, index) {
-    var inneritems = this.state.selectedItemSelectionInnerItems
-    var innerselectionitems = {
-      selectionitemtitle: '',
-      selectionitemprice: value
-    }
-    var newSelectionItem= {
-      selectioncategory: '',
-      selectionmaxnum: 1,
-      selectionitem: [innerselectionitems]
-    } 
+  handleSelectionItemPriceChange(e, value, outerindex, innerindex) {
+    var selectedSelectionArray = this.state.selectedItemSelection.slice();
+    var selectedSelectionJson = JSON.parse(
+      JSON.stringify(selectedSelectionArray[outerindex])
+    );
+    var selectedSelectionItemArray = selectedSelectionArray[
+      outerindex
+    ].selectionitem.slice();
+    var selectedSelectionItemJson = JSON.parse(
+      JSON.stringify(selectedSelectionItemArray[innerindex])
+    );
 
-    if (inneritems === null) {
-      inneritems = newSelectionItem;
+    if (typeof selectedSelectionItemJson.selectionitemprice === "undefined") {
+      selectedSelectionItemJson.selectionitemprice = value;
+    } else {
+      selectedSelectionItemJson.selectionitemprice = value;
     }
-    else {
-      inneritems.selectionitem[index].selectionitemprice = value
-    }
-    this.setState({ 
-      selectedItemSelectionInnerItems: inneritems,
-    })
+
+    selectedSelectionItemArray.splice(innerindex, 1, selectedSelectionItemJson);
+    selectedSelectionJson.selectionitem = selectedSelectionItemArray;
+    selectedSelectionArray.splice(outerindex, 1, selectedSelectionJson);
+
+    this.setState({
+      selectedItemSelection: selectedSelectionArray
+    });
   }
 
   //Render functions///////////////////////////////////////////////////////////////////////
@@ -977,43 +1095,59 @@ class MenuSetup extends Component {
       </NavItem>
     );
   }
-  
+
   renderNav() {
     var totaltabsarray = [];
     for (let i = 0; i < this.state.menutitle.length; i++) {
-      totaltabsarray.push(
-        this.renderNavItem(this.state.menutitle[i])
-      )
+      totaltabsarray.push(this.renderNavItem(this.state.menutitle[i]));
     }
-    return <Nav  style={{padding:20}}  className="float-left" pills>{totaltabsarray}</Nav>;
+    return (
+      <Nav style={{ padding: 20, backgroundColor: 'white', width: '100%' }} className="float-left" pills>
+        {totaltabsarray}
+      </Nav>
+    );
   }
 
   renderTabPane() {
-
     var tabarray = [];
 
-    var menutitle = this.state.menutitle
+    var menutitle = this.state.menutitle;
 
-    for(let i = 0; i < menutitle.length; i++){
+    for (let i = 0; i < menutitle.length; i++) {
       tabarray.push(
         <TabPane tabId={menutitle[i]}>
           <Row>
-            <Col style={{marginTop:0, marginBottom: 30}} xs="12">
-              <Button style={{fontSize: 17, fontWeight: '600'}} onClick={this.toggleNewCategoryModal} color="primary" className="btn-pill">  <i className="fa fa-plus fa-1x" aria-hidden="true"/>&nbsp; Add New Category</Button>
+            <Col style={{ marginTop: 0, marginBottom: 30 }} xs="12">
+              <Button
+                style={{ fontSize: 17, fontWeight: "600" }}
+                onClick={this.toggleNewCategoryModal}
+                color="primary"
+                className="btn-pill"
+              >
+                {" "}
+                <i className="fa fa-plus fa-1x" aria-hidden="true" />
+                &nbsp; Add New Category
+              </Button>
             </Col>
-            <Col xs="12">
-            {this.renderMenu(menutitle[i])}
-            </Col>
+            <Col xs="12">{this.renderMenu(menutitle[i])}</Col>
           </Row>
         </TabPane>
-      )
-    } 
+      );
+    }
 
-    return(
-      <TabContent style={{borderWidth: 0, paddingLeft: 20, paddingRight: 20, paddingTop: 0}} activeTab={this.state.activeTab} >
+    return (
+      <TabContent
+        style={{
+          borderWidth: 0,
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 0
+        }}
+        activeTab={this.state.activeTab}
+      >
         {tabarray}
-      </TabContent >
-    )
+      </TabContent>
+    );
   }
 
   renderMenu(menutitle) {
@@ -1026,26 +1160,31 @@ class MenuSetup extends Component {
         categoryarray.push(
           <Col xs="12">
             {this.renderCategoryItems(
+              menutitle,
               selectedmenutab[i].items,
-              selectedmenutab[i].categoryname, 
+              selectedmenutab[i].categoryname
             )}
           </Col>
         );
       }
-    }
-    else {
+    } else {
       for (let i = 0; i < 1; i++) {
         categoryarray.push(
-          <Col style={{padding: 0}} xs="12">
-            <Label style={{marginBottom: 10, marginRight:5, marginLeft:15}} className="h5">{menutitle}</Label>
+          <Col style={{ padding: 0 }} xs="12">
+            <Label
+              style={{ marginBottom: 10, marginRight: 5, marginLeft: 15 }}
+              className="h5"
+            >
+              {menutitle}
+            </Label>
             <a
-              style={{marginTop: -5, cursor: 'pointer', opacity: 0.6}} 
+              style={{ marginTop: -5, cursor: "pointer", opacity: 0.6 }}
               className="card-header-action"
-              onClick={() => alert('Edit Category Name: ' + menutitle)}
+              onClick={() => alert("Edit Category Name: " + menutitle)}
             >
               <i className="fa fa-pencil" />
             </a>
-            {this.renderEmptyItem()}
+            {this.renderEmptyItem(menutitle, menutitle)}
           </Col>
         );
       }
@@ -1053,40 +1192,65 @@ class MenuSetup extends Component {
     return <Row>{categoryarray}</Row>;
   }
 
-  renderCategoryItems(items, categoryname) {
-
+  renderCategoryItems(menutitle, items, categoryname) {
     var itemsarray = [];
 
-    for(let i = 0; i < items.length; i++){
+    for (let i = 0; i < items.length; i++) {
       itemsarray.push(
         <Col xs="12" sm="6" md="6" lg="4">
-          <Card  onClick={() => this.menuItemClicked(items[i]._id)} style={{ cursor: "pointer" }}>
-            <CardHeader style={{padding: 0, margin: 0, borderWidth: 0, backgroundColor: 'white', marginRight: 10}}  >
-            <div className="card-header-actions">
-              <a
-                style={{cursor: 'pointer', opacity: 0.6}} 
-                className="card-header-action btn btn-close"
-                onClick={() => alert('Remove Item')}
-              >
-                <i className="fa fa-times-thin fa-2x" aria-hidden="true"/>
-              </a>
-            </div>
+          <Card className="card-1">
+            <CardHeader
+              style={{
+                padding: 0,
+                margin: 0,
+                borderWidth: 0,
+                backgroundColor: "white",
+                marginRight: 10
+              }}
+            >
+              <div className="card-header-actions">
+                <a
+                  style={{ cursor: "pointer", opacity: 0.6 }}
+                  className="card-header-action btn btn-close"
+                  onClick={() => this.deleteMenuItem(items[i]._id)}
+                >
+                  <i className="fa fa-times-thin fa-2x" aria-hidden="true" />
+                </a>
+              </div>
             </CardHeader>
-            <CardBody style={{cursor: 'pointer', marginTop: 0, marginBottom: 10, padding: 0, height: "100%"}}>
+            <CardBody
+              style={{
+                cursor: "pointer",
+                marginTop: 0,
+                marginBottom: 10,
+                padding: 0,
+                height: "100%"
+              }}
+              onClick={() => this.menuItemClicked(items[i]._id)}
+            >
               <Col>
                 <div class="row">
                   <div>
                     <Dotdotdot clamp={1}>
-                      <h5 style={{ textAlign: "start", marginLeft: 15, marginRight:15,color: '#20a8d8', cursor: "pointer", overflow: "hidden" }}>
+                      <h5
+                        style={{
+                          textAlign: "start",
+                          marginLeft: 15,
+                          marginRight: 15,
+                          color: "#20a8d8",
+                          cursor: "pointer",
+                          overflow: "hidden"
+                        }}
+                      >
                         {items[i].title}
                       </h5>
                     </Dotdotdot>
                   </div>
-                  <Col style={{paddingRight: 20,}}>
+                  <Col style={{ paddingRight: 20 }}>
                     <Label
                       style={{
                         cursor: "pointer",
-                        textAlign: "end",
+                        textAlign: "end"
                       }}
                       className="h5 float-right"
                     >
@@ -1095,8 +1259,18 @@ class MenuSetup extends Component {
                   </Col>
                 </div>
                 <div class="row">
-                  <Label style={{ opacity: 0.7, cursor: 'pointer', marginLeft: 15, fontfStyle: 'italic',}}> Serves {items[i].serveperunit}</Label>
-                  {items[i].minquantity > 1 ? 
+                  <Label
+                    style={{
+                      opacity: 0.7,
+                      cursor: "pointer",
+                      marginLeft: 15,
+                      fontfStyle: "italic"
+                    }}
+                  >
+                    {" "}
+                    Serves {items[i].serveperunit}
+                  </Label>
+                  {items[i].minimumquantity > 1 ? (
                     <Label
                       style={{
                         opacity: 0.7,
@@ -1105,12 +1279,12 @@ class MenuSetup extends Component {
                         fontfStyle: "italic"
                       }}
                     >
-                    | Minimum {items[i].minimumquantity}
+                      | Minimum {items[i].minimumquantity}
                     </Label>
-                    :
-                    null
-                  }
-                  {typeof items[i].markitem === 'undefined' ? null : this.renderMarkAsIcon(items[i].markitem)}
+                  ) : null}
+                  {typeof items[i].markitem === "undefined"
+                    ? null
+                    : this.renderMarkAsIcon(items[i].markitem)}
                 </div>
                 <div style={{ marginTop: 10 }}>
                   <Dotdotdot clamp={2}>
@@ -1123,27 +1297,29 @@ class MenuSetup extends Component {
             </CardBody>
           </Card>
         </Col>
-      )
+      );
     }
 
-    return(
-      <Row >
+    return (
+      <Row>
         <Col xs="12">
-          <Label style={{marginBottom: 10, marginRight:5,}} className="h5">{categoryname}</Label>
+          <Label style={{ marginBottom: 10, marginRight: 5 }} className="h5">
+            {categoryname}
+          </Label>
           <a
-            style={{marginTop: -5, cursor: 'pointer', opacity: 0.6}} 
+            style={{ marginTop: -5, cursor: "pointer", opacity: 0.6 }}
             className="card-header-action"
-            onClick={() => alert('Edit Category Name: ' + categoryname)}
+            onClick={() => this.editMenuCategoryName(categoryname)}
           >
             <i className="fa fa-pencil" />
           </a>
         </Col>
-       
+
         {itemsarray}
 
-         {this.renderEmptyItem()}
+        {this.renderEmptyItem(menutitle, categoryname)}
       </Row>
-    )
+    );
   }
 
   renderMarkAsIcon(markas) {
@@ -1152,7 +1328,8 @@ class MenuSetup extends Component {
       iconarray.push(
         <img
           style={{
-            marginLeft: 5, marginBottom: 5,
+            marginLeft: 5,
+            marginBottom: 5,
             height: 20,
             width: 20,
             objectFit: "cover"
@@ -1160,40 +1337,53 @@ class MenuSetup extends Component {
           src={this.findIcon(markas[i])}
           alt=""
         />
-      )
+      );
     }
-    return(
-      <Col style={{
-        textAlign: 'right',flex: 1}}>
-      {iconarray}
+    return (
+      <Col
+        style={{
+          textAlign: "right",
+          flex: 1
+        }}
+      >
+        {iconarray}
       </Col>
-    )
+    );
   }
 
-  renderEmptyItem() {
-    return(
+  renderEmptyItem(menutitle, categoryname) {
+    return (
       <Col xs="12" sm="6" md="6" lg="4">
-        <Card style={{cursor: 'pointer', borderStyle: 'dashed', borderWidth: 2}} onMouseOver="" onClick={this.toggleNewItemModal}>
-          <CardBody style={{marginTop: 20, marginBottom: 10, padding: 0, height: 130}}>
-            <div class="col" style={{textAlign: 'center'}}>
-              <i style={{color: '#c8ced3', marginTop: 20}} className="fa icon-plus fa-3x text-center"></i>
-              <p style={{marginTop: 20}} >Add New Item</p>
+        <Card
+          style={{ cursor: "pointer", borderStyle: "dashed", borderWidth: 2 }}
+          onMouseOver=""
+          onClick={() => this.addNewItemClicked(menutitle, categoryname)}
+        >
+          <CardBody
+            style={{ marginTop: 20, marginBottom: 10, padding: 0, height: 130 }}
+          >
+            <div class="col" style={{ textAlign: "center" }}>
+              <i
+                style={{ color: "#c8ced3", marginTop: 20 }}
+                className="fa icon-plus fa-3x text-center"
+              />
+              <p style={{ marginTop: 20 }}>Add New Item</p>
             </div>
           </CardBody>
         </Card>
       </Col>
-    )
+    );
   }
 
   renderForm() {
-    var selectedItemTitle = this.state.selectedItemTitle
-    var selectedItemDescrip = this.state.selectedItemDescrip
-    var selectedItemPrice = this.state.selectedItemPrice
-    var selectedItemServe = this.state.selectedItemServe
-    var selectedItemMinimumQuantity = this.state.selectedItemMinimumQuantity
-    var selectedItemSelection = this.state.selectedItemSelection
-    var selectedMarkItemAs = this.state.selectedMarkItemAs
-    var selectedDishType = this.state.selectedDishType
+    var selectedItemTitle = this.state.selectedItemTitle;
+    var selectedItemDescrip = this.state.selectedItemDescrip;
+    var selectedItemPrice = this.state.selectedItemPrice;
+    var selectedItemServe = this.state.selectedItemServe;
+    var selectedItemMinimumQuantity = this.state.selectedItemMinimumQuantity;
+    var selectedItemSelection = this.state.selectedItemSelection;
+    var selectedMarkItemAs = this.state.selectedMarkItemAs;
+    var selectedDishType = this.state.selectedDishType;
     return (
       <Collapse isOpen={selectedDishType == "" ? false : true}>
         <Form action="" method="post" className="form-horizontal">
@@ -1202,10 +1392,17 @@ class MenuSetup extends Component {
               <h6>Title</h6>
             </Col>
             <Col xs="12" md="9">
-              <Input onChange={(e) => this.handleSelectionTitleChange(e)} value={selectedItemTitle} style={{color: 'black'}} type="text" placeholder="Title of the the dish" />
-              <FormText className="help-block">
+              <Input
+                onChange={e => this.handleTitleChange(e)}
+                value={selectedItemTitle}
+                style={{ color: "black" }}
+                type="text"
+                placeholder="Title of the the dish"
+                invalid={this.state.isTitleEmpty ? true : false}
+              />
+              <FormFeedback className="help-block">
                 Please enter title of your dish
-              </FormText>
+              </FormFeedback>
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -1213,98 +1410,109 @@ class MenuSetup extends Component {
               <h6>Description</h6>
             </Col>
             <Col xs="12" md="9">
-              <Input onChange={(e) => this.handleSelectionDescripChange(e)} value={selectedItemDescrip} style={{color: 'black'}} type="textarea" rows="3" placeholder="Description of the dish" />
+              <Input
+                onChange={e => this.handleDescripChange(e)}
+                value={selectedItemDescrip}
+                style={{ color: "black" }}
+                type="textarea"
+                rows="3"
+                placeholder="Description of the dish"
+                invalid={this.state.isDescripEmpty ? true : false}
+              />
+              <FormFeedback className="help-block">
+                Please enter description of your dish
+              </FormFeedback>
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Col xs="6">
-              <FormGroup>
-                <h6 htmlFor="appendedPrependedInput">Price</h6>
-                <div className="controls">
-                  <InputGroup className="input-prepend">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>€</InputGroupText>
-                    </InputGroupAddon>
-                    <CurrencyInput
-                      style={{borderWidth: 1, borderColor: 'rgba(211,211,211,0.3)',paddingLeft:10, color: 'black'}}
-                      value={selectedItemPrice}
-                      onChange={(e, value) => this.handleSelectionPriceChange(e, value)}
-                      placeholder="0.00"
-                      required
-                    />
-                  </InputGroup>
-                </div>
-              </FormGroup>
+            <Col md="3">
+              <h6>Price / Unit</h6>
             </Col>
-            <Col xs="6">
-              <FormGroup>
-                <h6>Unit</h6>
-                {this.state.selectedDishType == 'bulk' ? 
-                <Input style={{color: 'black'}} type="select">
-                  <option>per platter</option>
-                  <option>per tray</option>
-                </Input>
-                :
-                <Input style={{color: 'black'}} type="select">
-                  <option>per plate</option>
-                  <option>per box</option>
-                </Input>
-                }
-              </FormGroup>
-            </Col>
+            <Col xs="12" md="9">
+              <InputGroup style={{padding: 0}} className="input-prepend">
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>€</InputGroupText>
+                </InputGroupAddon>
+                <CurrencyInput
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "rgba(211,211,211,0.3)",
+                    paddingLeft: 10,
+                    color: "black",
+                    width: 100
+                  }}
+                  value={selectedItemPrice}
+                  onChange={(e, value) => this.handlePriceChange(e, value)}
+                  placeholder="0.00"
+                  required
+                />
+              </InputGroup>
+            </Col> 
           </FormGroup>
 
-          {this.state.selectedDishType == 'bulk' ? 
-          <FormGroup row>
-            <Col xs="6">
-              <FormGroup>
-                <h6>Serve</h6>
-                <Input onChange={(e) => this.handleSelectionServeChange(e)} value={selectedItemServe} style={{color: 'black'}} type="select" placeholder="1">
-                  {this.state.servecount.map(serve =>
-                    <option style={{color:'black'}} key={serve} value={serve}>{serve}</option>
-                  )}
+          {this.state.selectedDishType == "bulk" ? (
+            <FormGroup row>
+              <Col md="3">
+                <h6>Serves / Unit</h6>
+              </Col>
+              <Col xs="12" md="9">
+                <Input
+                  onChange={e => this.handleServeChange(e)}
+                  value={selectedItemServe}
+                  style={{ color: "black", width: 135 }}
+                  type="select"
+                  placeholder="1"
+                >
+                  {this.state.servecount.map(serve => (
+                    <option
+                      style={{ color: "black" }}
+                      key={serve}
+                      value={serve}
+                    >
+                      {serve}
+                    </option>
+                  ))}
                 </Input>
-              </FormGroup>
-            </Col>
-            <Col xs="6">
-              <FormGroup>
-                <h6>Unit</h6>
-                <Input style={{color: 'black'}} type="select">
-                  <option>per platter</option>
-                  <option>per tray</option>
-                </Input>
-              </FormGroup>
-            </Col>
-          </FormGroup>
-          : null }
+              </Col>
+            </FormGroup>
+          ) : null}
 
-          {this.state.selectedDishType == 'single' ? 
-          <FormGroup row>
-            <Col xs="6">
-              <FormGroup>
-                <h6>Minimum Quantity</h6>
-                <Input onChange={(e) => this.handleSelectionMinQuantityChange(e)} value={selectedItemMinimumQuantity} style={{color: 'black'}} type="select" placeholder="1">
-                  {this.state.servecount.map(minimumquantity =>
-                    <option style={{color:'black'}} key={minimumquantity} value={minimumquantity}>{minimumquantity}</option>
-                  )}
+          {this.state.selectedDishType == "single" ? (
+            <FormGroup row>
+              <Col md="3">
+                <h6>Min Quantity / Unit</h6>
+              </Col>
+              <Col xs="12" md="9">
+                <Input
+                  onChange={e => this.handleMinQuantityChange(e)}
+                  value={selectedItemMinimumQuantity}
+                  style={{ color: "black", width: 135 }}
+                  type="select"
+                  placeholder="1"
+                >
+                  {this.state.servecount.map(minimumquantity => (
+                    <option
+                      style={{ color: "black" }}
+                      key={minimumquantity}
+                      value={minimumquantity}
+                    >
+                      {minimumquantity}
+                    </option>
+                  ))}
                 </Input>
-              </FormGroup>
-            </Col>
-            <Col xs="6">
-              <FormGroup>
-                <h6>Unit</h6>
-                <Input style={{color: 'black'}} type="select">
-                  <option>per plate</option>
-                  <option>per box</option>
-                </Input>
-              </FormGroup>
-            </Col>
-          </FormGroup>
-          : null }
-          
+              </Col>
+            </FormGroup>
+          ) : null}
+
           {this.renderSelection(selectedItemSelection)}
 
-          <Button block color="primary" onClick={() => this.toggleNewSelectionModal()}>Add Selections (Toppings / Sides)</Button>
+          <Button
+            block
+            color="primary"
+            onClick={() => this.addNewSelectionCategory()}
+          >
+            Add Selections (Toppings / Sides)
+          </Button>
 
           <h6
             style={{
@@ -1327,150 +1535,297 @@ class MenuSetup extends Component {
     for (let i = 0; i < selection.length; i++) {
       selectionarray.push(
         <Card>
-          {this.renderEditSelectionHeader(selection, i)}
-          <CardBody>
-            {this.renderSelectionItems(selection[i].selectionitem)}
-          </CardBody>
+          <CardHeader>
+            <Label style={{ fontWeight: "600" }}>
+              Selection {i + 1}
+            </Label>
+            <div className="card-header-actions">
+              <a
+                onClick={() => this.toggleSelection(i)}
+                style={{ marginRight: 10, cursor: "pointer" }}
+                onMouseOver=""
+                className="card-header-action btn btn-close"
+              >
+                <img
+                  style={{
+                    height: 15,
+                    width: 15,
+                    objectFit: "cover"
+                  }}
+                  src={ selection[i].selectionisOpen ? dropUpIcon : dropDownIcon}
+                  alt=""
+                />
+              </a>
+              <a
+                onClick={() => this.deleteSelectionCategory(i)}
+                style={{ cursor: "pointer" }}
+                onMouseOver=""
+                className="card-header-action btn btn-close"
+              >
+                <img
+                  style={{
+                    height: 10,
+                    width: 10,
+                    objectFit: "cover"
+                  }}
+                  src={closeIcon}
+                  alt=""
+                />
+              </a>
+            </div>
+          </CardHeader>
+          <Collapse isOpen={selection[i].selectionisOpen ? true : false}>
+            <CardBody>
+              <FormGroup row>
+                <Col xs="4">
+                  <h6 style={{ marginTop: 5 }}>Selection Category</h6>
+                </Col>
+                <Col xs="8">
+                  <Input
+                    onChange={e => this.handleSelectionCategoryChange(e, i)}
+                    value={selection[i].selectioncategory}
+                    style={{ color: "black" }}
+                    type="text"
+                    placeholder="Selection Category"
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="4">
+                  <h6 style={{ marginTop: 5 }}>Selection Limit</h6>
+                </Col>
+                <Col xs="8">
+                  <Input
+                    onChange={e => this.handleSelectionMaxNumChange(e, i)}
+                    value={selection[i].selectionmaxnum}
+                    style={{ color: "black" }}
+                    type="select"
+                    placeholder="1"
+                  >
+                    {this.state.servecount.map(limit => (
+                      <option
+                        style={{ color: "black" }}
+                        key={limit}
+                        value={limit}
+                      >
+                        {limit}
+                      </option>
+                    ))}
+                  </Input>
+                </Col>
+              </FormGroup>
+              {this.renderSelectionItems(selection[i].selectionitem, i)}
+            </CardBody>
+          </Collapse>
         </Card>
       );
     }
-    return <FormGroup>{selectionarray}</FormGroup>;
-  }
-
-  renderSelectionHeader(selection, i) {
     return (
-      <CardHeader>
-        <Label style={{fontWeight: '600', color: 'black'}}>Select {selection[i].selectioncategory}</Label>
-        <div className="card-header-actions">
-          <a
-            style={{cursor: 'pointer'}} onMouseOver=""
-            className="card-header-action btn btn-close"
-            onClick={() => this.editSelection(selection[i].selectioncategory, selection[i].selectionmaxnum, selection[i].selectionitem)}
-          >
-            <i className="fa fa-pencil" />
-          </a>
-        </div>
-      </CardHeader>
-    )
+      <FormGroup>
+        {selectionarray}
+        {this.state.isItemSelectionEmpty ? (
+          <FormText className="help-block">
+            <span style={{ color: "red" }}>
+              Please fill in all the empty inputs in selections
+            </span>
+          </FormText>
+        ) : null}
+      </FormGroup>
+    );
   }
 
-  renderEditSelectionHeader(selection, i) {
-    return (
-      <CardHeader>
-        <FormGroup row>
-          <Col xs="4">
-            <h6 style={{marginTop: 5}}>Selection Category</h6>
-          </Col>
-          <Col xs="8">
-            <Input value={selection[i].selectioncategory} style={{color: 'black'}} type="text" placeholder="Selection Category" />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Col xs="4">
-            <h6 style={{marginTop: 5}}>Selection Limit</h6>
-          </Col>
-          <Col xs="8">
-            <Input value={selection[i].selectionmaxnum} style={{color: 'black'}} type="select" placeholder="1" >
-              {this.state.servecount.map(limit =>
-                <option style={{color:'black'}} key={limit} value={limit}>{limit}</option>
-              )}
-            </Input>
-          </Col>
-        </FormGroup>
-      </CardHeader>
-    )
-  }
-
-  renderSelectionItems(selectionitem) {
+  renderSelectionItems(selectionitem, outerindex) {
     var selectionitemarray = [];
     for (let i = 0; i < selectionitem.length; i++) {
       selectionitemarray.push(
-        <Col xs="12" sm="6" md="6">
-          {selectionitem[i].selectionitemprice === 0 ? (
-            <Label>{selectionitem[i].selectionitemtitle}</Label>
-          ) : (
-            <Label>
-              {selectionitem[i].selectionitemtitle} (+€
-              {Number(selectionitem[i].selectionitemprice).toFixed(2)})
-            </Label>
-          )}
-        </Col>
+        <Row>
+          <Col xs="12" md="5">
+            <FormGroup>
+              <div>
+                <Input
+                  onChange={e =>
+                    this.handleSelectionItemTitleChange(e, outerindex, i)
+                  }
+                  value={
+                    selectionitem[i] == null
+                      ? ""
+                      : selectionitem[i].selectionitemtitle
+                  }
+                  style={{ color: "black" }}
+                  type="text"
+                  placeholder="Selection 1"
+                />
+              </div>
+            </FormGroup>
+          </Col>
+          <Col xs="10" md="6">
+            <FormGroup>
+              <div>
+                <InputGroup className="input-prepend">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>€</InputGroupText>
+                  </InputGroupAddon>
+                  <CurrencyInput
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "rgba(211,211,211,0.3)",
+                      paddingLeft: 10,
+                      color: "black",
+                      width:'80%'
+                    }}
+                    value={
+                      selectionitem[i] == null
+                        ? ""
+                        : Number(selectionitem[i].selectionitemprice).toFixed(2)
+                    }
+                    onChange={(e, value) =>
+                      this.handleSelectionItemPriceChange(
+                        e,
+                        value,
+                        outerindex,
+                        i
+                      )
+                    }
+                    placeholder="0.00"
+                    required
+                  />
+                </InputGroup>
+              </div>
+            </FormGroup>
+          </Col>
+
+          <Col style={{ padding: 0 }} xs="2" md="1">
+            <img
+              style={{
+                cursor: "pointer",
+                height: 10,
+                width: 10,
+                objectFit: "cover",
+                marginTop: 10
+              }}
+              onClick={() => this.deleteSelectionItem(outerindex, i)}
+              src={closeIcon}
+              alt=""
+            />
+          </Col>
+        </Row>
       );
     }
-    return <Row>{selectionitemarray}</Row>;
+    return (
+      <Row>
+        <Col xs="12">{selectionitemarray}</Col>
+        <Col xs="12">
+          <Button
+            onClick={() => this.addNewSelectionItem(outerindex)}
+            color="primary"
+            className="btn-pill"
+          >
+            Add Items
+          </Button>
+        </Col>
+      </Row>
+    );
   }
 
   renderFormMarkItem(markeditem) {
     var itemsarray = [];
-    var markitem = this.state.markitem
+    var markitem = this.state.markitem;
     for (let i = 0; i < markitem.length; i++) {
       itemsarray.push(
         <Col xs="6">
-        <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="checkbox">
-          <Checkbox
-            checked={markeditem.includes(markitem[i])}
-            onChange={(e) => this.handleCheckBoxChange(e, markitem[i])}
-            value={markitem[i]}
-            style={{padding:0, marginRight: 10}}
-          />
-          <Label check className="form-check-label">
-            {markitem[i]}
-          </Label>
-          <img
-            style={{
-              marginLeft: 5,
-              marginRight: 20,
-              height: 25,
-              width: 25,
-              objectFit: "cover"
-            }}
-            src={this.findIcon(markitem[i])}
-            alt=""
-          />
-        </FormGroup>
+          <FormGroup
+            style={{ paddingLeft: 0, marginTop: 10 }}
+            check
+            className="checkbox"
+          >
+            <Checkbox
+              checked={markeditem.includes(markitem[i])}
+              onChange={e => this.handleCheckBoxChange(e, markitem[i])}
+              value={markitem[i]}
+              style={{ padding: 0, marginRight: 10 }}
+            />
+            <Label check className="form-check-label">
+              {markitem[i]}
+            </Label>
+            <img
+              style={{
+                marginLeft: 5,
+                marginRight: 20,
+                height: 25,
+                width: 25,
+                objectFit: "cover"
+              }}
+              src={this.findIcon(markitem[i])}
+              alt=""
+            />
+          </FormGroup>
         </Col>
       );
     }
 
-    return (
-      <Row>
-        {itemsarray}
-      </Row>
-    );
+    return <Row>{itemsarray}</Row>;
   }
 
   //Render Modal///////////////////////////////////////////////////////////////////////
 
   renderAddNewCategoryModal() {
-    return(
-      <Modal isOpen={this.state.categoryModal} toggle={this.toggleNewCategoryModal}>
-        <ModalHeader toggle={this.toggleNewCategoryModal}>Add New Category</ModalHeader>
+    return (
+      <Modal
+        isOpen={this.state.categoryModal}
+        toggle={this.toggleNewCategoryModal}
+      >
+        <ModalHeader toggle={this.toggleNewCategoryModal}>
+          {this.state.updateCategory ? "Edit Category" : "Add New Category"}
+        </ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Input style={{marginTop: 10, color: 'black'}} value={this.state.newCategoryName} onChange={(e) => this.handleCategoryNameChange(e)} type="text" placeholder={this.state.activeTab} />
+            <Input
+              style={{ marginTop: 10, color: "black" }}
+              value={this.state.newMenuCategoryName}
+              onChange={e => this.handleCategoryNameChange(e)}
+              type="text"
+              placeholder={this.state.activeTab}
+            />
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button disabled={this.state.newCategoryName == '' ? true : false} color="primary" onClick={() => this.addNewCategory()}>Add</Button>
-          <Button color="secondary" onClick={this.toggleNewCategoryModal}>Cancel</Button>
+          <Button
+            disabled={this.state.newMenuCategoryName == "" ? true : false}
+            color="primary"
+            onClick={() => this.state.updateCategory ? this.saveMenuCategoryName() : this.addNewMenuCategory()}
+          >
+            {this.state.updateCategory ? "Save" : "Add"}
+          </Button>
+          <Button color="secondary" onClick={this.toggleNewCategoryModal}>
+            Cancel
+          </Button>
         </ModalFooter>
       </Modal>
-    )
+    );
   }
 
   renderAddNewItemModal() {
     var selectedDishType = this.state.selectedDishType;
-    return(
+    return (
       <Modal isOpen={this.state.menuModalOpen} toggle={this.toggleNewItemModal}>
-        <ModalHeader toggle={this.toggleNewItemModal}>Add New Item</ModalHeader>
+        <ModalHeader toggle={this.toggleNewItemModal}>{this.state.updateItem ? "Edit Item" : "Add New Item"}</ModalHeader>
         <ModalBody>
           <Label>How do you want to sell your dish?</Label>
           <Row>
             <Col>
-              <Card style={{cursor: 'pointer', borderColor: selectedDishType == 'single' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('single')}>
+              <Card
+                style={{
+                  cursor: "pointer",
+                  borderColor: selectedDishType == "single" ? "#20a8d8" : null
+                }}
+                onMouseOver=""
+                onClick={() => this.selectDishType("single")}
+              >
                 <CardHeader>
                   <div class="container">
-                    <h6 style={{ textAlign: "center" }}>Plate / Box (Single) </h6>
+                    <h6 style={{ textAlign: "center", color: selectedDishType == "single" ? "#20a8d8" : null }}>
+                      Plate / Box (Single){" "}
+                    </h6>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -1485,10 +1840,19 @@ class MenuSetup extends Component {
               </Card>
             </Col>
             <Col>
-              <Card style={{cursor: 'pointer', borderColor: selectedDishType == 'bulk' ? '#20a8d8' : null}} onMouseOver="" onClick={() => this.selectDishType('bulk')}>
+              <Card
+                style={{
+                  cursor: "pointer",
+                  borderColor: selectedDishType == "bulk" ? "#20a8d8" : null
+                }}
+                onMouseOver=""
+                onClick={() => this.selectDishType("bulk")}
+              >
                 <CardHeader>
                   <div class="container">
-                    <h6 style={{ textAlign: "center" }}>Platter / Tray (Bulk}</h6>
+                    <h6 style={{ textAlign: "center", color: selectedDishType == "bulk" ? "#20a8d8" : null }}>
+                      Platter / Tray (Bulk}
+                    </h6>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -1506,197 +1870,95 @@ class MenuSetup extends Component {
           {this.renderForm()}
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" >
-            {this.state.updateItem ? 'Save' : 'Add'}
+          <Button onClick={() => this.checkInput()} color="primary">
+            {this.state.updateItem ? "Save" : "Add"}
           </Button>{" "}
           <Button color="secondary" onClick={this.toggleNewItemModal}>
             Cancel
           </Button>
         </ModalFooter>
       </Modal>
-    )
+    );
   }
-  
-  renderNewSelectionModal() {
-    var selectedItemSelectionInnerItems = this.state.selectedItemSelectionInnerItems;
 
-    var selectioncategory = '';
-    var selectionmaxnum = 1;
-    var selectionitem = [];
-
-    if (selectedItemSelectionInnerItems !== null) {
-     // alert(JSON.stringify(selectedItemSelectionInnerItems))
-      selectioncategory = selectedItemSelectionInnerItems.selectioncategory
-      selectionmaxnum = selectedItemSelectionInnerItems.selectionmaxnum
-      selectionitem = selectedItemSelectionInnerItems.selectionitem
+  renderDeleteItemModal() {
+    var title ;
+    var descrip;
+ 
+    if (this.state.deleteItemFunctionName === 'deleteMenuItem') {
+      title = "Delete Item";
+      descrip = "Are you sure you want to delete this item from menu?"
+    }
+    else if (this.state.deleteItemFunctionName === 'deleteSelectionCategory') {
+      title = "Delete Selection";
+      descrip = "Are you sure you want to this selection from your item's list?"
+    }
+    else if (this.state.deleteItemFunctionName === 'deleteSelectionItem') {
+      title = "Delete Selection Item";
+      descrip = "Are you sure you want to delete this item from your current selection category?"
     }
 
-    return(
-      <Modal isOpen={this.state.selectionModal} toggle={() => this.toggleNewSelectionModal()}>
-        <ModalHeader toggle={() => this.toggleNewSelectionModal()}>Add New Selection</ModalHeader>
+    return (
+      <Modal
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        isOpen={this.state.deleteModalOpen} 
+        toggle={this.toggleDeleteItemModal}
+      >
+        <ModalHeader toggle={this.toggleDeleteItemModal} closeButton>
+            {title}
+        </ModalHeader>
         <ModalBody>
-          <FormGroup row>
-            <Col md="3">
-              <h6 style={{marginTop:5}}>Select</h6>
-            </Col>
-            <Col xs="12" md="9">
-              <Input onChange={(e) => this.handleSelectionCategoryChange(e)} style={{color: 'black'}} value={selectioncategory} type="text" placeholder="Sides / Toppings / Main" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col md="3">
-              <h6 style={{marginTop:5}}>Selection Limit</h6>
-            </Col>
-            <Col xs="12" md="9">
-              <Input onChange={(e) => this.handleSelectionMaxNumChange(e)} style={{color: 'black'}} value={selectionmaxnum} type="select">
-                {this.state.servecount.map(limit =>
-                  <option style={{color:'black'}} key={limit} value={limit}>{limit}</option>
-                )}
-              </Input>
-            </Col>
-          </FormGroup>
-          {this.renderSelectionItemModal(selectionitem)}
-          <Button disabled={selectioncategory === '' ? true : false } color="primary" className="btn-pill" onClick={() => this.addNewSelectionItem(selectioncategory, selectionmaxnum)}>Add Selection</Button>
+          <p>
+            {descrip}
+          </p>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" >Save</Button>
-          <Button color="secondary" onClick={() => this.toggleNewSelectionModal()}>Cancel</Button>
+          <Button color="danger" onClick={() => this.deleteButtonPressed(this.state.deleteItemFunctionName, this.state.toBeReplaceItemArray)}>Delete</Button>
+          <Button color="secondary" onClick={this.toggleDeleteItemModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
     )
   }
 
-  renderSelectionItemModal(selectionitem) {
-
-    var itemsarray = [];
-
-    var selectionitems = selectionitem
-
-    if (selectionitem.length > 0) {
-      for(let i = 0; i < selectionitem.length; i++){
-        itemsarray.push(
-          <Row>
-            <Col xs="5">
-              <FormGroup>
-                <div>
-                  <Input onChange={(e) => this.handleSelectionItemTitleChange(e, i)}  value={selectionitems[i] == null ? '' : selectionitems[i].selectionitemtitle} style={{ color:'black'}} type="text" placeholder="Selection 1"></Input>
-                </div>
-              </FormGroup>
-            </Col>
-            <Col xs="6">
-              <FormGroup>
-                <div>
-                  <InputGroup className="input-prepend">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>€</InputGroupText>
-                    </InputGroupAddon>
-                    <CurrencyInput
-                      style={{borderWidth: 1, borderColor: 'rgba(211,211,211,0.3)', paddingLeft:10, color: 'black'}}
-                      value={selectionitems[i] == null ? '' : Number(selectionitems[i].selectionitemprice).toFixed(2)}
-                      onChange={(e, value) => this.handleSelectionItemPriceChange(e, value, i)}
-                      placeholder="0.00"
-                      required
-                    />
-                  </InputGroup>
-                </div>
-              </FormGroup>
-            </Col>
-
-            <Col style={{padding: 0}} xs="1">
-              <img
-                style={{
-                  cursor: "pointer",
-                  height: 10,
-                  width: 10,
-                  objectFit: "cover",
-                  marginTop:10,
-                }}
-             
-                src={closeIcon}
-                alt=""
-              />
-            </Col>
-            
-          </Row>
-        )
-      }
+  deleteButtonPressed = (deleteItemFunctionName, toBeReplaceItemArray) => {
+    if (deleteItemFunctionName === 'deleteMenuItem') {
+      this.setState({
+        fetchedmenu: toBeReplaceItemArray,
+        deleteModalOpen: !this.state.deleteModalOpen
+       },() => {
+         this.restructureMenu()
+       })
     }
-    else if (selectionitem.length == 0) {
-      itemsarray.push(
-        <FormGroup row>
-          <Col xs="5">
-            <FormGroup>
-              <div>
-                <Input onChange={(e) => this.handleSelectionItemTitleChange(e, -1)} value={''} style={{ color:'black'}} type="text" placeholder="Selection 1"></Input>
-              </div>
-            </FormGroup>
-          </Col>
-          <Col xs="6">
-            <FormGroup>
-              <div>
-                <InputGroup className="input-prepend">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>€</InputGroupText>
-                  </InputGroupAddon>
-                  <CurrencyInput
-                    style={{borderWidth: 1, borderColor: 'rgba(211,211,211,0.3)', paddingLeft:10, color: 'black'}}
-                    value={Number(0).toFixed(2)}
-                    onChange={(e, value) => this.handleSelectionItemPriceChange(e, value, -1)}
-                    placeholder="0.00"
-                    required
-                  />
-                </InputGroup>
-              </div>
-            </FormGroup>
-          </Col>
-          <Col style={{padding: 0}} xs="1">
-            <img
-              style={{
-                cursor: "pointer",
-                height: 10,
-                width: 10,
-                objectFit: "cover",
-                marginTop:10,
-              }}
-            
-              src={closeIcon}
-              alt=""
-            />
-          </Col>
-        </FormGroup>
-      )
+    else if (deleteItemFunctionName === 'deleteSelectionCategory') {
+      this.setState({
+        selectedItemSelection: toBeReplaceItemArray,
+        deleteModalOpen: !this.state.deleteModalOpen
+      });
     }
-    
-
-    return(
-      <Row style={{marginTop:20}}>
-        <Col>
-        {itemsarray}
-        </Col>
-      </Row>
-    )
+    else if (deleteItemFunctionName === 'deleteSelectionItem') {
+      this.setState({
+        selectedItemSelection: toBeReplaceItemArray,
+        deleteModalOpen: !this.state.deleteModalOpen
+      });
+    }
   }
 
-
   render() {
-
     return (
-      <div style={{backgroundColor: 'white'}} className="animated fadeIn">
-        <Row style={{marginBottom: 30}}>
-          <Col xs="12">
-            {this.renderNav()}
-          </Col>
-          <Col xs="12">
-            {this.renderTabPane()}
-          </Col>
+      <div style={{ backgroundColor: "transparent" }} className="animated fadeIn">
+        <Row style={{ marginBottom: 30 }}>
+          <Col xs="12">{this.renderNav()}</Col>
+          <Col xs="12">{this.renderTabPane()}</Col>
         </Row>
+
+        <div ref={this.myRef} style={{backgroundColor: 'transparent', height:1, width: '100%'}}></div>
 
         {this.renderAddNewCategoryModal()}
 
         {this.renderAddNewItemModal()}
 
-        {this.renderNewSelectionModal()}
-        
+        {this.renderDeleteItemModal()}
       </div>
     );
   }
