@@ -60,7 +60,7 @@ class Review extends Component {
       dateRangePicker: {
         selection: {
           startDate: new Date(),
-          endDate: subDays(new Date(), 7),
+          endDate: new Date(),
           key: 'selection',
         },
       },
@@ -113,7 +113,7 @@ class Review extends Component {
     var previousDateString = moment(previousDate).format("DD MMM, YYYY")
     var finalSelectionDate = previousDateString + ' - ' + currentDateString
     var finalDateArray = this.getIntervalDates(currentDate, previousDate).reverse();
-  
+ 
     this.setState({
       maxDate: currentDate,
       currentDate: currentDate,

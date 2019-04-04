@@ -66,7 +66,7 @@ class Customer extends Component {
       dateRangePicker: {
         selection: {
           startDate: new Date(),
-          endDate: subDays(new Date(), 7),
+          endDate: new Date(),
           key: 'selection',
         },
       },

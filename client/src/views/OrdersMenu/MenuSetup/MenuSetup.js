@@ -33,6 +33,7 @@ import Dotdotdot from "react-dotdotdot";
 import Checkbox from "@material-ui/core/Checkbox";
 import CurrencyInput from "react-currency-input";
 import { ObjectID } from 'bson';
+import CatererDetail from '../../Pages/CatererDetail'
 
 const glutenfreeIcon = require("../../../assets/img/glutenfree1.png");
 const hotIcon = require("../../../assets/img/fire.png");
@@ -50,6 +51,7 @@ class MenuSetup extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.toggleNewCategoryModal = this.toggleNewCategoryModal.bind(this);
+    this.togglePreviewModal = this.togglePreviewModal.bind(this);
     this.toggleNewItemModal = this.toggleNewItemModal.bind(this);
     this.toggleDeleteItemModal = this.toggleDeleteItemModal.bind(this);
     this.handleCategoryNameChange = this.handleCategoryNameChange.bind(this);
@@ -434,6 +436,7 @@ class MenuSetup extends Component {
         }*/
       ],
       menuModalOpen: false,
+      previewModalOpen: false,
       categoryModal: false,
       updateCategory: false,
       selectionModal: false,
@@ -539,6 +542,12 @@ class MenuSetup extends Component {
       newMenuCategoryName: "",
       oldMenuCategoryName: "",
       updateCategory: false
+    });
+  }
+
+  togglePreviewModal() {
+    this.setState({
+      previewModalOpen: !this.state.previewModalOpen,
     });
   }
 
@@ -1127,6 +1136,16 @@ class MenuSetup extends Component {
                 {" "}
                 <i className="fa fa-plus fa-1x" aria-hidden="true" />
                 &nbsp; Add New Category
+              </Button>
+              <Button
+                style={{ fontSize: 17, fontWeight: "600" }}
+                onClick={this.togglePreviewModal}
+                color="success"
+                className="float-right"
+              >
+                {" "}
+                <i className="fa fa-play fa-1x" aria-hidden="true" />
+                &nbsp; Preview
               </Button>
             </Col>
             <Col xs="12">{this.renderMenu(menutitle[i])}</Col>
@@ -1768,6 +1787,23 @@ class MenuSetup extends Component {
 
   //Render Modal///////////////////////////////////////////////////////////////////////
 
+  renderPreviewModal() {
+    return (
+      <Modal
+        isOpen={this.state.previewModalOpen}
+        toggle={this.togglePreviewModal}
+        size="lg"
+      >
+        <ModalHeader toggle={this.togglePreviewModal}>
+          Preview Menu
+        </ModalHeader>
+        <ModalBody>
+          <CatererDetail/>
+        </ModalBody>
+      </Modal>
+    );
+  }
+
   renderAddNewCategoryModal() {
     return (
       <Modal
@@ -1959,6 +1995,8 @@ class MenuSetup extends Component {
         {this.renderAddNewItemModal()}
 
         {this.renderDeleteItemModal()}
+
+        {this.renderPreviewModal()}
       </div>
     );
   }

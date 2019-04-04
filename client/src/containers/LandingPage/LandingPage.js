@@ -28,6 +28,12 @@ class LandingPage extends Component {
     this.props.history.push('/searchcaterer')
   }
 
+  registerCatererClicked(e) {
+    e.preventDefault()
+    this.props.history.push('/caterersignup')
+  }
+
+
   render() {
     return (
       <div id="app">
@@ -36,7 +42,7 @@ class LandingPage extends Component {
         <Shops/>
         <Features findFoodNow={e=>this.findFoodNow(e)}/>
         <Occasion />
-        <Caterer />
+        <Caterer registerCatererClicked={e=>this.registerCatererClicked(e)}/>
         <Testimonial/>
         <Footer />
       </div>

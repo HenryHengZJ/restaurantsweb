@@ -8,19 +8,31 @@ import Benefit from "./Benefit";
 import Banner from "./Banner";
 
 class CatererSignUp extends Component {
+
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef()   // Create a ref object 
+  }
+
   signIn(e) {
     e.preventDefault();
     this.props.history.push("/login");
   }
 
+  joinNowClicked(e) {
+    e.preventDefault();
+    this.myRef.current.scrollIntoView({ behavior: 'smooth' })
+  }
+
   render() {
     return (
       <div id="CatererSignUp">
+        <div ref={this.myRef} style={{backgroundColor: 'transparent', height:1, width: '100%'}}></div>
         <NavBar1 signIn={e => this.signIn(e)} />
         <Banner />
         <HowItWorks />
         <Benefit />
-        <Caterer />
+        <Caterer joinNowClicked={e=>this.joinNowClicked(e)}/>
         <Footer />
       </div>
     );

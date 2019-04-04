@@ -101,7 +101,7 @@ class Benefit extends Component {
       >
         <Container>
           <Row
-            style={{ paddingTop: 20, flex: 1, display: "flex" }}
+            style={{ paddingTop: 20, margin:0, flex: 1, display: "flex" }}
             className="justify-content-center"
           >
             <Col xs="12" style={{ textAlign: "center" }}>

@@ -527,7 +527,7 @@ class SearchCaterer extends Component {
   renderFilterModal() {
     return(
     <Modal isOpen={this.state.filterModalOpen} toggle={() => this.toggleFilterModal()}>
-      <ModalHeader style={{backgroundColor: 'rgba(211,211,211,0.5)', paddingLeft:30, paddingBottom: 0, paddingTop:10 }}>
+      <ModalHeader toggle={() => this.toggleFilterModal()} style={{backgroundColor: 'rgba(211,211,211,0.5)', paddingLeft:30, paddingBottom: 0, paddingTop:10 }}>
         <Label>Select Filter</Label>
       </ModalHeader>
       <ModalBody style={{marginBottom: 20}}>
