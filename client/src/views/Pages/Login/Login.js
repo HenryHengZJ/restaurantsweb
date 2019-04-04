@@ -41,6 +41,11 @@ class Login extends Component {
   }
 
 
+  caterersignup = (e) => {
+    e.preventDefault()
+    this.props.history.push('/caterersignup')
+  }
+
   render() {
     return (
       <div style={{backgroundColor: 'white'}}>
@@ -93,7 +98,7 @@ class Login extends Component {
                         <Button color="primary" className="mt-3" active tabIndex={-1}>Register As Member</Button>
                       </Link>
                       <h2 style={{marginTop: 45}}>I'm a Caterer</h2>
-                      <Link to="/register">
+                      <Link to="/caterersignup">
                         <Button style={{backgroundColor: 'white', fontWeight: '500'}} color="link" className="mt-3" >Register As Caterer</Button>
                       </Link>
                     </div>

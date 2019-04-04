@@ -1,0 +1,6 @@
+{
+  "name": "CatererSignUp",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./CatererSignUp.js"
+}

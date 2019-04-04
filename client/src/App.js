@@ -17,6 +17,11 @@ const LandingPage = Loadable({
   loading
 });
 
+const CatererSignUp = Loadable({
+  loader: () => import('./containers/CatererSignUp'),
+  loading
+});
+
 // Pages
 
 const SearchCaterer = Loadable({
@@ -68,6 +73,7 @@ class App extends Component {
     return (
       <HashRouter>
           <Switch>
+            <Route exact path="/caterersignup" name="Caterer SignUp" component={CatererSignUp} />
             <Route exact path="/catererdetail" name="Caterer Detail" component={CatererDetail} />
             <Route exact path="/searchcaterer" name="Search Caterer" component={SearchCaterer} />
             <Route exact path="/login" name="Login Page" component={Login} />
