@@ -13,7 +13,7 @@ var catererSchema = mongoose.Schema({
 });
 
 //Connect to specific database
-const db = mongoose.connection.useDb('TestDB');
+const db = mongoose.connection.useDb('foodiebee');
 
 // create the model
 module.exports = db.model('caterer', catererSchema, 'caterer');
