@@ -24,6 +24,11 @@ const CatererSignUp = Loadable({
 
 // Pages
 
+const DeliveryConfirmation = Loadable({
+  loader: () => import('./views/Pages/DeliveryConfirmation'),
+  loading
+});
+
 const SearchCaterer = Loadable({
   loader: () => import('./views/Pages/SearchCaterer'),
   loading
@@ -73,6 +78,7 @@ class App extends Component {
     return (
       <HashRouter>
           <Switch>
+            <Route exact path="/deliveryconfirmation" name="Delivery Confirmation" component={DeliveryConfirmation} />
             <Route exact path="/caterersignup" name="Caterer SignUp" component={CatererSignUp} />
             <Route exact path="/catererdetail" name="Caterer Detail" component={CatererDetail} />
             <Route exact path="/searchcaterer" name="Search Caterer" component={SearchCaterer} />

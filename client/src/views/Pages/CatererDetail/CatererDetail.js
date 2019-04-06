@@ -496,6 +496,10 @@ class CatererDetail extends Component {
     });
   };
 
+  checkOutClicked = () => {
+    this.props.history.push('deliveryconfirmation')
+  }
+
   toggleCuisineDropDown = () => {
     this.setState({
       menuDropDownOpen: !this.state.menuDropDownOpen
@@ -1091,8 +1095,8 @@ class CatererDetail extends Component {
             <img
               style={{
                 cursor: "pointer",
-                height: 20,
-                width: 20,
+                height: 15,
+                width: 15,
                 objectFit: "cover"
               }}
               onClick={() => this.cartItemDelete(i)}
@@ -1145,6 +1149,7 @@ class CatererDetail extends Component {
             fontWeight: "600",
             fontSize: 16
           }}
+          onClick={() => this.checkOutClicked()}
           block
         >
           Checkout

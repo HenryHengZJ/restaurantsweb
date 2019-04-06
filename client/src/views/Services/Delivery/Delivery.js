@@ -27,7 +27,7 @@ import {
 import { AppSwitch } from '@coreui/react'
 import GoogleMapReact from 'google-map-react';
 
-const GOOGLE_API_KEY = "AIzaSyCFHrZBb72wmg5LTiMjUgI_CLhsoMLmlBk";
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 const AnyReactComponent = ({ text }) => (
   <div style={{

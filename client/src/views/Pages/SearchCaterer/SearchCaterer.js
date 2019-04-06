@@ -13,6 +13,7 @@ import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
 import ContentLoader, { Facebook } from "react-content-loader";
 import Dotdotdot from "react-dotdotdot";
+import axios from "axios";
 
 import './SearchCaterer.css'
 import 'react-date-range/dist/styles.css'; // main style file
@@ -112,7 +113,7 @@ class SearchCaterer extends Component {
         },
       ],
       caterer: [
-        {
+        /*{
           name: "Flannery Restaurant & Pub",
           descrip:
             "Specialized in American Burger style mealset.",
@@ -155,7 +156,7 @@ class SearchCaterer extends Component {
             "https://www.sbs.com.au/food/sites/sbs.com.au.food/files/styles/full/public/Pasta-with-Cherry-Tomatoes.jpg?itok=mlbhhvu7&mtime=1401946169",
           minimumspend: "50",
           deliveryfee: "3"
-        }
+        }*/
       ],
       cuisine: [
         "All Cuisines",
@@ -209,12 +210,30 @@ class SearchCaterer extends Component {
   }
 
   componentDidMount() {
+    this.getDataFromDb();
     var currentDate = moment().toDate();
    
     this.setState({
       maxDate: currentDate,
     });
   }
+
+  getDataFromDb = () => {
+    var url = '/test/caterer';
+
+    axios.get(url)
+    .then((response) => {
+
+      var data = response.data;
+
+      this.setState({
+        caterer: data
+      })
+    })
+    .catch(err => {
+       alert(err)
+    });
+  };
 
   signIn(e) {
     e.preventDefault()
