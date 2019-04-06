@@ -28,12 +28,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger("dev"));
 
-// router files ===============================================================
-var testRoutes   = require('./routes/test');
-
-// routes ======================================================================
-app.use('/test', testRoutes);
-
 //Static file declaration
 app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -49,6 +43,12 @@ if(process.env.NODE_ENV === 'production') {
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'client/public/index.html'));
 })
+
+// router files ===============================================================
+var testRoutes   = require('./routes/test');
+
+// routes ======================================================================
+app.use('/test', testRoutes);
 
 //start server
 app.listen(port, (req, res) => {

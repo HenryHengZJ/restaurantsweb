@@ -210,7 +210,7 @@ class SearchCaterer extends Component {
   }
 
   componentDidMount() {
-    this.getDataFromDb();
+   // this.getDataFromDb();
     var currentDate = moment().toDate();
    
     this.setState({
