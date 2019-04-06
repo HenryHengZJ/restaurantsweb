@@ -210,7 +210,7 @@ class SearchCaterer extends Component {
   }
 
   componentDidMount() {
-   // this.getDataFromDb();
+    this.getDataFromDb();
     var currentDate = moment().toDate();
    
     this.setState({
@@ -225,13 +225,13 @@ class SearchCaterer extends Component {
     .then((response) => {
 
       var data = response.data;
-
+      console.log(data)
       this.setState({
         caterer: data
       })
     })
     .catch(err => {
-       alert(err)
+       console.log(err)
     });
   };
 
