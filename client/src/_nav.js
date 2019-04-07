@@ -53,6 +53,11 @@ export default {
           icon: '',
         },
         {
+          name: 'Minimum Spending',
+          url: '/caterer/services/minspending',
+          icon: '',
+        },
+        {
           name: 'Opening Hours',
           url: '/caterer/services/openinghours',
           icon: '',

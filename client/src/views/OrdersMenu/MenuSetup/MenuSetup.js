@@ -1798,7 +1798,9 @@ class MenuSetup extends Component {
           Preview Menu
         </ModalHeader>
         <ModalBody>
-          <CatererDetail/>
+          <div >
+            <CatererDetail/>
+          </div>
         </ModalBody>
       </Modal>
     );

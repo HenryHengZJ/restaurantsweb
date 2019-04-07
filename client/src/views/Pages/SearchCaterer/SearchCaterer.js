@@ -26,6 +26,8 @@ class SearchCaterer extends Component {
     super(props);
 
     this.state = {
+      loading: true,
+      empty: false,
       address: "",
       price: [
         "All",
@@ -227,7 +229,9 @@ class SearchCaterer extends Component {
       var data = response.data;
       console.log(data)
       this.setState({
-        caterer: data
+        caterer: data,
+        loading: false,
+        empty: data.length > 0 ? false : true
       })
     })
     .catch(err => {
@@ -776,7 +780,7 @@ class SearchCaterer extends Component {
                 <b style={{ marginLeft: 5, color: "darkorange" }}>
                   {caterer[i].rating}
                 </b>
-                <Label style={{ marginLeft: 5, color: "darkorange" }}>
+                <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
                   ({caterer[i].numofreview})
                 </Label>
               </Row>
@@ -1182,7 +1186,7 @@ class SearchCaterer extends Component {
               </Col>
 
               <Col style={{ marginTop: 20 }} xs="12" md="10">
-                {this.renderItems()}
+                {this.state.loading ? this.renderLoadingItems() : this.state.empty ?  this.renderEmptyItems() : this.renderItems()}
               </Col>
 
           </Row>

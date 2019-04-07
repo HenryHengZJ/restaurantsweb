@@ -26,6 +26,7 @@ import {
 } from 'reactstrap';
 import { AppSwitch } from '@coreui/react'
 import GoogleMapReact from 'google-map-react';
+import CurrencyInput from "react-currency-input";
 
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
@@ -53,6 +54,7 @@ class Delivery extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.handleNext = this.handleNext.bind(this);
+    this.handlePriceChange = this.handlePriceChange.bind(this);
   
     this.state = {
       delivery: true,
@@ -62,7 +64,8 @@ class Delivery extends Component {
       center: {
         lat: 53.349244,
         lng: -6.2693076
-      }
+      },
+      deliveryfee: 0
     };
 
   }
@@ -98,6 +101,13 @@ class Delivery extends Component {
     });
   };
 
+  
+  handlePriceChange(e, value) {
+    this.setState({
+      deliveryfee: Number(value).toFixed(2)
+    });
+  }
+
   render() {
     const center = this.state.center;
     return (
@@ -121,7 +131,33 @@ class Delivery extends Component {
 
                 <Collapse style={{paddingTop: 20}} isOpen={this.state.delivery} >
 
-                <h6>Delivery Radius: <b style={{color: 'green'}}>{this.state.radius}</b>km</h6>
+                <FormGroup row>
+                  <Col xs="4" md="3">
+                    <h6>Delivery Fee:</h6>
+                  </Col>
+                  <Col style={{padding:0}} xs="8" md="9">
+                    <InputGroup style={{padding: 0}} className="input-prepend">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>€</InputGroupText>
+                      </InputGroupAddon>
+                      <CurrencyInput
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "rgba(211,211,211,0.3)",
+                          paddingLeft: 10,
+                          color: "black",
+                          width: 100
+                        }}
+                        value={this.state.deliveryfee}
+                        onChange={(e, value) => this.handlePriceChange(e, value)}
+                        placeholder="0.00"
+                        required
+                      />
+                    </InputGroup>
+                  </Col>
+                </FormGroup>
+
+                <h6>Delivery Radius: <b style={{fontWeight:'700', color: 'darkorange', fontSize:17}}>{this.state.radius}</b>&nbsp;km</h6>
 
                 <div style={{ marginTop: 20, height: 500, width: '100%' }}>
                   <GoogleMapReact

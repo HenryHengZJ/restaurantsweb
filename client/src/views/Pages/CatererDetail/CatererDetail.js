@@ -33,12 +33,12 @@ import {
   Collapse,
 } from "reactstrap";
 import './CatererDetail.css'
-import StarRatingComponent from "react-star-rating-component";
 import NavBar from '../../../components/NavBar/NavBar';
 import Footer from '../../../components/Footer/Footer';
 import Dotdotdot from "react-dotdotdot";
 import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
+import StarRatingComponent from "react-star-rating-component";
 
 const glutenfreeIcon = require('../../../assets/img/glutenfree1.png');
 const hotIcon = require('../../../assets/img/fire.png');
@@ -415,7 +415,56 @@ class CatererDetail extends Component {
           totalprice: 15.00
         }*/
       ],
-      quantity: [1,2,3,4,5,6,7,8,9,10,11,12,13]
+      review: [
+        {
+          name: "Kieran",
+          location: 'Limerick, Ireland',
+          comment: "Everyone was very happy. Hearty sandwiches. Very nice dessert sandwiches",
+          time: "5 days ago",
+          rating: 5,
+        },
+        {
+          name: "Qiana",
+          location: 'Dublin, Ireland',
+          comment: "The food smelled pretty good and staff seemed excited because they eat there on their own time. The only downside is they delivered 45 mins. early, which is better than being late. I guess it didn't matter much since we did sandwiches and not something that would be bad if it got cold (i.e., pasta or other hot entree).",
+          time: "7 days ago",
+          rating: 4,
+        },
+        {
+          name: "Aldo",
+          location: 'Limerick, Ireland',
+          comment: "Food is on time, great experience, food is delicious",
+          time: "8 days ago",
+          rating: 5,
+        },
+        {
+          name: "Connie",
+          location: 'Limerick, Ireland',
+          comment: "The food was delicious and the presentation looked great. Perfect portions. We will order again!",
+          time: "15 days ago",
+          rating: 4,
+        },
+        {
+          name: "Chandra",
+          location: 'Limerick, Ireland',
+          comment: "First time ordering from Italian Gourmet for this group. Everything was a big hit--even though they were a bit early.",
+          time: "1 month ago",
+          rating: 5,
+        },
+      ],
+      quantity: [1,2,3,4,5,6,7,8,9,10,11,12,13],
+      restaurantInfo: {
+        name: "Flannery Restaurant & Pub",
+        profileimg: "https://www.psdgraphics.com/wp-content/uploads/2016/08/restaurant-logo.png",
+        coverimg: "http://www.fedracongressi.com/fedra/wp-content/uploads/2016/09/minisandwich.jpg",
+        descrip: "Specialized in American Burger style mealset. Our American subs are our specialty, and our Special Grileld with spiced capicola and prosciuttini is the number one customer favorite. Our portions won't leave your stomachs rumbling, and our flavors always go down easy.",
+        address: "30, O'Connell St, Dublin, Ireland",
+        rating: "4.7",
+        numofreview: "150",
+        workinghours: "Mon-Fri: 10am-3pm",
+        deliveryfee: 3,
+        minspending: 50
+      }
     };
   }
 
@@ -1294,7 +1343,12 @@ class CatererDetail extends Component {
       );
     }
 
-    return <Row>{menuarray}</Row>;
+    return (
+    <Row>
+      {menuarray}
+     
+    </Row>
+    );
   }
 
   renderCategory(menuitem) {
@@ -1419,6 +1473,144 @@ class CatererDetail extends Component {
     );
   }
 
+  renderReview() {
+    var itemsarray = [];
+
+    var review = this.state.review
+
+    for (let i = 0; i < review.length; i++) {
+      itemsarray.push(
+        <Col xs="12">
+          <Card style={{boxShadow: 'none', borderWidth: 0}}>
+            <CardBody
+              style={{ padding: 0,}}
+            >
+              <Row>
+                <Col xs="12">
+                  <Label
+                    className="h5"
+                  >
+                    {review[i].name}
+                  </Label>
+                </Col>
+
+                <Col xs="12">
+                  <Label>
+                    {review[i].location}
+                  </Label>
+                </Col>
+
+                <Col xs="12">
+                  <Row style={{marginLeft:0}} className="justify-content">
+                  <StarRatingComponent
+                    name="rating"
+                    emptyStarColor="#D3D3D3"
+                    starCount={5}
+                    editing={false}
+                    value={review[i].rating}
+                  />
+                  <Label
+                    style={{
+                      opacity: 0.7,
+                      marginLeft: 15,
+                      fontfStyle: "italic"
+                    }}
+                  >
+                    {review[i].time}
+                  </Label>
+                  </Row>
+                </Col>
+
+                <Col xs="12">
+                  <p style={{ overflow: "hidden" }}>
+                    {review[i].comment}
+                  </p>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      );
+    }
+
+    return (
+      <Row>
+        <Col xs="12">
+          <Label style={{ marginBottom: 30, fontSize: 19, }} className="h5">
+            Reviews for Flannery Resturant & Pub
+          </Label>
+        </Col>
+        {itemsarray}
+        <Col xs="12">
+          <Label style={{ color: '#20a8d8', cursor: 'pointer' }} className="h5">
+            See More
+          </Label>
+        </Col>
+      </Row>
+    );
+  }
+
+  renderAbout() {
+    var restaurantInfo = this.state.restaurantInfo
+    return (
+      <Row>
+        <img
+          style={{ objectFit: "cover", width: 80, height: 80 }}
+          src={this.state.restaurantInfo.profileimg}
+        />
+        <Label style={{ marginLeft: 10, marginTop: 20 }} className="h4">
+          {restaurantInfo.name}
+        </Label>
+
+        <Col xs="12">
+          <Label style={{ marginTop:10, fontWeight: '600' }}>
+            {restaurantInfo.address}
+          </Label>
+        </Col>
+
+        <Col xs="12">
+        <Row style={{marginLeft:0 }} className="justify-content">
+          <StarRatingComponent
+            name="rate1"
+            emptyStarColor="#D3D3D3"
+            starCount={5}
+            editing={false}
+            value={restaurantInfo.rating}
+          />
+          <b style={{ marginLeft: 5, color: "darkorange" }}>4.7</b>
+          <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
+            ({restaurantInfo.numofreview}) Reviews
+          </Label>
+        </Row>
+        </Col>
+
+        <Col xs="12">
+          <p style={{ marginTop: 10, overflow: "hidden" }}>
+            {restaurantInfo.descrip}
+          </p>
+        </Col>
+        <Col style={{margin: 0, padding : 0}} xs="12">
+          <Table style={{margin: 0, padding : 0}} borderless>
+            <tbody>
+              <tr>
+                <td><p style={{padding: 0, margin: 0}}>Working Hours:</p></td>
+                <td className="h6">{restaurantInfo.workinghours}</td>
+              </tr>
+              <tr>
+                <td><p style={{padding: 0, margin: 0}}>Delivery Fee:</p></td>
+                <td className="h6">€{Number(restaurantInfo.deliveryfee).toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td><p style={{padding: 0, margin: 0}}>Minimum Spending:</p></td>
+                <td className="h6">€{Number(restaurantInfo.minspending).toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
+    );
+  }
+
   renderIcon(markitem) {
     var iconarray = [];
     for (let i = 0; i < markitem.length; i++) {
@@ -1498,9 +1690,7 @@ class CatererDetail extends Component {
             >
               <img
                 style={{ objectFit: "cover", width: "100%", height: 300 }}
-                src={
-                  "http://www.fedracongressi.com/fedra/wp-content/uploads/2016/09/minisandwich.jpg"
-                }
+                src={this.state.restaurantInfo.coverimg}
               />
 
               <Col xs="0" sm="1" md="3" lg="3" />
@@ -1512,12 +1702,10 @@ class CatererDetail extends Component {
                   <CardBody>
                     <img
                       style={{ objectFit: "cover", width: 80, height: 80 }}
-                      src={
-                        "https://www.psdgraphics.com/wp-content/uploads/2016/08/restaurant-logo.png"
-                      }
+                      src={this.state.restaurantInfo.profileimg}
                     />
                     <Label style={{ marginLeft: 10 }} className="h4">
-                      Flannery Restaurant & Pub
+                      {this.state.restaurantInfo.name}
                     </Label>
 
                     <Row className="justify-content-center">
@@ -1526,16 +1714,16 @@ class CatererDetail extends Component {
                         emptyStarColor="#D3D3D3"
                         starCount={5}
                         editing={false}
-                        value={4.7}
+                        value={this.state.restaurantInfo.rating}
                       />
                       <b style={{ marginLeft: 5, color: "darkorange" }}>4.7</b>
                       <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
-                        (150) Reviews
+                        ({this.state.restaurantInfo.numofreview}) Reviews
                       </Label>
                     </Row>
 
                     <Label style={{ marginTop: 10 }} className="h6">
-                      30, O'Connell St, Dublin, Ireland
+                      {this.state.restaurantInfo.address}
                     </Label>
 
                   </CardBody>
@@ -1609,6 +1797,23 @@ class CatererDetail extends Component {
               <Col style={{ marginTop: 20 }} xs="0" sm="0" md="5" lg="5">
                 {this.renderCart()}
               </Col>
+
+              <div style={{marginTop:30, marginBottom:20, height:1, backgroundColor: 'gray', opacity: 0.3, width: '100%'}}/>
+
+              <Col style={{ marginTop: 20 }} xs="12" sm="12" md="7" lg="7">
+                {this.renderReview()}
+              </Col>
+
+              <Col style={{ marginTop: 20 }} xs="0" sm="0" md="5" lg="5"></Col>
+
+              <div style={{marginTop:30, marginBottom:20, height:1, backgroundColor: 'gray', opacity: 0.3, width: '100%'}}/>
+
+              <Col style={{ marginTop: 20 }} xs="12" sm="12" md="7" lg="7">
+                {this.renderAbout()}
+              </Col>
+
+              <Col style={{ marginTop: 20 }} xs="0" sm="0" md="5" lg="5"></Col>
+              
             </Row>
 
             {this.state.menuModalOpen ? this.renderMenuModal() : null}
