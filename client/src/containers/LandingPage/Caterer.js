@@ -1,5 +1,5 @@
 import React from 'react';
-import caterer_dashboard from '../../assets/img/caterer_dashboard.JPG';
+import caterer_dashboard from '../../assets/img/caterer_dashboard.jpg';
 import checked from '../../assets/img/checked.png';
 import { Button, Row, Col, Card, CardBody, Table} from 'reactstrap';
 import './styles.css'
