@@ -1,6 +1,0 @@
-{
-  "name": "NameAddress",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./NameAddress.js"
-}

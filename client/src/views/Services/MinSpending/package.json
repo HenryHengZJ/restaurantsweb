@@ -1,6 +1,0 @@
-{
-  "name": "MinSpending",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./MinSpending.js"
-}

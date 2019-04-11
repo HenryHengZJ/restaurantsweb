@@ -1,7 +1,0 @@
-{
-    "name": "Customer",
-    "version": "0.0.0",
-    "private": true,
-    "main": "./Customer.js"
-  }
-  
