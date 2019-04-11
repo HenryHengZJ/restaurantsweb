@@ -1,5 +1,4 @@
 import React from 'react';
-import caterer_dashboard from '/static/caterer_dashboard.jpg';
 const About = () => {
     return (<div>
         <h2>This is the About Page</h2>
