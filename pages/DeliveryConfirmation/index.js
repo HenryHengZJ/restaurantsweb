@@ -16,8 +16,10 @@ import {
   FormGroup,
   FormFeedback
 } from "reactstrap";
-import NavBar from '../../../components/NavBar/NavBar';
-import Footer from '../../../components/Footer/Footer';
+import Router from 'next/router'
+import NavBar from '../../components/NavBar';
+import Footer from '../../components/Footer';
+import Layout from '../../components/Layout';
 
 class DeliveryConfirmation extends Component {
   constructor(props) {
@@ -1061,7 +1063,9 @@ class DeliveryConfirmation extends Component {
 
   signIn(e) {
     e.preventDefault();
-    this.props.history.push("/login");
+    Router.push({
+      pathname: '/login'
+    })
   }
 
   checkAllInput = () => {
@@ -1093,6 +1097,7 @@ class DeliveryConfirmation extends Component {
 
   render() {
     return (
+      <Layout>
       <div style={{ backgroundColor: "white" }}>
          <NavBar signIn={e=>this.signIn(e)}/>
         <div className="app justify-content-center align-items-center">
@@ -1223,6 +1228,7 @@ class DeliveryConfirmation extends Component {
         </div>
         <Footer />
       </div>
+      </Layout>
     );
   }
 }

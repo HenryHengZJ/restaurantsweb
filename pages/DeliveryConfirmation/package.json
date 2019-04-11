@@ -1,6 +1,0 @@
-{
-  "name": "DeliveryConfirmation",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./DeliveryConfirmation.js"
-}

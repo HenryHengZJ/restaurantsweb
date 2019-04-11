@@ -1,10 +1,29 @@
 import React, { Component } from 'react';
 import { Button, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import NavBar from '../../components/NavBar';
+import Footer from '../../components/Footer';
+import Layout from '../../components/Layout';
+import Router from 'next/router'
 
 class Page500 extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+  
+  signIn(e) {
+    e.preventDefault()
+    Router.push({
+      pathname: '/login'
+    })
+  }
+
   render() {
     return (
-      <div className="app flex-row align-items-center">
+      <Layout>
+        <div style={{backgroundColor: 'white'}}>
+        <NavBar signIn={e=>this.signIn(e)}/>
+        <div className="app justify-content-center align-items-center">
         <Container>
           <Row className="justify-content-center">
             <Col md="6">
@@ -27,7 +46,10 @@ class Page500 extends Component {
             </Col>
           </Row>
         </Container>
+        </div>
+      <Footer />
       </div>
+      </Layout>
     );
   }
 }
