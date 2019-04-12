@@ -31,6 +31,7 @@ class SearchCaterer extends Component {
 
   static async getInitialProps({query: { occasion }}) {
     console.log('occasion = ' + occasion)
+    console.log('server = ' + server)
     const res = await fetch(`${server}/test/caterer`)
     const data = await res.json();
     console.log(`Show data fetched. Count: ${data}`);
@@ -249,6 +250,7 @@ class SearchCaterer extends Component {
 
   componentDidMount() {
   //  this.getDataFromDb();
+    
     var currentDate = moment().toDate();
     this.setState({
       maxDate: currentDate,
@@ -322,10 +324,7 @@ class SearchCaterer extends Component {
   };
 
   catererClicked = () => {
-    Router.push({
-      pathname: '/catererdetail',
-      query: { id: 'Bwytkfhgugmg123' }
-    })
+    Router.push(`/catererdetail?id=Bwytkfhgugmg123`, `/catererdetail/Bwytkfhgugmg123`)
   };
 
   handleTimeChange(e) {

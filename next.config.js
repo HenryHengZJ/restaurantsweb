@@ -16,7 +16,12 @@ withSass(
     {cssModules: true},
 )*/
 
+const nextConfig = {
+  publicRuntimeConfig: {
+    NODE_ENV: process.env.NODE_ENV
+  }
+};
 
 module.exports = withPlugins([
-    [withCSS], [withSass], withImages
-  ]);
+  [withCSS], [withSass], withImages],nextConfig
+  );

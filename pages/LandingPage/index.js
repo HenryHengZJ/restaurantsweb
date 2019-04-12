@@ -21,19 +21,16 @@ class LandingPage extends Component {
 
   searchAddress(e) {
     e.preventDefault()
-   // Router.push('/searchcaterer')
-    Router.push({
+    Router.push(`/searchcaterer?occasion=All`, `/searchcaterer/All`)
+    /*Router.push({
       pathname: '/searchcaterer',
       query: { occasion: 'All' }
-    })
+    })*/
   }
 
   findFoodNow(e) {
     e.preventDefault()
-    Router.push({
-      pathname: '/searchcaterer',
-      query: { occasion: 'All' }
-    })
+    Router.push(`/searchcaterer?occasion=All`, `/searchcaterer/All`)
   }
 
   registerCatererClicked(e) {
