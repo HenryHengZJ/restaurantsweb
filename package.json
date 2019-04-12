@@ -7,10 +7,10 @@
     "node": "10.7.0"
   },
   "scripts": {
-	  "dev": "node server.js",
+    "dev": "node server.js",
     "build": "./node_modules/next/dist/bin/next build",
     "heroku-postbuild": "./node_modules/next/dist/bin/next build",
-    "start": "node server.js" 
+    "start": "node server.js"
   },
   "author": "Henry Heng",
   "license": "ISC",
@@ -42,6 +42,7 @@
     "next-images": "^1.1.1",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
+    "pretty-checkbox": "^3.0.3",
     "react": "^16.8.6",
     "react-content-loader": "^4.2.1",
     "react-date-range": "^1.0.0-beta",

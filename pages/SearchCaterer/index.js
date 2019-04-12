@@ -18,9 +18,6 @@ import axios from "axios";
 import Router from 'next/router'
 import fetch from 'isomorphic-unfetch'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles.scss'
-
 import { server } from '../../config';
 import './SearchCaterer.css'
 import 'react-date-range/dist/styles.css'; // main style file
@@ -481,13 +478,20 @@ class SearchCaterer extends Component {
       itemsarray.push(
         <Col xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="radio">
-           <Radio
-            checked={this.state.selectedCuisine === cuisine[i]}
-            onChange={this.handleCuisineChange}
-            value={cuisine[i]}
-            name={cuisine[i]}
-            style={{padding:0, marginRight: 10}}
-          />
+          <div class="pretty p-default p-round">
+            <input 
+              type="radio" 
+              name="color"
+              checked={this.state.selectedCuisine === cuisine[i]}
+              onChange={this.handleCuisineChange}
+              value={cuisine[i]}
+              name={cuisine[i]}
+              style={{padding:0, marginRight: 10}} />
+            <div class="state p-success-o">
+                <label></label>
+            </div>
+          </div>
+           
           <Label check className="form-check-label">
             {cuisine[i]}
           </Label>
@@ -512,13 +516,21 @@ class SearchCaterer extends Component {
       itemsarray.push(
         <Col xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="radio">
-           <Radio
-            checked={this.state.selectedPrice === price[i]}
-            onChange={this.handleChange}
-            value={price[i]}
-            name={price[i]}
-            style={{padding:0, marginRight: 10}}
-          />
+
+          <div class="pretty p-default p-round">
+            <input 
+              type="radio" 
+              name="color"
+              checked={this.state.selectedPrice === price[i]}
+              onChange={this.handleChange}
+              value={price[i]}
+              name={price[i]}
+              style={{padding:0, marginRight: 10}} />
+            <div class="state p-success-o">
+                <label></label>
+            </div>
+          </div>
+           
           <Label check className="form-check-label">
             {price[i]}
           </Label>
@@ -543,12 +555,21 @@ class SearchCaterer extends Component {
       itemsarray.push(
         <Col xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="checkbox">
-          <Checkbox
-            checked={dietary[i].value}
-            onChange={(e) => this.handleCheckBoxChange(i, 'dietary', e)}
-            value={dietary[i].name}
-            style={{padding:0, marginRight: 10}}
-          />
+          <div class="pretty p-svg p-curve">
+            <input 
+              type="checkbox"
+              checked={dietary[i].value}
+              onChange={(e) => this.handleCheckBoxChange(i, 'dietary', e)}
+              value={dietary[i].name}
+              style={{padding:0, marginRight: 10}} />
+            <div class="state p-success">
+                <svg class="svg svg-icon" viewBox="0 0 20 20">
+                    <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style={{stroke: 'white', fill: 'white'}}></path>
+                </svg>
+                <label></label>
+            </div>
+          </div>
+          
           <Label check className="form-check-label">
             {dietary[i].name}
           </Label>
@@ -573,12 +594,21 @@ class SearchCaterer extends Component {
       itemsarray.push(
         <Col xs={this.state.filterModalOpen ? "6" : "12"}>
           <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
-            <Checkbox
-              checked={occasion[i].value}
-              onChange={(e) => this.handleCheckBoxChange(i, 'occasion', e)}
-              value={occasion[i].name}
-              style={{padding:0, marginRight: 10}}
-            />
+            <div class="pretty p-svg p-curve">
+              <input 
+                type="checkbox"
+                checked={occasion[i].value}
+                onChange={(e) => this.handleCheckBoxChange(i, 'occasion', e)}
+                value={occasion[i].name}
+                style={{padding:0, marginRight: 10}} />
+              <div class="state p-success">
+                  <svg class="svg svg-icon" viewBox="0 0 20 20">
+                      <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style={{stroke: 'white', fill: 'white'}}></path>
+                  </svg>
+                  <label></label>
+              </div>
+            </div>
+            
             <Label check className="form-check-label">
               {occasion[i].name}
             </Label>
