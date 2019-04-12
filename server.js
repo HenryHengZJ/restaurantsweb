@@ -41,10 +41,6 @@ nextApp.prepare().then(() => {
   // routes ======================================================================
   app.use('/test', testRoutes);
 
-  app.get('*', (req,res) => {
-    return handle(req,res) // for all the react stuff
-  })  
-
   app.get('/searchcaterer/:occasion', (req,res) => {
     return app.render(req, res, '/searchcaterer', { occasion: req.params.occasion })
   })  
@@ -64,6 +60,10 @@ nextApp.prepare().then(() => {
   app.get('/caterersignup', (req,res) => {
     return app.render(req, res, '/caterersignup')
   }) 
+
+  app.get('*', (req,res) => {
+    return handle(req,res) // for all the react stuff
+  })  
 
   //start server
   app.listen(port, (req, res) => {
