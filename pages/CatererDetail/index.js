@@ -37,8 +37,6 @@ import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
 import Dotdotdot from "react-dotdotdot";
-import Radio from '@material-ui/core/Radio';
-import Checkbox from '@material-ui/core/Checkbox';
 import StarRatingComponent from "react-star-rating-component";
 import Router from 'next/router'
 
@@ -550,7 +548,7 @@ class CatererDetail extends Component {
   };
 
   checkOutClicked = () => {
-    this.props.history.push('deliveryconfirmation')
+    Router.push(`/deliveryconfirmation`, `/deliveryconfirmation`)
   }
 
   toggleCuisineDropDown = () => {
@@ -970,14 +968,21 @@ class CatererDetail extends Component {
         <Col xs="12" sm="6" md="6">
           {selectionitem[i].selectionitemprice === 0 ? 
           (
-            <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
-              <Radio
-                checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
-                onChange={(e) => this.handleRadioBoxChange(e, selectioncategory, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
-                value={selectionitem[i].selectionitemtitle}
-                name={selectionitem[i].selectionitemtitle}
-                style={{padding:0, marginRight: 10}}
-              />
+            <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="radio">
+              <div class="pretty p-default p-round">
+                <input 
+                  type="radio" 
+                  name="radio1"
+                  checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
+                  onChange={(e) => this.handleRadioBoxChange(e, selectioncategory, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
+                  value={selectionitem[i].selectionitemtitle}
+                  name={selectionitem[i].selectionitemtitle}
+                  style={{padding:0, marginRight: 10}} />
+                <div class="state p-success-o">
+                    <label></label>
+                </div>
+              </div>
+
               <Label check className="form-check-label">
                 {selectionitem[i].selectionitemtitle}
               </Label>
@@ -985,14 +990,21 @@ class CatererDetail extends Component {
           ) 
           : 
           (
-            <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
-              <Radio
-                checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
-                onChange={(e) => this.handleRadioBoxChange(e, selectioncategory, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
-                value={selectionitem[i].selectionitemtitle}
-                name={selectionitem[i].selectionitemtitle}
-                style={{padding:0, marginRight: 10}}
-              />
+            <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="radio">
+              <div class="pretty p-default p-round">
+                <input 
+                  type="radio" 
+                  name="radio2"
+                  checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
+                  onChange={(e) => this.handleRadioBoxChange(e, selectioncategory, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
+                  value={selectionitem[i].selectionitemtitle}
+                  name={selectionitem[i].selectionitemtitle}
+                  style={{padding:0, marginRight: 10}} />
+                <div class="state p-success-o">
+                    <label></label>
+                </div>
+              </div>
+
               <Label check className="form-check-label">
                 {selectionitem[i].selectionitemtitle} (+€
                 {Number(selectionitem[i].selectionitemprice).toFixed(2)})
@@ -1013,12 +1025,21 @@ class CatererDetail extends Component {
           {selectionitem[i].selectionitemprice === 0 ? 
           (
             <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
-              <Checkbox
-                checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
-                onChange={(e) => this.handleCheckBoxChange(e, selectioncategory, selectionmaxnum, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
-                value={selectionitem[i].selectionitemtitle}
-                style={{padding:0, marginRight: 10}}
-              />
+              <div class="pretty p-svg p-curve">
+                <input 
+                  type="checkbox"
+                  checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
+                  onChange={(e) => this.handleCheckBoxChange(e, selectioncategory, selectionmaxnum, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
+                  value={selectionitem[i].selectionitemtitle}
+                  style={{padding:0, marginRight: 10}} />
+                <div class="state p-success">
+                    <svg class="svg svg-icon" viewBox="0 0 20 20">
+                        <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style={{stroke: 'white', fill: 'white'}}></path>
+                    </svg>
+                    <label></label>
+                </div>
+              </div>
+             
               <Label check className="form-check-label">
                 {selectionitem[i].selectionitemtitle}
               </Label>
@@ -1027,12 +1048,21 @@ class CatererDetail extends Component {
           : 
           (
             <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
-              <Checkbox
-                checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
-                onChange={(e) => this.handleCheckBoxChange(e, selectioncategory, selectionmaxnum, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
-                value={selectionitem[i].selectionitemtitle}
-                style={{padding:0, marginRight: 10}}
-              />
+              <div class="pretty p-svg p-curve">
+                <input 
+                  type="checkbox"
+                  checked={this.findSelectionIndex(selectioncategory, selectionitem[i].selectionitemtitle)}
+                  onChange={(e) => this.handleCheckBoxChange(e, selectioncategory, selectionmaxnum, selectionitem[i].selectionitemtitle, selectionitem[i].selectionitemprice, priceperunit)}
+                  value={selectionitem[i].selectionitemtitle}
+                  style={{padding:0, marginRight: 10}} />
+                <div class="state p-success">
+                    <svg class="svg svg-icon" viewBox="0 0 20 20">
+                        <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style={{stroke: 'white', fill: 'white'}}></path>
+                    </svg>
+                    <label></label>
+                </div>
+              </div>
+             
               <Label check className="form-check-label">
                 {selectionitem[i].selectionitemtitle} (+€
                 {Number(selectionitem[i].selectionitemprice).toFixed(2)})
@@ -1683,7 +1713,7 @@ class CatererDetail extends Component {
     const menutitlelength = this.state.menutitle.length;
 
     return (
-      <Layout>
+      <Layout title={this.state.restaurantInfo.name + ' Caterer Detail FoodieBee - Catering Service'}>
       <div style={{backgroundColor: 'white'}}>
          <NavBar signIn={e=>this.signIn(e)}/>
       <div className="app align-items-center">

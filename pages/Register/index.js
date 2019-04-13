@@ -23,8 +23,7 @@ class Register extends Component {
 
   render() {
     return (
-
-      <Layout>
+      <Layout title={'Register FoodieBee - Catering Service'}>
         <div style={{backgroundColor: 'white'}}>
           <NavBar signIn={e=>this.signIn(e)}/>
           <div className="app justify-content-center align-items-center">
@@ -39,7 +38,7 @@ class Register extends Component {
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
-                            <i className="icon-user"></i>
+                            <a style={{color: 'gray', marginLeft: 2.5, marginRight: 2.5}} className="fa fa-user"></a>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text" placeholder="First Name" autoComplete="firstname" />
@@ -47,7 +46,7 @@ class Register extends Component {
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
-                            <i className="icon-user"></i>
+                            <a style={{color: 'gray', marginLeft: 2.5, marginRight: 2.5}} className="fa fa-user"></a>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text" placeholder="Last Name" autoComplete="lastname" />
@@ -61,7 +60,7 @@ class Register extends Component {
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
-                            <i className="icon-lock"></i>
+                            <a style={{color: 'gray', marginLeft: 2.5, marginRight: 2.5}} className="fa fa-lock"></a>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="password" placeholder="Password" autoComplete="new-password" />
@@ -69,15 +68,14 @@ class Register extends Component {
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
-                            <i className="icon-lock"></i>
+                            <a style={{color: 'gray', marginLeft: 2.5, marginRight: 2.5}} className="fa fa-lock"></a>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="password" placeholder="Repeat password" autoComplete="new-password" />
                       </InputGroup>
-                      <Button color="success" block>Create Account</Button>
+                      <Button style={{paddingTop:10, paddingBottom: 10}} color="success" block>Create Account</Button>
                     </Form>
                   </CardBody>
-                
                 </Card>
               </Col>
             </Row>

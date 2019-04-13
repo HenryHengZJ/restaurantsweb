@@ -3,6 +3,7 @@ import { Button, Row, Col, InputGroup, InputGroupAddon, FormGroup, Form, Label, 
 import './styles.css'
 import AutoCompleteAddress from '../../components/AutoCompleteAddress'
 import PropTypes from 'prop-types';
+import Router from 'next/router'
 
 const propTypes = {
   children: PropTypes.node,
@@ -18,6 +19,18 @@ class Hero extends React.Component {
     this.state = {
       address: "",
     }
+  }
+
+  searchAddress = (e, address) => {
+    e.preventDefault()
+   // alert(JSON.stringify(address))
+   // alert(address.address_components[1].long_name)
+    var city = address.address_components[1].long_name
+    this.setState({
+      address: ""
+    }, () => {
+      Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer/${city}/All`)
+    })
   }
 
   showPlaceDetails(address) {
@@ -69,7 +82,7 @@ class Hero extends React.Component {
                         onPlaceChanged={this.showPlaceDetails.bind(this)} />     
 
                       <InputGroupAddon addonType="prepend">
-                        <Button onClick={e => this.props.searchAddress(e)} block style={{height: '100%', fontWeight: '600', borderTopRightRadius: 5, borderBottomRightRadius: 5,}} className="bg-primary" color="primary">SEARCH</Button>
+                        <Button onClick={e => this.searchAddress(e, this.state.address)} block style={{height: '100%', fontWeight: '600', borderTopRightRadius: 5, borderBottomRightRadius: 5,}} className="bg-primary" color="primary">SEARCH</Button>
                       </InputGroupAddon>
                   </InputGroup>
                   

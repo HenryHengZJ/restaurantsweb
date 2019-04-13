@@ -1097,7 +1097,7 @@ class DeliveryConfirmation extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout title={'Delivery Confirmation FoodieBee - Catering Service'}>
       <div style={{ backgroundColor: "white" }}>
          <NavBar signIn={e=>this.signIn(e)}/>
         <div className="app justify-content-center align-items-center">

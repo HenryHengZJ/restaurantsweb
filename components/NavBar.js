@@ -3,13 +3,6 @@ import { Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink, NavbarToggler} fr
 import './styles/navbar.css'
 import PropTypes from 'prop-types';
 
-const propTypes = {
-  children: PropTypes.node,
-};
-
-const defaultProps = {};
-
-
 class NavBar extends Component {
 
   constructor(props) {
@@ -28,31 +21,35 @@ class NavBar extends Component {
   }
 
   render() {
+    const {
+      theme
+    } = this.props;
+
+    const backgroundColorVal = theme === 'dark' ? this.state.isOpen ? '#696969' : 'transparent' : 'rgba(211,211,211,0.3)' ;
+    const boxShadowVal = theme === 'dark' ? 'none' : '0px 0px 3px #9E9E9E';
+    const lightVal = theme === 'dark' ? false : true;
+    const darkVal = theme === 'dark' ? true : false;
+    const imgsrc = theme === 'dark' ? '/static/brandlogo_dark.png' : '/static/brandlogo_light.png';
+    const colorVal = theme === 'dark' ? 'white' : null;
+
     return (
       <div>
-        <Navbar style={{padding: 0, margin: 0, backgroundColor: 'rgba(211,211,211,0.3)', boxShadow: '0px 0px 3px #9E9E9E'}} light expand="md">
+        <Navbar style={{padding: 0, margin: 0, backgroundColor: backgroundColorVal, boxShadow: boxShadowVal}} light={lightVal} dark={darkVal} expand="md">
           <NavbarBrand style={{padding: 0, margin: 0,}} href="/">
-            <img style={{objectFit: 'cover', height: 50, width: 160, marginLeft: 20, marginTop: 10}} src={'/static/brandlogo_light.png'}/>
+            <img style={{objectFit: 'cover', height: 50, width: 160, marginLeft: 20, marginTop: 10}} src={imgsrc}/>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink style={{ fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href="">Home</NavLink>
+                <NavLink style={{ color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href="">About Us</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink style={{ fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href= "" >Services</NavLink>
+                <NavLink style={{ color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href= "" target="_blank">Contact</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink style={{ fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href= "" target="_blank">Who we are</NavLink>
+                <NavLink onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink style={{ fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href= "" target="_blank">Contact</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
-              </NavItem>
-              
             </Nav>
           </Collapse>
         </Navbar>
@@ -61,7 +58,8 @@ class NavBar extends Component {
   }
 };
 
-NavBar.propTypes = propTypes;
-NavBar.defaultProps = defaultProps;
+NavBar.propTypes = {
+  theme: PropTypes.string,
+};
 
 export default NavBar;

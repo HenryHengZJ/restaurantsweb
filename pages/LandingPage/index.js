@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import NavBar from './NavBar';
+import NavBar from '../../components/NavBar';
 import Hero from './Hero';
 import Occasion from './Occasion';
 import Features from './Features';
 import Caterer from './Caterer';
-import Footer from './Footer';
+import Footer from '../../components/Footer'
 import Shops from './Shops';
 import Testimonial from './Testimonial';
 import Router from 'next/router'
@@ -19,18 +19,9 @@ class LandingPage extends Component {
     })
   }
 
-  searchAddress(e) {
-    e.preventDefault()
-    Router.push(`/searchcaterer?occasion=All`, `/searchcaterer/All`)
-    /*Router.push({
-      pathname: '/searchcaterer',
-      query: { occasion: 'All' }
-    })*/
-  }
-
   findFoodNow(e) {
     e.preventDefault()
-    Router.push(`/searchcaterer?occasion=All`, `/searchcaterer/All`)
+    Router.push(`/searchcaterer`, `/searchcaterer`)
   }
 
   registerCatererClicked(e) {
@@ -45,8 +36,8 @@ class LandingPage extends Component {
     return (
       <Layout>
         <div id="app">
-          <NavBar signIn={e=>this.signIn(e)}/>
-          <Hero searchAddress={e=>this.searchAddress(e)}/>
+          <NavBar theme={'dark'} signIn={e=>this.signIn(e)}/>
+          <Hero/>
           <Shops/>
           <Features findFoodNow={e=>this.findFoodNow(e)}/>
           <Occasion />

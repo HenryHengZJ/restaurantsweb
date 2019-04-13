@@ -10,8 +10,6 @@ import AutoCompleteAddress from '../../components/AutoCompleteAddress'
 import moment from "moment";
 import StarRatingComponent from "react-star-rating-component";
 import { Calendar } from 'react-date-range';
-import Radio from '@material-ui/core/Radio';
-import Checkbox from '@material-ui/core/Checkbox';
 import ContentLoader, { Facebook } from "react-content-loader";
 import Dotdotdot from "react-dotdotdot";
 import axios from "axios";
@@ -26,14 +24,16 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 class SearchCaterer extends Component {
 
-  static async getInitialProps({query: { occasion }}) {
+  static async getInitialProps({query: { occasion, location }}) {
     console.log('occasion = ' + occasion)
     console.log('server = ' + server)
+    console.log('location = ' + location)
     const res = await fetch(`${server}/test/caterer`)
     const data = await res.json();
     console.log(`Show data fetched. Count: ${data}`);
     return {
-      data: data
+      data: data,
+      location: location,
     };
   }
 
@@ -41,7 +41,8 @@ class SearchCaterer extends Component {
     this.setState({
       caterer: this.props.data,
       loading: false,
-      empty: this.props.data.length > 0 ? false : true
+      empty: this.props.data.length > 0 ? false : true,
+      location: this.props.location,
     })
   }
 
@@ -59,6 +60,7 @@ class SearchCaterer extends Component {
     super(props);
 
     this.state = {
+      location: "",
       isMobile: false,
       loading: true,
       empty: false,
@@ -481,7 +483,7 @@ class SearchCaterer extends Component {
           <div class="pretty p-default p-round">
             <input 
               type="radio" 
-              name="color"
+              name="radio1"
               checked={this.state.selectedCuisine === cuisine[i]}
               onChange={this.handleCuisineChange}
               value={cuisine[i]}
@@ -520,7 +522,7 @@ class SearchCaterer extends Component {
           <div class="pretty p-default p-round">
             <input 
               type="radio" 
-              name="color"
+              name="radio2"
               checked={this.state.selectedPrice === price[i]}
               onChange={this.handleChange}
               value={price[i]}
@@ -941,7 +943,7 @@ class SearchCaterer extends Component {
 
   renderTopSearchBar() {
     return (
-      <div className="topsearchbar">
+      <div>
       <Container>
           <Row style={{ paddingTop: 20, paddingBottom: 10}}>
             <Col xs="8">
@@ -960,6 +962,7 @@ class SearchCaterer extends Component {
                   fontSize = {15}
                   color = 'black'
                   height = {40}
+                  value={this.state.location}
                   onPlaceChanged={this.showPlaceDetails.bind(this)} />
               </FormGroup>
             </Col>
@@ -986,7 +989,7 @@ class SearchCaterer extends Component {
                     >
                     <Label style={{ cursor: 'pointer', fontSize: 15, paddingLeft:5, textAlign:'start', color: this.state.selectedDate === "" ? 'gray' : 'black', height:12, width: '98%'}}>{this.state.selectedDate === "" ? 'Select Date' : this.state.selectedDate}</Label> 
                     </DropdownToggle>
-                    <DropdownMenu >
+                    <DropdownMenu>
                       <div >
                         <Calendar
                           onChange={this.handleDateChange.bind(this)}
@@ -1023,7 +1026,7 @@ class SearchCaterer extends Component {
     const slicedCuisine = this.state.cuisine.slice(4, cuisinelength)
 
     return (
-      <Layout>
+      <Layout title={this.state.location === "" || typeof this.state.location === "undefined" ? 'Caterers Nearby FoodieBee - Catering Service' : this.state.location + " Caterers FoodieBee - Catering Service"}>
       <div style={{backgroundColor: 'white'}}>
          <NavBar signIn={e=>this.signIn(e)}/>
 
@@ -1051,6 +1054,7 @@ class SearchCaterer extends Component {
                         fontSize = {15}
                         color = 'black'
                         height = {40}
+                        value={this.props.location}
                         onPlaceChanged={this.showPlaceDetails.bind(this)} />
                     </FormGroup>
                   </Col>
@@ -1103,7 +1107,7 @@ class SearchCaterer extends Component {
             null}
 
             <Col style={{marginTop: 20}} xs="12">
-              <h2 style={{ textAlign: 'center', fonWeight:'700', fontSize: 30, paddingLeft:10, paddingRight: 10}}>56 Caterers Available</h2>
+              <h2 style={{ textAlign: 'center', fonWeight:'700', fontSize: 30, paddingLeft:10, paddingRight: 10}}>6 Caterers Available</h2>
             </Col>
 
             {!this.state.isMobile ? 
@@ -1125,14 +1129,15 @@ class SearchCaterer extends Component {
             null}
 
             {!this.state.isMobile ? 
-            <Col style={{ marginTop: 20 }} xs="12" md="8">
-                <Nav className="float-right" pills>
+            <Col style={{ marginTop: 20, }} xs="12" md="8">
+                <Nav style={{paddingLeft:50,}} className="float-right" pills>
                   {this.renderNavItem(this.state.cuisine[0])}
                   {this.renderNavItem(this.state.cuisine[1])}
                   {this.renderNavItem(this.state.cuisine[2])}
                   {this.renderNavItem(this.state.cuisine[3])}
+ 
                   <NavItem>
-                    <UncontrolledDropdown
+                    <Dropdown
                       nav
                       isOpen={this.state.cuisineDropDownOpen}
                       toggle={() => {
@@ -1151,8 +1156,8 @@ class SearchCaterer extends Component {
                       >
                         {slicedCuisine.includes(this.state.selectedCuisine) ? this.state.selectedCuisine : "More"}
                       </DropdownToggle>
-                      <DropdownMenu right style={{ right: "auto" }}>
-                        <Table style={{ margin: 0 }} borderless>
+                      <DropdownMenu right style={{ right: 0, left: 'auto' }}>
+                        <Table style={{ marginRight: 0 }} borderless>
                           <tbody>
                             {this.renderMoreCuisine(4, 10)}
                             {this.renderMoreCuisine(10, 16)}
@@ -1161,7 +1166,7 @@ class SearchCaterer extends Component {
                           </tbody>
                         </Table>
                       </DropdownMenu>
-                    </UncontrolledDropdown>
+                    </Dropdown>
                     <div
                       style={{
                         height: 2,

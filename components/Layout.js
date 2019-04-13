@@ -15,8 +15,11 @@ class Layout extends React.Component {
   render() {
 
     const {
-      children
+      children,
+      title
     } = this.props;
+
+    const titleVal = title || 'FoodieBee - Catering Service';
 
     return (
       <div>
@@ -27,7 +30,7 @@ class Layout extends React.Component {
             <meta name="description" content="FoodieBee - Catering Service"/>
             <meta name="author" content="Henry Heng"/>
             <meta name="keyword" content="FoodieBee,Catering,Corporate,Event"/>
-            <title>FoodieBee - Catering Service</title>
+            <title>{titleVal}</title>
             <link rel="manifest" href="/manifest.json"/>
             <link rel="shortcut icon" href="/static/favicon.ico"/>
             

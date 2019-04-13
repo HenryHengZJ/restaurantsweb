@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import NavBar from "./NavBar";
+import NavBar from '../../components/NavBar';
 import HowItWorks from "./HowItWorks";
 import Caterer from "./Caterer";
 import Footer from "../../components/Footer";
@@ -29,10 +29,10 @@ class CatererSignUp extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout title={'Caterer Sign Up FoodieBee - Catering Service'}>
       <div id="CatererSignUp">
         <div ref={this.myRef} style={{backgroundColor: 'transparent', height:1, width: '100%'}}></div>
-        <NavBar signIn={e => this.signIn(e)} />
+        <NavBar theme={'dark'} signIn={e => this.signIn(e)} />
         <Banner />
         <HowItWorks />
         <Benefit />

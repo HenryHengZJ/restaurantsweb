@@ -42,8 +42,8 @@ nextApp.prepare().then(() => {
   // routes ======================================================================
   app.use('/test', testRoutes);
 
-  app.get('/searchcaterer/:occasion', (req,res) => {
-    return nextApp.render(req, res, '/SearchCaterer', { occasion: req.params.occasion })
+  app.get('/searchcaterer/:location/:occasion', (req,res) => {
+    return nextApp.render(req, res, '/SearchCaterer', { location: req.params.location, occasion: req.params.occasion })
   })  
 
   app.get('/catererdetail/:id', (req,res) => {
@@ -60,6 +60,10 @@ nextApp.prepare().then(() => {
 
   app.get('/caterersignup', (req,res) => {
     return nextApp.render(req, res, '/CatererSignUp')
+  }) 
+
+  app.get('/deliveryconfirmation', (req,res) => {
+    return nextApp.render(req, res, '/DeliveryConfirmation')
   }) 
 
   app.get('*', (req,res) => {
