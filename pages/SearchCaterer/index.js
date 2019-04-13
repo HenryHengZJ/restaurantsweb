@@ -27,7 +27,7 @@ class SearchCaterer extends Component {
   static async getInitialProps({query: { occasion, location }}) {
     //console.log('occasion = ' + occasion)
     //console.log('server = ' + server)
-   // console.log('location = ' + location)
+    console.log('location = ' + location)
     const res = await fetch(`${server}/test/caterer`)
     const data = await res.json();
    // console.log(`Show data fetched. Count: ${data}`);
@@ -228,6 +228,7 @@ class SearchCaterer extends Component {
       selectedDate: "",
       maxDate: null,
       cuisineDropDownOpen: false,
+      dropDownAddress: false,
       dropDownDate: false,
       isSearchBarOpen: false,
       filterModalOpen: false,
@@ -271,6 +272,15 @@ class SearchCaterer extends Component {
       false
     );
 
+    Router.events.on("routeChangeComplete", () => {
+      this.setState({
+        loading: false,
+        caterer: this.props.data,
+        empty: this.props.data.length > 0 ? false : true,
+        location: this.props.location,
+      });
+    });
+
   }
 
   getDataFromDb = () => {
@@ -305,6 +315,12 @@ class SearchCaterer extends Component {
     })
   }
 
+  toggleDropDownAddress = () => {
+    this.setState({
+      dropDownAddress: !this.state.dropDownAddress
+    })
+  }
+
   searchBarToggle = () => {
     this.setState({
       isSearchBarOpen: !this.state.isSearchBarOpen
@@ -314,6 +330,27 @@ class SearchCaterer extends Component {
   showPlaceDetails(address) {
     this.setState({ address });
   }
+
+  saveAddress = () => {
+    var address = this.state.address
+    var url;
+    var asurl;
+    if (address != "") {
+      var city = address.address_components[1].long_name
+      url = `/searchcaterer?location=${city}&occasion=All`;
+      asurl = `/searchcaterer/${city}/All`;
+    }
+    else {
+      url = `/searchcaterer?location=Dublin&occasion=All`;
+      asurl = `/searchcaterer/Dublin/All`;
+    }
+    this.setState({
+      dropDownAddress: ! this.state.dropDownAddress,
+      loading: true,
+    },() => {
+      Router.replace(url, asurl)
+    })
+  };
 
   navItemClicked = selectedCuisine => {
     this.setState({
@@ -963,7 +1000,6 @@ class SearchCaterer extends Component {
                   fontSize = {15}
                   color = 'black'
                   height = {40}
-                  value={this.state.location}
                   onPlaceChanged={this.showPlaceDetails.bind(this)} />
               </FormGroup>
             </Col>
@@ -1045,18 +1081,41 @@ class SearchCaterer extends Component {
                   <Col xs="12" md="4">
                     <FormGroup>
                       <h6>Delivered To</h6>
-                      <AutoCompleteAddress 
-                        borderRadius = {5}
-                        borderColor = 'rgba(211,211,211, 0.5)'
-                        paddingLeft = {10}
-                        paddingRight = {10}
-                        paddingTop = {5}
-                        paddingBottom = {5}
-                        fontSize = {15}
-                        color = 'black'
-                        height = {40}
-                        value={this.props.location}
-                        onPlaceChanged={this.showPlaceDetails.bind(this)} />
+                      <UncontrolledDropdown isOpen={this.state.dropDownAddress}  toggle={() => this.toggleDropDownAddress()}>
+                        <DropdownToggle
+                          style={{
+                            height: 40,
+                            width: '100%',
+                            color: "rgba(0,0,0, 0.5)",
+                            borderColor: "rgba(211,211,211, 0.5)",
+                            backgroundColor: "white",
+                          }}
+                          caret
+                        >
+                        <Label style={{ cursor: 'pointer', fontSize: 15, paddingLeft:5, textAlign:'start', color: this.state.location === "" ? 'gray' : 'black', height:12, width: '98%'}}>{this.state.location}</Label> 
+                        </DropdownToggle>
+                        <DropdownMenu style={{width: '100%'}}>
+                          <Row style={{width: '100%'}}>
+                            <Col style={{paddingRight: 0}} xs="10">
+                              <AutoCompleteAddress 
+                                borderRadius = {5}
+                                borderColor = 'rgba(211,211,211, 0.5)'
+                                paddingLeft = {10}
+                                paddingRight = {10}
+                                paddingTop = {5}
+                                paddingBottom = {5}
+                                fontSize = {15}
+                                color = 'black'
+                                height = {40}
+                                onPlaceChanged={this.showPlaceDetails.bind(this)} />
+                            </Col>
+                            <Col xs="2">
+                              <Button onClick={() => this.saveAddress()} style={{ height: '100%'}} className="bg-primary" color="primary">Save</Button>
+                            </Col>
+                          </Row>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                      
                     </FormGroup>
                   </Col>
                   <Col xs="6" md="3">
