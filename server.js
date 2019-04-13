@@ -60,7 +60,11 @@ nextApp.prepare().then(() => {
 
   app.get('/caterersignup', (req,res) => {
     return nextApp.render(req, res, '/CatererSignUp')
-  }) 
+  })
+  
+  app.get('/catererlogin', (req,res) => {
+    return nextApp.render(req, res, '/CatererLogin')
+  })
 
   app.get('/deliveryconfirmation', (req,res) => {
     return nextApp.render(req, res, '/DeliveryConfirmation')

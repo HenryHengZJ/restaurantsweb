@@ -15,10 +15,10 @@ class CatererSignUp extends Component {
     this.myRef = React.createRef()   // Create a ref object 
   }
 
-  signIn(e) {
+  caterersignIn(e) {
     e.preventDefault();
     Router.push({
-      pathname: '/login'
+      pathname: '/catererlogin'
     })
   }
 
@@ -32,7 +32,7 @@ class CatererSignUp extends Component {
       <Layout title={'Caterer Sign Up FoodieBee - Catering Service'}>
       <div id="CatererSignUp">
         <div ref={this.myRef} style={{backgroundColor: 'transparent', height:1, width: '100%'}}></div>
-        <NavBar theme={'dark'} signIn={e => this.signIn(e)} />
+        <NavBar signInHide={true} catererSignInVisible={true} theme={'dark'} caterersignIn={e => this.caterersignIn(e)} />
         <Banner />
         <HowItWorks />
         <Benefit />

@@ -6,10 +6,9 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
-class Login extends Component {
+class CatererLogin extends Component {
 
   constructor(props) {
     super(props);
@@ -23,13 +22,6 @@ class Login extends Component {
     }
   }
 
-  signIn(e) {
-    e.preventDefault()
-    Router.push({
-      pathname: '/login'
-    })
-  }
-
   handleEmailChange(e) {
     this.setState({ useremail: e.target.value });
   }
@@ -40,33 +32,14 @@ class Login extends Component {
 
   login = (e) => {
     e.preventDefault()
-    const {userpassword, useremail, } = this.state;
-    if (useremail === 'user' && userpassword === '12345') {
-    //  this.props.history.push('/caterer')
-    }
-   // this.props.history.push('/caterer')
-  }
-
-
-  caterersignup = (e) => {
-    e.preventDefault()
-    Router.push({
-      pathname: '/caterersignup'
-    })
-  }
-
-  signupmember = (e) => {
-    e.preventDefault()
-    Router.push({
-      pathname: '/register'
-    })
+    window.location.assign('https://foodiebeecaterer.herokuapp.com');
   }
 
   render() {
     return (
-      <Layout title={'Login FoodieBee - Catering Service'}>
+      <Layout title={'Caterer Login FoodieBee - Catering Service'}>
         <div style={{backgroundColor: 'white'}}>
-          <NavBar signIn={e=>this.signIn(e)}/>
+          <NavBar signInHide={true}/>
           <div className="app justify-content-center align-items-center">
           <Container>
             <Row style={{marginTop: 20, flex: 1, display: 'flex'}} className="justify-content-center">
@@ -74,8 +47,8 @@ class Login extends Component {
                 <Card style={{boxShadow: '1px 1px 3px #9E9E9E'}} className="p-4">
                   <CardBody className="text-center">
                     <Form>
-                      <h2>Login</h2>
-                      <p style={{marginBottom:20}} className="text-muted text-center">Sign In to your account</p>
+                      <h2>Caterer Login</h2>
+                      <p style={{marginBottom:20}} className="text-muted text-center">Sign In to your caterer's account</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>@</InputGroupText>
@@ -102,23 +75,7 @@ class Login extends Component {
                   </CardBody>
                 </Card>
                 </Col>
-
-                <Col xs="12" md="6">
-                  <Card style={{backgroundColor: "#20a8d8"}} className="text-white py-4" >
-                    <CardBody className="text-center">
-                      <div>
-                        <h2>Sign up</h2>
-                        
-                        <Button onClick={(e) => this.signupmember(e)} color="primary" className="mt-3" active tabIndex={-1}>Register As Member</Button>
-                        
-                        <h2 style={{marginTop: 45}}>I'm a Caterer</h2>
-                        
-                        <Button onClick={(e) => this.caterersignup(e)} style={{backgroundColor: 'white', fontWeight: '500'}} color="link" className="mt-3" >Login / Register As Caterer</Button>
-                        
-                      </div>
-                    </CardBody>
-                  </Card>
-                </Col>
+              
               </Row>
           </Container>
         </div>
@@ -129,4 +86,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default CatererLogin;

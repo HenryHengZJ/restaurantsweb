@@ -22,7 +22,9 @@ class NavBar extends Component {
 
   render() {
     const {
-      theme
+      theme,
+      catererSignInVisible,
+      signInHide,
     } = this.props;
 
     const backgroundColorVal = theme === 'dark' ? this.state.isOpen ? '#696969' : 'transparent' : 'rgba(211,211,211,0.3)' ;
@@ -47,9 +49,16 @@ class NavBar extends Component {
               <NavItem>
                 <NavLink style={{ color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href= "" target="_blank">Contact</NavLink>
               </NavItem>
+              {!signInHide ?
               <NavItem>
                 <NavLink onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
               </NavItem>
+              : null}
+              {catererSignInVisible ?
+              <NavItem>
+                <NavLink onClick={e => this.props.caterersignIn(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Caterer Sign In</NavLink>
+              </NavItem>
+              : null }
             </Nav>
           </Collapse>
         </Navbar>
@@ -60,6 +69,8 @@ class NavBar extends Component {
 
 NavBar.propTypes = {
   theme: PropTypes.string,
+  signInHide: PropTypes.bool,
+  catererSignInVisible: PropTypes.bool,
 };
 
 export default NavBar;
