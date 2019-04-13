@@ -21,7 +21,7 @@ class LandingPage extends Component {
 
   findFoodNow(e) {
     e.preventDefault()
-    Router.push(`/searchcaterer`, `/searchcaterer`)
+    Router.push(`/searchcaterer?location=Dublin&occasion=All`, `/searchcaterer`)
   }
 
   registerCatererClicked(e) {
