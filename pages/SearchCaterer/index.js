@@ -25,12 +25,12 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 class SearchCaterer extends Component {
 
   static async getInitialProps({query: { occasion, location }}) {
-    console.log('occasion = ' + occasion)
-    console.log('server = ' + server)
-    console.log('location = ' + location)
+    //console.log('occasion = ' + occasion)
+    //console.log('server = ' + server)
+   // console.log('location = ' + location)
     const res = await fetch(`${server}/test/caterer`)
     const data = await res.json();
-    console.log(`Show data fetched. Count: ${data}`);
+   // console.log(`Show data fetched. Count: ${data}`);
     return {
       data: data,
       location: location,
@@ -280,7 +280,7 @@ class SearchCaterer extends Component {
     .then((response) => {
 
       var data = response.data;
-      console.log(data)
+     // console.log(data)
       this.setState({
         caterer: data,
         loading: false,
@@ -478,7 +478,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < cuisine.length; i++) {
       itemsarray.push(
-        <Col xs={this.state.filterModalOpen ? "6" : "12"}>
+        <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="radio">
           <div class="pretty p-default p-round">
             <input 
@@ -516,7 +516,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < price.length; i++) {
       itemsarray.push(
-        <Col xs={this.state.filterModalOpen ? "6" : "12"}>
+        <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="radio">
 
           <div class="pretty p-default p-round">
@@ -555,7 +555,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < dietary.length; i++) {
       itemsarray.push(
-        <Col xs={this.state.filterModalOpen ? "6" : "12"}>
+        <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="checkbox">
           <div class="pretty p-svg p-curve">
             <input 
@@ -594,7 +594,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < occasion.length; i++) {
       itemsarray.push(
-        <Col xs={this.state.filterModalOpen ? "6" : "12"}>
+        <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
           <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
             <div class="pretty p-svg p-curve">
               <input 
@@ -738,7 +738,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < 6; i++) {
       itemsarray.push(
-        <Col xs="12" sm="6" md="4" lg="4">
+        <Col key={i} xs="12" sm="6" md="4" lg="4">
           <ContentLoader height="400">
             <rect x="0" y="0" rx="6" ry="6" width="100%" height="200" />
             <rect x="0" y="240" rx="4" ry="4" width="300" height="13" />
@@ -768,6 +768,7 @@ class SearchCaterer extends Component {
     for (let i = 0; i < filterArray.length; i++) {
       itemsarray.push(
         <span
+          key={i} 
           style={{
             borderWidth: 1.5,
             color: "black",
@@ -806,7 +807,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < caterer.length; i++) {
       itemsarray.push(
-        <Col xs="12" sm="6" md="4" lg="4">
+        <Col key={i} xs="12" sm="6" md="4" lg="4">
           <Card
             style={{
               cursor: "pointer",

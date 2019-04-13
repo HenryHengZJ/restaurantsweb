@@ -50,7 +50,7 @@ class Benefit extends Component {
 
     for (let i = 0; i < benefits.length; i++) {
       itemsarray.push(
-        <Col xs="10" sm="6" md="4" lg="4">
+        <Col key={i} xs="10" sm="6" md="4" lg="4">
           <Card
             style={{
               backgroudColor: "white",

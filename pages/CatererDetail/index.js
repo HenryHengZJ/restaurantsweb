@@ -37,6 +37,7 @@ import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
 import Dotdotdot from "react-dotdotdot";
+import ContentLoader, { Facebook } from "react-content-loader";
 import StarRatingComponent from "react-star-rating-component";
 import Router from 'next/router'
 
@@ -57,6 +58,7 @@ class CatererDetail extends Component {
     this.handleSpecialInstruction = this.handleSpecialInstruction.bind(this);
 
     this.state = {
+      loading: true,
       updateCartItem: false,
       selectedPrice: 0,
       selectedSelection: [],
@@ -504,10 +506,11 @@ class CatererDetail extends Component {
       finalresult.push(parentObject);
     }
 
-    console.log(JSON.stringify(finalresult));
+   // console.log(JSON.stringify(finalresult));
 
     this.setState({
-      menu: finalresult
+      menu: finalresult,
+      loading: false,
     });
   }
 
@@ -948,7 +951,7 @@ class CatererDetail extends Component {
     var selectionarray = [];
     for (let i = 0; i < selection.length; i++) {
       selectionarray.push(
-        <Card>
+        <Card key={i} >
           <CardHeader style={{fontWeight: '600'}}>
             Select {selection[i].selectionmaxnum} {selection[i].selectioncategory}
           </CardHeader>
@@ -965,7 +968,7 @@ class CatererDetail extends Component {
     var selectionitemarray = [];
     for (let i = 0; i < selectionitem.length; i++) {
       selectionitemarray.push(
-        <Col xs="12" sm="6" md="6">
+        <Col key={i} xs="12" sm="6" md="6">
           {selectionitem[i].selectionitemprice === 0 ? 
           (
             <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="radio">
@@ -1021,7 +1024,7 @@ class CatererDetail extends Component {
     var selectionitemarray = [];
     for (let i = 0; i < selectionitem.length; i++) {
       selectionitemarray.push(
-        <Col xs="12" sm="6" md="6">
+        <Col key={i} xs="12" sm="6" md="6">
           {selectionitem[i].selectionitemprice === 0 ? 
           (
             <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
@@ -1099,7 +1102,7 @@ class CatererDetail extends Component {
 
     for (let i = 0; i < selection.length; i++) {
       itemsarray.push(
-        <p style={{textSize: 13, opacity: 0.7, margin: 0 }}>
+        <p key={i} style={{textSize: 13, opacity: 0.7, margin: 0 }}>
           <span>&#8226;</span> {selection[i].selectioncategory}:
           {this.renderCartSelectionItem(selection[i].selectionitem)}
         </p>
@@ -1114,7 +1117,7 @@ class CatererDetail extends Component {
 
     for (let i = 0; i < 1; i++) {
       itemsarray.push(
-        <p style={{ textSize: 13, opacity: 0.7, margin: 0 }}>
+        <p key={i} style={{ textSize: 13, opacity: 0.7, margin: 0 }}>
           <span>&#8226;</span> Instruction:
           <div>
             <Label style={{ cursor: 'pointer', opacity: 0.7, }}>
@@ -1359,7 +1362,7 @@ class CatererDetail extends Component {
 
     for (let i = 0; i < menutab.length; i++) {
       menuarray.push(
-        <Col xs="12">
+        <Col key={i} xs="12">
           {i === 0 ? null : (
             <div
               style={{
@@ -1392,7 +1395,7 @@ class CatererDetail extends Component {
 
     for (let i = 0; i < categorytab.length; i++) {
       categoryarray.push(
-        <Col xs="12">
+        <Col key={i} xs="12">
           {this.renderCategoryItems(
             categorytab[i].items,
             categorytab[i].categoryname,
@@ -1409,7 +1412,7 @@ class CatererDetail extends Component {
 
     for (let i = 0; i < items.length; i++) {
       itemsarray.push(
-        <Col xs="12" sm="12" md="12" lg="6">
+        <Col key={i} xs="12" sm="12" md="12" lg="6">
           <Card className="card-1" onClick={() => this.menuItemClicked(items[i]._id)} style={{ cursor: "pointer" }}>
             <CardBody
               style={{
@@ -1514,7 +1517,7 @@ class CatererDetail extends Component {
 
     for (let i = 0; i < review.length; i++) {
       itemsarray.push(
-        <Col xs="12">
+        <Col key={i} xs="12">
           <Card style={{boxShadow: 'none', borderWidth: 0}}>
             <CardBody
               style={{ padding: 0,}}
@@ -1649,7 +1652,7 @@ class CatererDetail extends Component {
     var iconarray = [];
     for (let i = 0; i < markitem.length; i++) {
       iconarray.push(
-        <span style={{opacity: 0.8}}>
+        <span key={i} style={{opacity: 0.8}}>
           {markitem[i]}
           <img
             style={{
@@ -1685,6 +1688,7 @@ class CatererDetail extends Component {
     for (let i = 0; i < markitem.length; i++) {
       iconarray.push(
         <img
+          key={i} 
           style={{
             marginLeft: 5,
             marginBottom: 5,
@@ -1706,6 +1710,32 @@ class CatererDetail extends Component {
       >
         {iconarray}
       </Col>
+    );
+  }
+
+  renderLoadingItems() {
+    var itemsarray = [];
+
+    for (let i = 0; i < 6; i++) {
+      itemsarray.push(
+        <Col key={i} xs="12" sm="6" md="6" lg="6">
+          <ContentLoader height="350">
+            <rect x="0" y="0" rx="6" ry="6" width="100%" height="220" />
+            <rect x="0" y="240" rx="4" ry="4" width="300" height="13" />
+            <rect x="0" y="265" rx="3" ry="3" width="100%" height="20" />
+          </ContentLoader>
+        </Col>
+      );
+    }
+
+    return (
+      <Row
+        style={{
+          marginTop: 10
+        }}
+      >
+        {itemsarray}
+      </Row>
     );
   }
 
@@ -1826,7 +1856,7 @@ class CatererDetail extends Component {
               </Col>
 
               <Col style={{ marginTop: 20 }} xs="12" sm="12" md="7" lg="7">
-                {this.renderMenu()}
+                {this.state.loading ? this.renderLoadingItems() : this.renderMenu()}
               </Col>
 
               <Col style={{ marginTop: 20 }} xs="0" sm="0" md="5" lg="5">

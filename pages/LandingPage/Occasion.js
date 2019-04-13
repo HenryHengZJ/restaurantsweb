@@ -71,7 +71,7 @@ class Occasion extends Component {
 
     for(let i = 0; i < occasions.length; i++){
       itemsarray.push(
-        <Col xs="12" sm="6" md="6" lg="4">
+        <Col key={i} xs="12" sm="6" md="6" lg="4">
           <Card onMouseEnter={() => this.toggle(i)} onMouseLeave={() => this.toggle(i)} style={{cursor: 'pointer', marginTop:0,  boxShadow: 'none', borderWidth: 0}}  onClick={() => this.handleSelectedCardClick(i)}>
             <CardBody style={{position:'relative', padding: 0}}>
               <img style={ { objectFit:'cover', width: '100%', height: 220 }} src={occasions[i].src}  />

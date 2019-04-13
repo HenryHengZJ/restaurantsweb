@@ -53,7 +53,7 @@ class Testimonial extends Component {
 
     for(let i = 0; i < testimonial.length; i++){
       itemsarray.push(
-        <Col xs="6" sm="6" md="4" lg="4">
+        <Col key={i} xs="6" sm="6" md="4" lg="4">
           <Card style={{ backgroudColor: 'rgba(220,220,220, 0.5)', borderWidth: 0, borderColor: 'white', boxShadow: 'none'}}>
           <CardBody style={{padding: 0}}>
 

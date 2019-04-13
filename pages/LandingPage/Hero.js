@@ -23,14 +23,23 @@ class Hero extends React.Component {
 
   searchAddress = (e, address) => {
     e.preventDefault()
-   // alert(JSON.stringify(address))
+    //alert(JSON.stringify(address))
    // alert(address.address_components[1].long_name)
-    var city = address.address_components[1].long_name
-    this.setState({
-      address: ""
-    }, () => {
-      Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer/${city}/All`)
-    })
+    if (address != "") {
+      var city = address.address_components[1].long_name
+      this.setState({
+        address: ""
+      }, () => {
+        Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer/${city}/All`)
+      })
+    }
+    else {
+      this.setState({
+        address: ""
+      }, () => {
+        Router.push(`/searchcaterer?location=Dublin&occasion=All`, `/searchcaterer/Dublin/All`)
+      })
+    }
   }
 
   showPlaceDetails(address) {
