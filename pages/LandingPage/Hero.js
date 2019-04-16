@@ -30,14 +30,14 @@ class Hero extends React.Component {
       this.setState({
         address: ""
       }, () => {
-        Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer/${city}/All`)
+        Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer?location=${city}&occasion=All`)
       })
     }
     else {
       this.setState({
         address: ""
       }, () => {
-        Router.push(`/searchcaterer?location=Dublin&occasion=All`, `/searchcaterer/Dublin/All`)
+        Router.push(`/searchcaterer?location=Dublin&occasion=All`, `/searchcaterer?location=Dublin&occasion=All`)
       })
     }
   }

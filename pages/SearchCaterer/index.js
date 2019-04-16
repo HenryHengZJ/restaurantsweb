@@ -14,7 +14,7 @@ import ContentLoader, { Facebook } from "react-content-loader";
 import Dotdotdot from "react-dotdotdot";
 import axios from "axios";
 import Router from 'next/router'
-import fetch from 'isomorphic-unfetch'
+//import fetch from 'isomorphic-unfetch'
 
 import { server } from '../../config';
 import './SearchCaterer.css'
@@ -25,12 +25,20 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 class SearchCaterer extends Component {
 
   static async getInitialProps({query: { occasion, location }}) {
-    //console.log('occasion = ' + occasion)
+    console.log('occasion = ' + occasion)
     //console.log('server = ' + server)
     console.log('location = ' + location)
-    const res = await fetch(`${server}/test/caterer`)
+    /*const res = await fetch(`${server}/test/caterer`)
     const data = await res.json();
    // console.log(`Show data fetched. Count: ${data}`);
+    return {
+      data: data,
+      location: location,
+    };*/
+
+    const res = await axios.get(`${server}/test/caterer`);
+    const data = await res.data;
+    console.log(`Show data fetched. Count: ${data.length}`);
     return {
       data: data,
       location: location,
@@ -338,11 +346,11 @@ class SearchCaterer extends Component {
     if (address != "") {
       var city = address.address_components[1].long_name
       url = `/searchcaterer?location=${city}&occasion=All`;
-      asurl = `/searchcaterer/${city}/All`;
+      asurl = `/searchcaterer?location=${city}&occasion=All`;
     }
     else {
       url = `/searchcaterer?location=Dublin&occasion=All`;
-      asurl = `/searchcaterer/Dublin/All`;
+      asurl = `/searchcaterer?location=Dublin&occasion=All`;
     }
     this.setState({
       dropDownAddress: ! this.state.dropDownAddress,

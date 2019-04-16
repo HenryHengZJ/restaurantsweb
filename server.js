@@ -1,5 +1,6 @@
 // set up ===============================================================
 require('dotenv').config()
+require('newrelic');
 const express = require('express');
 const path = require('path');
 const port = process.env.PORT || 5000;
@@ -42,8 +43,16 @@ nextApp.prepare().then(() => {
   // routes ======================================================================
   app.use('/test', testRoutes);
 
-  app.get('/searchcaterer/:location/:occasion', (req,res) => {
-    return nextApp.render(req, res, '/SearchCaterer', { location: req.params.location, occasion: req.params.occasion })
+  app.get('/searchcaterer', (req,res) => {
+    var location = "";
+    var occasion = "" ;
+    if (req.query.location) {
+      location = req.query.location
+    }
+    if (req.query.occasion) {
+      occasion = req.query.occasion
+    }
+    return nextApp.render(req, res, '/SearchCaterer', { location: location, occasion: occasion })
   })  
 
   app.get('/catererdetail/:id', (req,res) => {

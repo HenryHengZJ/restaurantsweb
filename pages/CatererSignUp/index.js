@@ -17,9 +17,7 @@ class CatererSignUp extends Component {
 
   caterersignIn(e) {
     e.preventDefault();
-    Router.push({
-      pathname: '/catererlogin'
-    })
+    window.open('https://foodiebeecaterer.herokuapp.com', '_blank');
   }
 
   joinNowClicked(e) {
