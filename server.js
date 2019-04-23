@@ -79,6 +79,10 @@ nextApp.prepare().then(() => {
     return nextApp.render(req, res, '/DeliveryConfirmation')
   }) 
 
+  app.get('/userprofile/:id', (req,res) => {
+    return nextApp.render(req, res, '/UserProfile', { id: req.params.id })
+  }) 
+
   app.get('*', (req,res) => {
     return handle(req,res) // for all the react stuff
   })  

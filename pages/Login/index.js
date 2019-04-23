@@ -42,9 +42,9 @@ class Login extends Component {
     e.preventDefault()
     const {userpassword, useremail, } = this.state;
     if (useremail === 'user' && userpassword === '12345') {
-    //  this.props.history.push('/caterer')
+
     }
-   // this.props.history.push('/caterer')
+    Router.push(`/userprofile?id=Bwytkfhgugmg123`, `/userprofile/Bwytkfhgugmg123`)
   }
 
 

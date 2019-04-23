@@ -49,6 +49,7 @@
     "react-dom": "^16.8.6",
     "react-dotdotdot": "^1.2.3",
     "react-star-rating-component": "^1.4.1",
+    "react-star-ratings": "^2.3.0",
     "reactstrap": "^8.0.0",
     "webpack": "^4.28.3"
   }
