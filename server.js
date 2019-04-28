@@ -12,7 +12,9 @@ const next = require('next')
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler() //part of next config
 var cors = require('cors');
-
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
+require('./middleware/passport')(passport);
 
 // DB configuration ===============================================================
 const dbRoute = process.env.DB_URI;
@@ -35,13 +37,25 @@ nextApp.prepare().then(() => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(logger("dev"));
+  app.use(cookieParser());
+	app.use(passport.initialize());
   //app.use(express.static(path.join(__dirname, 'client/build')));
 
   // router files ===============================================================
-  var testRoutes   = require('./routes/test');
-
-  // routes ======================================================================
-  app.use('/test', testRoutes);
+	var testRoutes   = require('./routes/test');
+	var authRoutes   = require('./routes/auth');
+	var catererPublishedRoutes   = require('./routes/catererPublished');
+	var customerRoutes   = require('./routes/customer');
+	var menuPublishedRoutes   = require('./routes/menuPublished');
+	var cartRoutes   = require('./routes/cart');
+	
+	// routes ======================================================================
+	app.use('/test', testRoutes);
+  app.use('/auth', authRoutes);
+	app.use('/caterer', catererPublishedRoutes);
+	app.use('/customer', customerRoutes);
+	app.use('/menu', menuPublishedRoutes);
+	app.use('/cart', cartRoutes);
 
   app.get('/searchcaterer', (req,res) => {
     var location = "";
@@ -79,13 +93,26 @@ nextApp.prepare().then(() => {
     return nextApp.render(req, res, '/DeliveryConfirmation')
   }) 
 
-  app.get('/userprofile/:id', (req,res) => {
-    return nextApp.render(req, res, '/UserProfile', { id: req.params.id })
+  app.get('/userprofile/:userprofilepage', (req,res) => {
+    return nextApp.render(req, res, '/UserProfile', { userprofilepage: req.params.userprofilepage })
   }) 
 
   app.get('*', (req,res) => {
     return handle(req,res) // for all the react stuff
   })  
+
+  app.get('/checkLoggedIn',
+    passport.authenticate('jwt', {session: false, failWithError: true}),
+    function(req, res, next) {
+      // Handle success
+      const { user } = req;
+      return res.status(200).json(user);
+    },
+    function(err, req, res, next) {
+      // Handle error
+      return res.status(401).send({ error: err });
+    }
+  )
 
   //start server
   app.listen(port, (req, res) => {

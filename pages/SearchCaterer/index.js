@@ -17,9 +17,8 @@ import Router from 'next/router'
 //import fetch from 'isomorphic-unfetch'
 
 import { server } from '../../config';
-import './SearchCaterer.css'
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+//import 'react-date-range/dist/styles.css'; // main style file
+//import 'react-date-range/dist/theme/default.css'; // theme css file
 
 
 class SearchCaterer extends Component {
@@ -258,7 +257,6 @@ class SearchCaterer extends Component {
 
   componentDidMount() {
   //  this.getDataFromDb();
-    
     var currentDate = moment().toDate();
     this.setState({
       maxDate: currentDate,

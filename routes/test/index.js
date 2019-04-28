@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Caterer = require('../../models/caterer');
+var Caterer = require('../../models/catererPublished');
 
 router.get('/caterer', (req, res) => {
     Caterer.find( (err,caterer) => {

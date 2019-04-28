@@ -4,11 +4,13 @@ import React from "react";
 import Router from 'next/router'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../pages/styles.scss'
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+
 
 class Layout extends React.Component {
   constructor(props) {
     super(props);
-
     Router.events.on('routeChangeComplete', () => { window.scrollTo(0, 0); });
   }
 

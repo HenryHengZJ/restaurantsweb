@@ -16,6 +16,7 @@ import {
   Row,
   Label,
   FormGroup,
+  FormFeedback,
   UncontrolledDropdown,
   Dropdown,
   DropdownItem,
@@ -41,6 +42,13 @@ import ContentLoader, { Facebook } from "react-content-loader";
 import StarRatingComponent from "react-star-rating-component";
 import Router from 'next/router'
 import StarRatings from 'react-star-ratings';
+import Cards from 'react-credit-cards';
+import {
+  formatCreditCardNumber,
+  formatCVC,
+  formatExpirationDate,
+  formatFormData,
+} from '../../utils';
 
 const glutenfreeIcon = '/static/glutenfree1.png';
 const hotIcon = '/static/fire.png';
@@ -51,21 +59,43 @@ const halalicon = '/static/halalsign.png';
 const closeIcon = '/static/close.png';
 
 class UserProfile extends Component {
+
+  static async getInitialProps({query: { userprofilepage }}) {
+    console.log('userprofilepage = ' + userprofilepage)
+    var activemenu;
+    if (typeof userprofilepage !== 'undefined') {
+      activemenu = userprofilepage
+    }
+    else {
+      activemenu = "Account Info"
+    }
+    return {
+      selectedMenu: activemenu,
+    };
+  }
+
+  componentWillMount() {
+    this.setState({
+      selectedMenu: this.props.selectedMenu,
+    })
+  }
+
   constructor(props) {
     super(props);
 
+    this.handleAddress1 = this.handleAddress1.bind(this);
+    this.handleAddress2 = this.handleAddress2.bind(this);
+    this.handleAddress3 = this.handleAddress3.bind(this);
+    this.handleCounty = this.handleCounty.bind(this);
+
     this.state = {
-      loading: true,
-      updateCartItem: false,
-      selectedPrice: 0,
-      selectedSelection: [],
-      selectedQuantity: 1,
-      activeMenu: null,
-      specialInstructionOpen: false,
-      specialInstruction: '',
-      menuModalOpen: false,
-      selectedMenu: "Account Info",
+      selectedMenu: "",
+      isMobile: false,
       menuDropDownOpen: false,
+      isPaymentButtonActive: false,
+      paymentCardModalOpen: false,
+      isAddressButtonActive: false,
+      deliveryAddressModalOpen: false,
       deliveryaddresses: [
         {
           fulladdress: "301, the Windmill, Dock Road",
@@ -211,14 +241,119 @@ class UserProfile extends Component {
         workinghours: "Mon-Fri: 10am-3pm",
         deliveryfee: 3,
         minspending: 50
-      }
+      },
+      address1: "",
+      isAddressEmpty: false,
+      address2: "",
+      address3: "",
+      county: "",
+      cardnumber: '',
+      cardholdername: '',
+      expiry: '',
+      cvc: '',
+      issuer: '',
+      focused: '',
+      formData: null,
     };
+
+    this.CountyData = ["Dublin", "Limerick", "Cork"];
+
   }
 
   componentDidMount() {
-    
+
+      if (window.innerWidth < 800) {
+        this.setState({
+          isMobile: true
+        });
+      }
+  
+      window.addEventListener(
+        "resize",
+        () => {
+          this.setState({
+            isMobile: window.innerWidth < 800
+          });
+        },
+        false
+      );
+
+    }
+
+  ////////////////////////////////////////////////handleInput/////////////////////////////////////////////////////
+  
+  handleAddress1(e) {
+    this.setState(
+      {
+        address1: e.target.value,
+        isAddressEmpty: e.target.value === "" ? true : false
+      },
+      () => {
+        this.checkAddressInput();
+      }
+    );
   }
 
+  handleAddress2(e) {
+    this.setState({ address2: e.target.value });
+  }
+
+  handleAddress3(e) {
+    this.setState({ address3: e.target.value });
+  }
+
+  handleCounty(e) {
+    this.setState(
+      {
+        county: e.target.value
+      },
+      () => {
+        this.checkAddressInput();
+      }
+    );
+  }
+
+  
+  handleCallback = ({ issuer }, isValid) => {
+    if (isValid) {
+      this.setState({ issuer });
+    }
+  };
+
+  handleInputFocus = ({ target }) => {
+    this.setState({
+      focused: target.name,
+    });
+  };
+
+  handleInputChange = ({ target }) => {
+    if (target.name === 'cardnumber') {
+      target.value = formatCreditCardNumber(target.value);
+    } else if (target.name === 'expiry') {
+      target.value = formatExpirationDate(target.value);
+    } else if (target.name === 'cvc') {
+      target.value = formatCVC(target.value);
+    }
+
+    this.setState({ [target.name]: target.value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const { issuer } = this.state;
+    const formData = [...e.target.elements]
+      .filter(d => d.name)
+      .reduce((acc, d) => {
+        acc[d.name] = d.value;
+        return acc;
+      }, {});
+
+    this.setState({ formData });
+    this.form.reset();
+  };
+
+
+  ////////////////////////////////////////////////Other functions/////////////////////////////////////////////////////
 
   signIn(e) {
     e.preventDefault();
@@ -227,12 +362,51 @@ class UserProfile extends Component {
     })
   }
 
-  navItemClicked = (selectedMenu) => {
-    this.setState({
-      selectedMenu: selectedMenu,
-      menuDropDownOpen: false
-    });
+  checkAddressInput = () => {
+    const {
+      address1,
+      county,
+    } = this.state;
+    if (
+      address1 !== "" &&
+      county !== "" 
+    ) {
+      //Activate Next Button
+      this.setState({
+        isAddressButtonActive: true
+      });
+    } else {
+      this.setState({
+        isAddressButtonActive: false
+      });
+    }
   };
+
+  navItemClicked = (selectedMenu) => {
+    var url = `/userprofile/${selectedMenu}`;
+    Router.replace(url)
+    /*this.setState({
+      selectedMenu: selectedMenu,
+    });*/
+  };
+
+  toggleDropDown = () => {
+    this.setState({
+      menuDropDownOpen: !this.state.menuDropDownOpen,
+    });
+  }
+
+  toggleDeliveryAddressModal = () => {
+    this.setState({
+      deliveryAddressModalOpen: !this.state.deliveryAddressModalOpen,
+    });
+  }
+
+  togglePaymentCardModal = () => {
+    this.setState({
+      paymentCardModalOpen: !this.state.paymentCardModalOpen,
+    });
+  }
 
   ////////////////////////////////////////////////Render////////////////////////////////////////////////////////
   
@@ -381,7 +555,7 @@ class UserProfile extends Component {
                 <Button style={{paddingTop:10, paddingBottom: 10, fontWeight: '600'}} outline color="success" block>Make Default</Button>
               </Col>
               <Col xs="6">
-                <Button style={{paddingTop:10, paddingBottom: 10, fontWeight: '600'}} outline color="primary" block>Edit</Button>
+                <Button onClick={() => this.toggleDeliveryAddressModal()} style={{paddingTop:10, paddingBottom: 10, fontWeight: '600'}} outline color="primary" block>Edit</Button>
               </Col>
             </Row>
           </CardBody>
@@ -454,7 +628,7 @@ class UserProfile extends Component {
                 <Button style={{paddingTop:10, paddingBottom: 10, fontWeight: '600'}} outline color="success" block>Make Default</Button>
               </Col>
               <Col xs="6">
-                <Button style={{paddingTop:10, paddingBottom: 10, fontWeight: '600'}} outline color="primary" block>Edit</Button>
+                <Button onClick={() => this.togglePaymentCardModal()} style={{paddingTop:10, paddingBottom: 10, fontWeight: '600'}} outline color="primary" block>Edit</Button>
               </Col>
             </Row>
           </CardBody>
@@ -607,6 +781,200 @@ class UserProfile extends Component {
     );
   }
 
+  ////////////////////////////////////////////////Render Modal////////////////////////////////////////////////////////
+
+  renderDeliveryAddressModal() {
+    return(
+      <Modal isOpen={this.state.deliveryAddressModalOpen} toggle={() => this.toggleDeliveryAddressModal()}>
+     
+        <ModalBody>
+          <Card style={{boxShadow: 'none', borderWidth: 0}}>
+          <CardBody>
+            <Form>
+              <h2>Delivery Address</h2>
+              <div style={{ marginTop: 30 }} />
+              <FormGroup style={{ marginTop: 10 }}>
+                <h6>Address*</h6>
+                <Input
+                  value={this.state.address1}
+                  onChange={e => this.handleAddress1(e)}
+                  type="text"
+                  placeholder="Address line 1"
+                  autoComplete="address1"
+                  invalid={this.state.isAddressEmpty ? true : false}
+                />
+                <FormFeedback className="help-block">
+                  Please enter your address
+                </FormFeedback>
+                <Input
+                  value={this.state.address2}
+                  onChange={e => this.handleAddress2(e)}
+                  style={{ marginTop: 10 }}
+                  type="text"
+                  placeholder="Address line 2 (optional)"
+                  autoComplete="address2"
+                />
+                <Input
+                  value={this.state.address3}
+                  onChange={e => this.handleAddress3(e)}
+                  style={{ marginTop: 10 }}
+                  type="text"
+                  placeholder="Address line 3 (optional)"
+                  autoComplete="address3"
+                />
+              </FormGroup>
+              <FormGroup style={{ marginTop: 10 }}>
+                <h6>Town / County*</h6>
+                <Input
+                  value={this.state.county}
+                  onChange={e => this.handleCounty(e)}
+                  type="select"
+                  placeholder="County"
+                  autoComplete="county"
+                >
+                  <option value="" disabled>
+                    Select County
+                  </option>
+                  {this.CountyData.map(county => (
+                    <option
+                      style={{ color: "black" }}
+                      key={county}
+                      value={county}
+                    >
+                      {county}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+              <Button
+                style={{
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  marginTop: 20
+                }}
+                color="success"
+                block
+                disabled={this.state.isAddressButtonActive ? false : true}
+              >
+                Save Changes
+              </Button>
+            </Form>
+          </CardBody>
+        </Card>
+      </ModalBody>
+    </Modal>
+    )
+  }
+
+  renderPaymentCardModal() {
+    return(
+      <Modal isOpen={this.state.paymentCardModalOpen} toggle={() => this.togglePaymentCardModal()}>
+     
+        <ModalBody>
+          <Card style={{boxShadow: 'none', borderWidth: 0}}>
+          <CardBody>
+            <Form>
+              <h2>Payment Card</h2>
+              <div style={{ marginTop: 30 }} />
+              <Cards
+                number={this.state.cardnumber}
+                name={this.state.cardholdername}
+                expiry={this.state.expiry}
+                cvc={this.state.cvc}
+                focused={this.state.focused}
+                callback={this.handleCallback}
+              />
+              <form style={{ marginTop: 30 }} ref={c => (this.form = c)} onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                  <input
+                    type="tel"
+                    name="cardnumber"
+                    className="form-control"
+                    placeholder="Card Number"
+                    pattern="[\d| ]{16,22}"
+                    required
+                    onChange={this.handleInputChange}
+                    onFocus={this.handleInputFocus}
+                  />
+                  <small>E.g.: 49..., 51..., 36..., 37...</small>
+                </div>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="cardholdername"
+                    className="form-control"
+                    placeholder="Name"
+                    required
+                    onChange={this.handleInputChange}
+                    onFocus={this.handleInputFocus}
+                  />
+                </div>
+                <div className="row">
+                  <div className="col-6">
+                    <input
+                      type="tel"
+                      name="expiry"
+                      className="form-control"
+                      placeholder="Valid Thru"
+                      pattern="\d\d/\d\d"
+                      required
+                      onChange={this.handleInputChange}
+                      onFocus={this.handleInputFocus}
+                    />
+                  </div>
+                  <div className="col-6">
+                    <input
+                      type="tel"
+                      name="cvc"
+                      className="form-control"
+                      placeholder="CVC"
+                      pattern="\d{3,4}"
+                      required
+                      onChange={this.handleInputChange}
+                      onFocus={this.handleInputFocus}
+                    />
+                  </div>
+                </div>
+                <input type="hidden" name="issuer" value={this.state.issuer} />
+                <div className="form-actions">
+                  <button style={{ paddingTop: 10, paddingBottom: 10, marginTop: 20 }}className="btn btn-success btn-block">Save Card</button>
+                </div>
+              </form>
+            </Form>
+          </CardBody>
+        </Card>
+      </ModalBody>
+    </Modal>
+    )
+  }
+
+  renderSmallScreenNavBar() {
+    return (
+      <Col style={{ paddingLeft: 40, paddingRight: 40, marginTop: 30, marginBottom: 20 }} xs="12" md="12">
+        <UncontrolledDropdown isOpen={this.state.menuDropDownOpen}  toggle={() => this.toggleDropDown()}>
+          <DropdownToggle
+            style={{
+              height: 40,
+              width: '100%',
+              color: "rgba(0,0,0, 0.5)",
+              borderColor: "rgba(211,211,211, 0.8)",
+              backgroundColor: "white",
+            }}
+            caret
+          >
+          <Label style={{ cursor: 'pointer', fontSize: 15, fontWeight: '600', paddingLeft:5, textAlign:'start', color: '#20a8d8', height:12, width: '98%'}}>{this.state.selectedMenu}</Label> 
+          </DropdownToggle>
+          <DropdownMenu style={{width: '100%'}}>
+            <DropdownItem onClick={() => this.navItemClicked("Account Info")}>Account Info</DropdownItem>
+            <DropdownItem onClick={() => this.navItemClicked("Orders")}>Orders</DropdownItem>
+            <DropdownItem onClick={() => this.navItemClicked("Payment Methods")}>Payment Methods</DropdownItem>
+            <DropdownItem onClick={() => this.navItemClicked("Delivery Addresses")}>Delivery Addresses</DropdownItem>
+            <DropdownItem onClick={() => this.navItemClicked("Reviews")}>Reviews</DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>      
+      </Col>
+    )
+  }
 
   render() {
     const menutitlelength = this.state.menutitle.length;
@@ -624,7 +992,7 @@ class UserProfile extends Component {
             >
              
 
-              <Col style={{ paddingLeft: 40, paddingRight: 40, marginTop: 30, marginBottom: 20 }} xs="12" md="12">
+              {!this.state.isMobile ? <Col style={{ paddingLeft: 40, paddingRight: 40, marginTop: 30, marginBottom: 20 }} xs="12" md="12">
                 <Nav className="float-left" pills>
                   {this.renderNavItem(this.state.menutitle[0])}
                   {this.renderNavItem(this.state.menutitle[1])}
@@ -632,7 +1000,10 @@ class UserProfile extends Component {
                   {this.renderNavItem(this.state.menutitle[3])}
                   {this.renderNavItem(this.state.menutitle[4])}
                 </Nav>
-              </Col>
+              </Col> : null}
+
+              {this.state.isMobile ? this.renderSmallScreenNavBar() : null}
+            
 
               <Col style={{ marginTop: 20 }} xs="12" sm="12" md="12" lg="12">
                 {this.state.selectedMenu === "Account Info" ? this.renderAccountInfo() :
@@ -641,9 +1012,13 @@ class UserProfile extends Component {
                 this.state.selectedMenu === "Delivery Addresses" ? this.renderDeliveryAddresses() :
                 this.state.selectedMenu === "Reviews" ? this.renderReviewTable() : null}
               </Col>
-              
+
             </Row>
 
+            {this.renderDeliveryAddressModal()}
+
+            {this.renderPaymentCardModal()}
+            
           </Container>
         </div>
         <Footer />

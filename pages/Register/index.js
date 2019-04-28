@@ -10,6 +10,7 @@ import Router from 'next/router'
 
 class Register extends Component {
 
+
   constructor(props) {
     super(props);
   }

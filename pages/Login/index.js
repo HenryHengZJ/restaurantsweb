@@ -7,7 +7,8 @@ import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
+import axios from 'axios';
+import apis from "../../apis";
 
 class Login extends Component {
 
@@ -40,13 +41,36 @@ class Login extends Component {
 
   login = (e) => {
     e.preventDefault()
+
     const {userpassword, useremail, } = this.state;
     if (useremail === 'user' && userpassword === '12345') {
 
     }
-    Router.push(`/userprofile?id=Bwytkfhgugmg123`, `/userprofile/Bwytkfhgugmg123`)
-  }
 
+    var data = {
+      email: "lala@gg.com",
+      password: "1234567"
+    }
+
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.POSTcustomerlogin;
+
+    axios.post(url, data, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+         // alert(JSON.stringify(response.data))
+          var userID = response.data.userID
+          Router.push(`/userprofile/Account%20Info`, `/userprofile/Account%20Info`)
+        }
+      })
+      .catch((error) => {
+        alert("error login! " + error)
+      });
+    
+  }
 
   caterersignup = (e) => {
     e.preventDefault()
@@ -66,7 +90,7 @@ class Login extends Component {
     return (
       <Layout title={'Login FoodieBee - Catering Service'}>
         <div style={{backgroundColor: 'white'}}>
-          <NavBar signIn={e=>this.signIn(e)}/>
+          <NavBar signIn={e=>this.signIn(e)}/>          
           <div className="app justify-content-center align-items-center">
           <Container>
             <Row style={{marginTop: 20, flex: 1, display: 'flex'}} className="justify-content-center">
