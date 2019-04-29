@@ -41,7 +41,8 @@ var catererSchema = mongoose.Schema({
     },
     rating: Number,
     numofreview: Number,
-    src: String,
+    coversrc: String,
+    profilesrc: String,
     verified: {
         type: Boolean,
         default: false
@@ -76,7 +77,8 @@ catererSchema.methods.toAuthJSON = function() {
     emailReceivable     : this.emailReceivable,
     rating				: this.rating,
     numofreview			: this.numofreview,
-    src					: this.src,
+    coversrc			: this.coversrc,
+    profilesrc          : this.profilesrc,
     verified			: this.verified,
   };
 };

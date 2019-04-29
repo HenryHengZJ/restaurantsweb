@@ -17,13 +17,11 @@ var selectionSchema = mongoose.Schema({
 
 // define the schema for our catererSchema model
 var cartSchema = mongoose.Schema({
-	title: String,
 	quantity: Number,
 	instruction: String,
 	menuID: ObjectId,
 	catererID: ObjectId,
 	customerID: ObjectId,
-	serveperunit: Number,
 	totalprice: Number,
 	selection: [selectionSchema],
 });

@@ -2,7 +2,7 @@
 export default {
 
     /*Caterer API*/
-    GETcaterer: "/caterer/getcaterer",
+    GETcatererprofile: "/caterer/getcatererprofile",
 
     /*Auth API*/
     POSTcustomerlogin: "/auth/customerlogin",

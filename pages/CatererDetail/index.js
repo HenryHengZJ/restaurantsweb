@@ -40,6 +40,9 @@ import Dotdotdot from "react-dotdotdot";
 import ContentLoader, { Facebook } from "react-content-loader";
 import StarRatingComponent from "react-star-rating-component";
 import Router from 'next/router'
+import axios from "axios";
+import apis from "../../apis";
+import { server } from '../../config';
 
 const glutenfreeIcon = '/static/glutenfree1.png';
 const hotIcon = '/static/fire.png';
@@ -50,6 +53,22 @@ const halalicon = '/static/halalsign.png';
 const closeIcon = '/static/close.png';
 
 class CatererDetail extends Component {
+  
+  static async getInitialProps({query: { id }}) {
+    return {
+      catererID: id,
+    };
+  }
+
+  componentWillMount() {
+    var restaurantInfo = this.state.restaurantInfo
+    restaurantInfo.catererID = this.props.catererID
+    this.setState({
+      restaurantInfo: restaurantInfo,
+    })
+  }
+
+
   constructor(props) {
     super(props);
 
@@ -456,22 +475,24 @@ class CatererDetail extends Component {
       ],
       quantity: [1,2,3,4,5,6,7,8,9,10,11,12,13],
       restaurantInfo: {
-        name: "Flannery Restaurant & Pub",
-        profileimg: "https://www.psdgraphics.com/wp-content/uploads/2016/08/restaurant-logo.png",
-        coverimg: "http://www.fedracongressi.com/fedra/wp-content/uploads/2016/09/minisandwich.jpg",
-        descrip: "Specialized in American Burger style mealset. Our American subs are our specialty, and our Special Grileld with spiced capicola and prosciuttini is the number one customer favorite. Our portions won't leave your stomachs rumbling, and our flavors always go down easy.",
-        address: "30, O'Connell St, Dublin, Ireland",
+        /*catererID: "",
+        catererName: "Flannery Restaurant & Pub",
+        profilesrc: "https://www.psdgraphics.com/wp-content/uploads/2016/08/restaurant-logo.png",
+        coversrc: "http://www.fedracongressi.com/fedra/wp-content/uploads/2016/09/minisandwich.jpg",
+        catererDescrip: "Specialized in American Burger style mealset. Our American subs are our specialty, and our Special Grileld with spiced capicola and prosciuttini is the number one customer favorite. Our portions won't leave your stomachs rumbling, and our flavors always go down easy.",
+        catererAddress: "30, O'Connell St, Dublin, Ireland",
         rating: "4.7",
-        numofreview: "150",
-        workinghours: "Mon-Fri: 10am-3pm",
-        deliveryfee: 3,
-        minspending: 50
+        numofreview: "150",*/
+        openinghours: "Mon-Fri: 10am-3pm",
+        /*deliveryfee: 3,
+        minspending: 50*/
       }
     };
   }
 
   componentDidMount() {
     this.restructureMenu();
+    this.getCatererDetail();
   }
 
   restructureMenu = () => {
@@ -512,6 +533,36 @@ class CatererDetail extends Component {
       menu: finalresult,
       loading: false,
     });
+  }
+
+  getCatererDetail= () => {
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.GETcatererprofile + "/" + this.state.restaurantInfo.catererID;
+
+    axios.get(url, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          var restaurantInfo = this.state.restaurantInfo
+          restaurantInfo.catererID = response.data[0]._id;
+          restaurantInfo.catererName = typeof response.data[0].catererName !== 'undefined' ? response.data[0].catererName : "",
+          restaurantInfo.profilesrc = typeof response.data[0].profilesrc !== 'undefined' ? response.data[0].profilesrc : "",
+          restaurantInfo.coversrc = typeof response.data[0].coversrc !== 'undefined' ? response.data[0].coversrc : "https://stmed.net/sites/default/files/food-wallpapers-28249-101905.jpg",
+          restaurantInfo.catererAddress = typeof response.data[0].catererAddress !== 'undefined' ? response.data[0].catererAddress : "",
+          restaurantInfo.rating = typeof response.data[0].rating !== 'undefined' ? response.data[0].rating : 0,
+          restaurantInfo.numofreview = typeof response.data[0].numofreview !== 'undefined' ? response.data[0].numofreview : 0,
+          restaurantInfo.deliveryfee = typeof response.data[0].deliveryfee !== 'undefined' ? response.data[0].deliveryfee : 0,
+          restaurantInfo.minspending = typeof response.data[0].minspending !== 'undefined' ? response.data[0].minspending : 0,
+
+          this.setState({
+            restaurantInfo: restaurantInfo
+          })
+        } 
+      })
+      .catch((error) => {
+      });
   }
 
   signIn(e) {
@@ -1591,17 +1642,19 @@ class CatererDetail extends Component {
     var restaurantInfo = this.state.restaurantInfo
     return (
       <Row>
-        <img
-          style={{ objectFit: "cover", width: 80, height: 80 }}
-          src={this.state.restaurantInfo.profileimg}
-        />
-        <Label style={{ marginLeft: 10, marginTop: 20 }} className="h4">
-          {restaurantInfo.name}
-        </Label>
+        <div style={{ marginLeft: 10, width: 80, height: 80, position: 'relative', overflow: 'hidden', borderRadius: '50%'}}>
+          <img style={{ objectFit:'cover', width: 'auto', height: '100%', display: 'inline' }} src={this.state.restaurantInfo.profilesrc}/>
+        </div>
+              
+        <Col xs="12">
+          <Label style={{ marginTop: 20 }} className="h4">
+            {restaurantInfo.catererName}
+          </Label>
+        </Col>
 
         <Col xs="12">
           <Label style={{ marginTop:10, fontWeight: '600' }}>
-            {restaurantInfo.address}
+            {restaurantInfo.catererAddress}
           </Label>
         </Col>
 
@@ -1614,16 +1667,21 @@ class CatererDetail extends Component {
             editing={false}
             value={restaurantInfo.rating}
           />
-          <b style={{ marginLeft: 5, color: "darkorange" }}>4.7</b>
+          {restaurantInfo.rating === 0 ? null : <b style={{ marginLeft: 5, color: "darkorange" }}>{restaurantInfo.rating}</b> }
+          {restaurantInfo.numofreview === 0 ? 
+          <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
+            No Ratings Yet
+          </Label>
+          :
           <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
             ({restaurantInfo.numofreview}) Reviews
-          </Label>
+          </Label>}
         </Row>
         </Col>
 
         <Col xs="12">
           <p style={{ marginTop: 10, overflow: "hidden" }}>
-            {restaurantInfo.descrip}
+            {restaurantInfo.catererDescrip}
           </p>
         </Col>
         <Col style={{margin: 0, padding : 0}} xs="12">
@@ -1631,7 +1689,7 @@ class CatererDetail extends Component {
             <tbody>
               <tr>
                 <td><p style={{padding: 0, margin: 0}}>Working Hours:</p></td>
-                <td className="h6">{restaurantInfo.workinghours}</td>
+                <td className="h6">{restaurantInfo.openinghours}</td>
               </tr>
               <tr>
                 <td><p style={{padding: 0, margin: 0}}>Delivery Fee:</p></td>
@@ -1743,7 +1801,7 @@ class CatererDetail extends Component {
     const menutitlelength = this.state.menutitle.length;
 
     return (
-      <Layout title={this.state.restaurantInfo.name + ' Caterer Detail FoodieBee - Catering Service'}>
+      <Layout title={this.state.restaurantInfo.catererName + ' Caterer Detail FoodieBee - Catering Service'}>
       <div style={{backgroundColor: 'white'}}>
          <NavBar signIn={e=>this.signIn(e)}/>
       <div className="app align-items-center">
@@ -1755,7 +1813,7 @@ class CatererDetail extends Component {
             >
               <img
                 style={{ objectFit: "cover", width: "100%", height: 300 }}
-                src={this.state.restaurantInfo.coverimg}
+                src={this.state.restaurantInfo.coversrc}
               />
 
               <Col xs="0" sm="1" md="3" lg="3" />
@@ -1765,14 +1823,13 @@ class CatererDetail extends Component {
                   style={{ textAlign: "center", marginTop: -250 }}
                 >
                   <CardBody>
-                    <img
-                      style={{ objectFit: "cover", width: 80, height: 80 }}
-                      src={this.state.restaurantInfo.profileimg}
-                    />
-                    <Label style={{ marginLeft: 10 }} className="h4">
-                      {this.state.restaurantInfo.name}
-                    </Label>
 
+                    <div style={{width: 80, height: 80, position: 'relative', margin: 'auto', overflow: 'hidden', borderRadius: '50%'}}>
+                      <img style={{ objectFit:'cover', width: 'auto', height: '100%', display: 'inline' }} src={this.state.restaurantInfo.profilesrc}/>
+                    </div>
+                
+                    <Label style={{ marginTop:10, marginLeft: 10 }} className="h4">{this.state.restaurantInfo.catererName}</Label>
+  
                     <Row className="justify-content-center">
                       <StarRatingComponent
                         name="rate1"
@@ -1781,14 +1838,19 @@ class CatererDetail extends Component {
                         editing={false}
                         value={this.state.restaurantInfo.rating}
                       />
-                      <b style={{ marginLeft: 5, color: "darkorange" }}>4.7</b>
+                      {this.state.restaurantInfo.rating === 0 ? null : <b style={{ marginLeft: 5, color: "darkorange" }}>{this.state.restaurantInfo.rating}</b> }
+                      {this.state.restaurantInfo.numofreview === 0 ? 
+                      <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
+                        No Ratings Yet
+                      </Label>
+                      :
                       <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
                         ({this.state.restaurantInfo.numofreview}) Reviews
-                      </Label>
+                      </Label>}
                     </Row>
 
                     <Label style={{ marginTop: 10 }} className="h6">
-                      {this.state.restaurantInfo.address}
+                      {this.state.restaurantInfo.catererAddress}
                     </Label>
 
                   </CardBody>

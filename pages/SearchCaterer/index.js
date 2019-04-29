@@ -365,8 +365,8 @@ class SearchCaterer extends Component {
     });
   };
 
-  catererClicked = () => {
-    Router.push(`/catererdetail?id=Bwytkfhgugmg123`, `/catererdetail/Bwytkfhgugmg123`)
+  catererClicked = (_id) => {
+    Router.push(`/catererdetail/${_id}`, `/catererdetail/${_id}`)
   };
 
   handleTimeChange(e) {
@@ -859,7 +859,7 @@ class SearchCaterer extends Component {
               borderColor: "white",
               boxShadow: "none"
             }}
-            onClick={() => this.catererClicked()}
+            onClick={() => this.catererClicked(caterer[i]._id)}
           >
             <CardBody style={{ padding: 0 }}>
               <img
@@ -869,7 +869,7 @@ class SearchCaterer extends Component {
                   height: 150,
                   display: "inline"
                 }}
-                src={caterer[i].src}
+                src={caterer[i].coversrc}
               />
 
               <b
@@ -887,7 +887,7 @@ class SearchCaterer extends Component {
                   fontSize: 17
                 }}
               >
-                {caterer[i].name}
+                {caterer[i].catererName}
               </b>
 
               <Row
@@ -900,12 +900,18 @@ class SearchCaterer extends Component {
                   editing={false}
                   value={caterer[i].rating}
                 />
+                {typeof caterer[i].rating === 'undefined' || caterer[i].rating === 0 ?  null : 
                 <b style={{ marginLeft: 5, color: "darkorange" }}>
                   {caterer[i].rating}
-                </b>
+                </b>}
+                {typeof caterer[i].numofreview === 'undefined' || caterer[i].numofreview === 0 ?  
+                <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
+                  No Ratings Yet
+                </Label>
+                :
                 <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
                   ({caterer[i].numofreview})
-                </Label>
+                </Label>}
               </Row>
 
               <Table style={{ margin: 0 }} borderless>
@@ -928,7 +934,7 @@ class SearchCaterer extends Component {
                         }
                       />
                       <b style={{ color: "#20a8d8" }}>
-                        €{caterer[i].minimumspend}
+                        €{Number(caterer[i].minimumspend).toFixed(2)}
                       </b>
                     </td>
                     <td
@@ -948,7 +954,7 @@ class SearchCaterer extends Component {
                         }
                       />
                       <b style={{ color: "green" }}>
-                        €{caterer[i].deliveryfee}
+                        €{Number(caterer[i].deliveryfee).toFixed(2)}
                       </b>
                     </td>
                   </tr>
@@ -964,7 +970,7 @@ class SearchCaterer extends Component {
                     opacity: 0.8
                   }}
                 >
-                  {caterer[i].descrip}
+                  {caterer[i].catererDescrip}
                 </p>
               </Dotdotdot>
               

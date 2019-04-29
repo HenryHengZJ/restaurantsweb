@@ -50,32 +50,34 @@ router.post('/customerlogin', (req, res) => {
             console.log('user = ', user)
           res.status(400).json({ 'error': error });
         }
-  
-        /** This is what ends up in our JWT */
-        var myDate = new Date();
-        myDate.setHours(myDate.getHours() + 24);
-        console.log(myDate)
-        const payload = {
-            customerID: user._id,
-            customerName: user.customerFirstName,
-            customerEmail: user.customerEmail,
-            expires: myDate,
-        };
-  
-        /** assigns payload to req.user */
-        req.login(payload, {session: false}, (error) => {
-          if (error) {
-            console.log('6')
-            res.status(400).send({ error });
-          }
-  
-          /** generate a signed json web token and return it in the response */
-          const token = jwt.sign(payload, "FoodieBeeSecretKey", {expiresIn: '24h'} );
-  
-          /** assign our jwt to the cookie */
-          res.cookie('jwt', token, { httpOnly: true});
-          res.status(200).json({ 'userID': user._id });
-        });
+        else {
+            /** This is what ends up in our JWT */
+            var myDate = new Date();
+            myDate.setHours(myDate.getHours() + 24);
+            console.log(myDate)
+            const payload = {
+                customerID: user._id,
+                customerName: user.customerFirstName,
+                customerEmail: user.customerEmail,
+                expires: myDate,
+            };
+
+            /** assigns payload to req.user */
+            req.login(payload, {session: false}, (error) => {
+                if (error) {
+                    console.log('6')
+                    res.status(400).send({ error });
+                }
+                else {
+                    /** generate a signed json web token and return it in the response */
+                    const token = jwt.sign(payload, "FoodieBeeSecretKey", {expiresIn: '24h'} );
+
+                    /** assign our jwt to the cookie */
+                    res.cookie('jwt', token, { httpOnly: true});
+                    res.status(200).json(payload);
+                }
+            });
+        }
       },
     )(req, res);
 });
