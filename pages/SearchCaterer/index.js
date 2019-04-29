@@ -869,7 +869,7 @@ class SearchCaterer extends Component {
                   height: 150,
                   display: "inline"
                 }}
-                src={caterer[i].coversrc}
+                src={typeof caterer[i].coversrc !== 'undefined' ? caterer[i].coversrc : "https://stmed.net/sites/default/files/food-wallpapers-28249-101905.jpg" }
               />
 
               <b

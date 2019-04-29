@@ -1801,7 +1801,7 @@ class CatererDetail extends Component {
     const menutitlelength = this.state.menutitle.length;
 
     return (
-      <Layout title={this.state.restaurantInfo.catererName + ' Caterer Detail FoodieBee - Catering Service'}>
+      <Layout title= {typeof this.state.restaurantInfo.catererName !== 'undefined' ? this.state.restaurantInfo.catererName + ' Caterer Detail FoodieBee - Catering Service' : 'Caterer Detail FoodieBee - Catering Service'}>
       <div style={{backgroundColor: 'white'}}>
          <NavBar signIn={e=>this.signIn(e)}/>
       <div className="app align-items-center">
