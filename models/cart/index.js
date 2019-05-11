@@ -16,14 +16,25 @@ var selectionSchema = mongoose.Schema({
 });
 
 // define the schema for our catererSchema model
-var cartSchema = mongoose.Schema({
+var cartItemSchema = mongoose.Schema({
+	title: String,
+	serveperunit: Number,
 	quantity: Number,
 	instruction: String,
 	menuID: ObjectId,
-	catererID: ObjectId,
-	customerID: ObjectId,
 	totalprice: Number,
 	selection: [selectionSchema],
+});
+
+var cartSchema = mongoose.Schema({
+	catererID: ObjectId,
+	customerID: ObjectId,
+	orderType: String,
+	cartitem: [cartItemSchema],
+	deliveryfee: Number,
+	totalOrderPrice: Number
+},{
+	timestamps: true
 });
 
 //Connect to specific database

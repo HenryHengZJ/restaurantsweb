@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Row, Col, Card, CardBody } from 'reactstrap';
 import './styles.css'
+import img from "../../assets/img"
 
 class Occasion extends Component {
 
@@ -14,37 +15,37 @@ class Occasion extends Component {
       [
         {
           title: 'Breakfast',
-          src: 'https://www.dublinskylonhotel.com/cmsGallery/imagerow/11256/resized/1200x798/breakfast_hot_buffet_1.jpg',
+          src: img.landingpage_breakfast,
           descrip: 'Select wide variety of breakfast to kickstart your fresh new day.',
           hover: false,
         },
         {
           title: 'Events',
-          src: 'http://prod.static9.net.au/_/media/2018/08/16/13/09/dessert-cob-loaf-filled-with-chocolate-ganache-dipping-sauce.jpg',
+          src: img.landingpage_events,
           descrip: 'Choose your ideal food catering service for different types of occasions.',
           hover: false,
         },
         {
           title: 'Lunch',
-          src: 'https://assets.bonappetit.com/photos/57d8322a304c2be47da77111/master/w_1200,c_limit/lunch-al-desko-main.jpg',
+          src: img.landingpage_lunch,
           descrip: 'Check out our wide variety of meals from different cuisines and categories. ',
           hover: false,
         },
         {
           title: 'Finger Food',
-          src: 'https://www.yummyhealthyeasy.com/wp-content/uploads/2018/06/Low-Carb-Avocado-Shrimp-Cucumber-Appetizer-3.jpg',
+          src: img.landingpage_fingerfood,
           descrip: 'Finger lickin good snacks to temporarily satisfy your cravings.',
           hover: false,
         },
         {
           title: 'Buffets',
-          src: 'https://www.capetownmagazine.com//media_lib/r2/69b757ced9a28df9b5601ae29eeed959.img.jpg',
+          src: img.landingpage_buffet,
           descrip: 'Order your perfect buffets choice according to your budgets, headcounts, etc.',
           hover: false,
         },
         {
           title: 'Office Daily',
-          src: 'https://holycitycrossfit.com/wp-content/uploads/2018/12/HolidayParty_1.jpg',
+          src: img.landingpage_officedaily,
           descrip: 'Check out our food catering package and platters for your daily office lunch and breakfast.',
           hover: false,
         },

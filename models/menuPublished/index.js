@@ -29,6 +29,7 @@ var menuSchema = mongoose.Schema({
 	priceperunit: Number,
 	selection: [selectionSchema],
 	soldamount: Number,
+	src: String,
 });
 
 //Connect to specific database

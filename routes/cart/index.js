@@ -10,9 +10,14 @@ router.get('/getcart', passport.authenticate('jwt', {session: false}), (req, res
     var userID = user.customerID
 
     var matchquery={};
-    matchquery = {customerID: new ObjectId(userID)}
+    if (typeof req.query.catererID !== 'undefined') {
+        matchquery= {catererID: new ObjectId(req.query.catererID), customerID: new ObjectId(userID)}
+    }
+    else {
+        matchquery= {catererID: new ObjectId(), customerID: new ObjectId(userID)}
+    }
 
-	Cart.aggregate([ 
+	/*Cart.aggregate([ 
        {$match: matchquery},
        {$lookup: {
            from: "menuPublished", 
@@ -23,7 +28,13 @@ router.get('/getcart', passport.authenticate('jwt', {session: false}), (req, res
      ], (err,doc) => {
 		if (err) return res.status(500).send({ error: err });
 		res.status(200).json(doc);
-	 });
+     });*/
+     Cart.find(matchquery, (err, doc) => {
+        if (err) return res.status(500).send({ error: err });
+        if (doc === null) return res.status(404).send({ error: 'doc not found' });
+        return res.status(200).json(doc);
+    });
+
 });
 
 router.put('/updatecart', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -39,8 +50,9 @@ router.put('/updatecart', passport.authenticate('jwt', {session: false}), (req, 
         matchquery = {_id: new ObjectId(req.query._id), customerID: new ObjectId(userID)}
     }
    
+    console.log(matchquery)
     var updateData = req.body
-
+    console.log(updateData)
     Cart.findOneAndUpdate(matchquery, {$set: updateData}, {upsert:true, new: true, runValidators: true, setDefaultsOnInsert: true}, (err, doc) => {
         if (err) return res.status(500).send({ error: err });
         return res.status(201).json(doc);

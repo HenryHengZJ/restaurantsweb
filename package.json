@@ -54,6 +54,7 @@
     "pretty-checkbox": "^3.0.3",
     "react": "^16.8.6",
     "react-content-loader": "^4.2.1",
+    "react-cookie": "^4.0.0",
     "react-credit-cards": "^0.7.0",
     "react-date-range": "^1.0.0-beta",
     "react-dom": "^16.8.6",

@@ -3,6 +3,7 @@ import { Button, Row, Col, Card, CardBody, Table} from 'reactstrap';
 import './styles.css'
 import PropTypes from 'prop-types';
 import Link from 'next/link';
+import img from "../../assets/img"
 
 const propTypes = {
   children: PropTypes.node,
@@ -49,7 +50,7 @@ class Caterer extends React.Component {
     
             </Col>
             <Col xs="12" md="6" >
-              <img style={ { objectFit:'cover', width: '100%', height: '100%' }} src={'/static/caterer_dashboard.jpg'}  />
+              <img style={ { objectFit:'cover', width: '100%', height: '100%' }} src={img.caterer_dashboard}  />
             </Col>
 
             <div style={{height: 1, marginTop:100, opacity: 0.2, backgroundColor: 'gray', borderWidth: 1}} className="col l1"></div>

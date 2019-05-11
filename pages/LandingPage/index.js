@@ -11,11 +11,12 @@ import Router from 'next/router'
 import Layout from '../../components/Layout'
 
 class LandingPage extends Component {
-
+  
   signIn(e) {
     e.preventDefault()
     Router.push({
-      pathname: '/login'
+      pathname: '/login',
+      query: {'returnurl': `/`}
     })
   }
 

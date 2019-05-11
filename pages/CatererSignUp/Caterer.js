@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Row, Col, Container, Card, CardBody, Table } from "reactstrap";
 import "./styles.css";
 import PropTypes from 'prop-types';
+import img from "../../assets/img"
 
 const propTypes = {
   children: PropTypes.node,
@@ -55,7 +56,7 @@ class Caterer extends React.Component {
             <Col style={{ marginTop: 20, textAlign: "center" }} xs="12" md="6">
               <img
                 style={{ objectFit: "cover", width: 300, height: 300 }}
-                src={'/static/caterer_ingredients.png'}
+                src={img.caterer_ingredients}
               />
             </Col>
           </Row>

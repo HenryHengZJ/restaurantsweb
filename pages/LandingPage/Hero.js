@@ -4,6 +4,7 @@ import './styles.css'
 import AutoCompleteAddress from '../../components/AutoCompleteAddress'
 import PropTypes from 'prop-types';
 import Router from 'next/router'
+import img from "../../assets/img"
 
 const propTypes = {
   children: PropTypes.node,
@@ -30,14 +31,24 @@ class Hero extends React.Component {
       this.setState({
         address: ""
       }, () => {
-        Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer?location=${city}&occasion=All`)
+        //Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer?location=${city}&occasion=All`)
+        /*Router.push({
+          pathname: '/searchcaterer',
+          query: { location: city, occasion: 'All' }
+        })*/
+        Router.push(`/searchcaterer/${city}/All`, `/searchcaterer/${city}/All`)
       })
     }
     else {
       this.setState({
         address: ""
       }, () => {
-        Router.push(`/searchcaterer?location=Dublin&occasion=All`, `/searchcaterer?location=Dublin&occasion=All`)
+       // Router.push(`/searchcaterer?location=Dublin&occasion=All`, `/searchcaterer?location=Dublin&occasion=All`)
+        /*Router.push({
+          pathname: '/searchcaterer',
+          query: { location: 'Dublin', occasion: 'All' }
+        })*/
+        Router.push(`/searchcaterer/Dublin/All`, `/searchcaterer/Dublin/All`)
       })
     }
   }
@@ -50,7 +61,7 @@ class Hero extends React.Component {
     return (
       <section
         id="hero"
-        style={{ height: 600, marginTop: -70, backgroundImage: 'url(' + 'static/corporate_lunch2.jpg' + ')', backgroundSize: 'cover'}}
+        style={{ height: 600, marginTop: -70, backgroundImage: 'url(' + img.corporate_lunch2 + ')', backgroundSize: 'cover'}}
       >
           <Row style={{margin:0, marginTop: 150, display:'flex',}} >
             

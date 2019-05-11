@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, CardBody} from 'reactstrap';
 import './styles.css'
+import img from "../../assets/img"
 
 class Shops extends Component {
 
@@ -10,12 +11,12 @@ class Shops extends Component {
     this.state = {
       icons:
       [
-        '/static/res1.png',
-        '/static/res2.jpg',
-        '/static/res3.jpg',
-        '/static/res4.jpg',
-        '/static/res5.png',
-        '/static/res6.jpg',
+        img.res1,
+        img.res2,
+        img.res3,
+        img.res4,
+        img.res5,
+        img.res6,
       ]
     }
 

@@ -41,6 +41,7 @@ class SearchCaterer extends Component {
     return {
       data: data,
       location: location,
+      occasion: occasion,
     };
   }
 
@@ -50,6 +51,7 @@ class SearchCaterer extends Component {
       loading: false,
       empty: this.props.data.length > 0 ? false : true,
       location: this.props.location,
+      occasion: this.props.occasion,
     })
   }
 
@@ -68,6 +70,7 @@ class SearchCaterer extends Component {
 
     this.state = {
       location: "",
+      occasion: "",
       isMobile: false,
       loading: true,
       empty: false,
@@ -311,7 +314,8 @@ class SearchCaterer extends Component {
   signIn(e) {
     e.preventDefault()
     Router.push({
-      pathname: '/login'
+      pathname: '/login',
+      query: {'returnurl': `/searchcaterer/${this.state.location}/${this.state.occasion}`}
     })
   }
 

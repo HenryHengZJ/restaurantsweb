@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import "./styles.css";
 import PropTypes from "prop-types";
+import img from "../../assets/img"
 
 const propTypes = {
   children: PropTypes.node
@@ -101,8 +102,12 @@ class Banner extends React.Component {
     });
   }
 
+  validateEmail (email) {
+    const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regexp.test(String(email).toLowerCase());
+  }
+
   onGetStartedClick = () => {
-    alert(this.state.isMobile);
     const {
       restaurantName,
       restaurantPhoneNumber,
@@ -113,17 +118,17 @@ class Banner extends React.Component {
       this.setState({
         isNameEmpty: true
       });
-    } else if (restaurantPhoneNumber === "") {
-      this.setState({
-        isPhoneNumberEmpty: true
-      });
-    } else if (restaurantEmail === "") {
-      this.setState({
-        isEmailEmpty: true
-      });
     } else if (restaurantAddress === "") {
       this.setState({
         isAddressEmpty: true
+      });
+    } else if ((restaurantEmail === "") || !this.validateEmail(restaurantEmail) ) {
+      this.setState({
+        isEmailEmpty: true
+      });
+    } else if (restaurantPhoneNumber === "") {
+      this.setState({
+        isPhoneNumberEmpty: true
       });
     }
   };
@@ -137,7 +142,7 @@ class Banner extends React.Component {
         style={{
           height: isMobile ? 800 : 600,
           marginTop: -70,
-          backgroundImage: "url(" + '/static/caterer_wallpaper.png' + ")",
+          backgroundImage: "url(" + img.caterer_wallpaper + ")",
           backgroundSize: "cover"
         }}
       >

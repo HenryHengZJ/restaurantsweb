@@ -52,6 +52,11 @@ const healthyIcon = '/static/fruit.png';
 const halalicon = '/static/halalsign.png';
 const closeIcon = '/static/close.png';
 
+import { inject, observer } from 'mobx-react'
+
+@inject('store')
+@observer
+
 class CatererDetail extends Component {
   
   static async getInitialProps({query: { id }}) {
@@ -63,6 +68,7 @@ class CatererDetail extends Component {
   componentWillMount() {
     var restaurantInfo = this.state.restaurantInfo
     restaurantInfo.catererID = this.props.catererID
+    console.log(this.props.catererID)
     this.setState({
       restaurantInfo: restaurantInfo,
     })
@@ -72,12 +78,17 @@ class CatererDetail extends Component {
   constructor(props) {
     super(props);
 
+    this.refObj = {}
+
     this.toggleMenuModal = this.toggleMenuModal.bind(this);
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
     this.handleSpecialInstruction = this.handleSpecialInstruction.bind(this);
 
     this.state = {
+      todayDay: null,
       loading: true,
+      cartloading: true,
+      orderType: "delivery",
       updateCartItem: false,
       selectedPrice: 0,
       selectedSelection: [],
@@ -89,7 +100,7 @@ class CatererDetail extends Component {
       selectedMenu: "All Menu",
       menuDropDownOpen: false,
       fetchedmenu: [
-        {
+        /*{
           _id: '1',
           title: "Hot Dog",
           categoryname: "Appetizer",
@@ -230,7 +241,7 @@ class CatererDetail extends Component {
           markitem: ["Hot", "Healthy"],
           priceperunit: 22.00,
           selection: [],
-        }
+        }*/
       ],
       menu: [
         /*{
@@ -379,18 +390,7 @@ class CatererDetail extends Component {
         }*/
       ],
       menutitle: [
-        "All Menu",
-        "Appetizer",
-        "Breakfast",
-        "Sandwiches",
-        "Salads",
-        "Catering",
-        "Entrees",
-        "Lunches",
-        "Pizza",
-        "Sides",
-        "Desserts",
-        "Beverages"
+       
       ],
       cartitem: [
         /*{
@@ -436,6 +436,7 @@ class CatererDetail extends Component {
           totalprice: 15.00
         }*/
       ],
+      cartToBeOrder: [],
       review: [
         {
           name: "Kieran",
@@ -482,17 +483,26 @@ class CatererDetail extends Component {
         catererDescrip: "Specialized in American Burger style mealset. Our American subs are our specialty, and our Special Grileld with spiced capicola and prosciuttini is the number one customer favorite. Our portions won't leave your stomachs rumbling, and our flavors always go down easy.",
         catererAddress: "30, O'Connell St, Dublin, Ireland",
         rating: "4.7",
-        numofreview: "150",*/
+        numofreview: "150",
         openinghours: "Mon-Fri: 10am-3pm",
-        /*deliveryfee: 3,
+        deliveryfee: 3,
         minspending: 50*/
-      }
+      },
+      orderNotOverMinSpending: false
     };
   }
 
   componentDidMount() {
-    this.restructureMenu();
     this.getCatererDetail();
+    this.getCatererMenu();
+    this.getCustomerCart();
+   // this.deleteLocalStorage()
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var d = new Date();
+    var dayName = days[d.getDay()];
+    this.setState({
+      todayDay: dayName
+    });
   }
 
   restructureMenu = () => {
@@ -532,7 +542,21 @@ class CatererDetail extends Component {
     this.setState({
       menu: finalresult,
       loading: false,
-    });
+    },() => {
+      this.listmenu()
+    })
+  }
+
+  listmenu = () => {
+    var menu = this.state.menu
+    var menutitleArray = ["All Menu"];
+    for (let i = 0; i < menu.length; i++) { 
+      var menutitle = menu[i].menutitle
+      menutitleArray.push(menutitle)
+    }
+    this.setState({
+      menutitle: menutitleArray
+    })
   }
 
   getCatererDetail= () => {
@@ -555,7 +579,7 @@ class CatererDetail extends Component {
           restaurantInfo.numofreview = typeof response.data[0].numofreview !== 'undefined' ? response.data[0].numofreview : 0,
           restaurantInfo.deliveryfee = typeof response.data[0].deliveryfee !== 'undefined' ? response.data[0].deliveryfee : 0,
           restaurantInfo.minspending = typeof response.data[0].minspending !== 'undefined' ? response.data[0].minspending : 0,
-
+          restaurantInfo.openinghours = typeof response.data[0].openinghours !== 'undefined' ? response.data[0].openinghours : [],
           this.setState({
             restaurantInfo: restaurantInfo
           })
@@ -565,19 +589,80 @@ class CatererDetail extends Component {
       });
   }
 
+  getCatererMenu= () => {
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.GETmenu + "/" + this.state.restaurantInfo.catererID;
+
+    axios.get(url, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            fetchedmenu: response.data,
+          },() => {
+            this.restructureMenu();
+          })
+        } 
+      })
+      .catch((error) => {
+      });
+  }
+
+  getCustomerCart= () => {
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.GETcart + "?catererID=" + this.state.restaurantInfo.catererID;
+
+    axios.get(url, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            cartToBeOrder: response.data.length > 0 ? response.data : [],
+            cartitem: response.data.length > 0 ? response.data[0].cartitem.length > 0 ? response.data[0].cartitem : [] : [],
+            orderType: response.data.length > 0 ? typeof response.data[0].orderType !== 'undefined' ? response.data[0].orderType : "" : "",
+            cartloading: false,
+          })
+        } 
+      })
+      .catch((error) => {
+        this.getLocalStorage()
+      });
+  }
+
+
   signIn(e) {
-    e.preventDefault();
+    e.preventDefault()
     Router.push({
-      pathname: '/login'
+      pathname: '/login',
+      query: {'returnurl': `/catererdetail/${this.state.restaurantInfo.catererID}`}
     })
   }
+
 
   navItemClicked = selectedMenu => {
     this.setState({
       selectedMenu: selectedMenu,
       menuDropDownOpen: false
-    });
+    }, () => {
+      var index = this.state.menu.findIndex(x => x.menutitle === selectedMenu);
+      if (index > 0) {
+        this.refObj[index].current.scrollIntoView({behavior: 'smooth'});
+      }
+    })
   };
+
+  selectOrderType = (orderType) => {
+    this.setState({
+      orderType,
+    },() => {
+      this.updateOrderType()
+      this.calculateCartTotalPrice()
+    })
+  }
 
   menuItemClicked = (_id) => {
     var menuindex = this.state.fetchedmenu.findIndex(x => x._id==_id);
@@ -602,7 +687,25 @@ class CatererDetail extends Component {
   };
 
   checkOutClicked = () => {
-    Router.push(`/deliveryconfirmation`, `/deliveryconfirmation`)
+    var cartToBeOrder = {
+      orderType: this.state.orderType,
+      cartitem: this.state.cartitem,
+      catererID: this.state.restaurantInfo.catererID,
+      deliveryfee: this.state.restaurantInfo.deliveryfee,
+      totalOrderPrice: this.calculateCartTotalPrice()
+    }
+
+    if (this.calculateCartTotalPrice() >= this.state.restaurantInfo.minspending) {
+      Router.push(`/checkout/${this.state.restaurantInfo.catererID}`, `/checkout/${this.state.restaurantInfo.catererID}`)
+    }
+    else {
+      this.setState({
+        orderNotOverMinSpending: true
+      })
+    }
+   
+  //  this.props.store.storecart(cartToBeOrder)
+
   }
 
   toggleCuisineDropDown = () => {
@@ -629,14 +732,6 @@ class CatererDetail extends Component {
     });
   };
 
-  cartItemDelete = index => {
-    var newcart = this.state.cartitem;
-    newcart.splice(index, 1);
-    this.setState({
-      cartitem: newcart
-    });
-  };
-
   findIcon = (iconname) => {
     var iconPath;
     if (iconname == 'Hot') { iconPath = hotIcon }
@@ -649,11 +744,22 @@ class CatererDetail extends Component {
   }
 
   calculateCartTotalPrice = () => {
-    const {cartitem} = this.state
+    const {cartitem, orderType, restaurantInfo, fetchedmenu} = this.state
     var cartTotalPrice = 0;
-
     for (let i = 0; i < cartitem.length; i++) { 
-      cartTotalPrice =  cartTotalPrice + cartitem[i].totalprice;
+      var index = fetchedmenu.findIndex(x => x._id===cartitem[i].menuID);
+      if (index > 0) {
+        var singlemenuprice = fetchedmenu[index].priceperunit
+        var quantitychosen = cartitem[i].quantity
+        cartTotalPrice =  cartTotalPrice + (quantitychosen * singlemenuprice);
+      }
+      else {
+        cartTotalPrice =  cartTotalPrice;
+      }
+    }
+
+    if (orderType === "delivery") {
+      cartTotalPrice =  cartTotalPrice + restaurantInfo.deliveryfee
     }
 
     return (Number(cartTotalPrice).toFixed(2));
@@ -722,65 +828,296 @@ class CatererDetail extends Component {
     })
   }
 
+  getLocalStorage = () => {
+    if (localStorage.getItem(this.state.restaurantInfo.catererID) !== null) {
+      var localstoragecartitem = JSON.parse(localStorage.getItem(this.state.restaurantInfo.catererID));
+      this.setState({
+        cartitem: localstoragecartitem.cartitem,
+        orderType: localstoragecartitem.orderType,
+        cartloading: false
+      })
+    }
+  }
+
+  addToLocalStorage = () => {
+    var addItem = {
+      cartitem: this.state.cartitem,
+      orderType: this.state.orderType
+    }
+    localStorage.setItem(this.state.restaurantInfo.catererID, JSON.stringify(addItem));
+  }
+
+  deleteLocalStorage = () => {
+    localStorage.removeItem(this.state.restaurantInfo.catererID);
+  }
+
   addToCart = () => {
-    const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction} = this.state;
- 
-    var addToCartItem = {
-      _id: activeMenu._id,
-      quantity: selectedQuantity,
+
+    this.setState({
+      cartloading: true
+    })
+
+    const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction, restaurantInfo, orderType, cartToBeOrder} = this.state;
+    
+    var cartInnerItem = {
       title: activeMenu.title,
       serveperunit: activeMenu.serveperunit,
+      menuID: activeMenu._id,
+      quantity: selectedQuantity,
       totalprice: selectedPrice === 0 ? activeMenu.priceperunit : selectedPrice,
     }
 
     if (specialInstruction !== '') {
-      addToCartItem.instruction = specialInstruction
+      cartInnerItem.instruction = specialInstruction
     }
 
     if (selectedSelection.length !== 0) {
-      addToCartItem.selection = selectedSelection
+      cartInnerItem.selection = selectedSelection
     }
 
-    var newCartItem = this.state.cartitem;
-    newCartItem.push(addToCartItem);
+    //Push to CartItem Array
+
+    var newCartItem = this.state.cartitem.slice()
+    newCartItem.push(cartInnerItem)
+
+    //To Be Order Cart Item
+
+    var cartReadyToOrder = {
+      orderType: orderType === "" ? "delivery" : orderType,
+      catererID: restaurantInfo.catererID,
+      cartitem: newCartItem
+    }
+
+   // alert(JSON.stringify(cartReadyToOrder))
+
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.UPDATEcart;
+
+    if (cartToBeOrder.length > 0) {
+      url = url + "?_id=" + cartToBeOrder[0]._id;
+    }
+
+    axios.put(url, cartReadyToOrder, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+      
+        if (response.status === 201) {
+          this.toggleMenuModal()
+          this.getCustomerCart()
+        } 
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          this.setState({
+            cartitem: newCartItem,
+            cartloading: false
+          },() => {
+            this.toggleMenuModal()
+            this.addToLocalStorage()
+          })
+        } 
+      });
+  }
+
+  updateOrderType = () => {
 
     this.setState({
-      cartitem: newCartItem
-    },() => {
-      this.toggleMenuModal()
+      cartloading: true
     })
+
+    const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction, cartToBeOrder, orderType, restaurantInfo} = this.state;
+    
+    //To Be Order Cart Item
+    var cartReadyToOrder = {
+      orderType: orderType,
+    }
+
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.UPDATEcart;
+
+    if (cartToBeOrder.length > 0) {
+      url = url + "?_id=" + cartToBeOrder[0]._id;
+    }
+
+    axios.put(url, cartReadyToOrder, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+       
+        if (response.status === 201) {
+          this.getCustomerCart()
+        } 
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          this.setState({
+            cartloading: false
+          },() => {
+            this.addToLocalStorage()
+          })
+        } 
+      }); 
   }
 
   updateCart = () => {
-    const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction} = this.state;
 
-    var index = this.state.cartitem.findIndex(x => x._id==activeMenu._id);
+    this.setState({
+      cartloading: true
+    })
 
-    var updateCartItem = {
-      _id: activeMenu._id,
-      quantity: selectedQuantity,
-      title: activeMenu.title,
-      serveperunit: activeMenu.serveperunit,
-      totalprice: selectedPrice === 0 ? activeMenu.priceperunit : selectedPrice,
+    const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction, cartToBeOrder, orderType, restaurantInfo} = this.state;
+
+    var index = this.state.cartitem.findIndex(x => x.menuID==activeMenu._id);
+
+    var updateCartInnerItem = this.state.cartitem[index];
+
+    if (selectedQuantity !== 0) {
+      updateCartInnerItem.quantity = selectedQuantity
+    }
+
+    if (selectedSelection.selectedPrice === 0) {
+      updateCartInnerItem.totalprice = activeMenu.priceperunit
+    }
+    else {
+      updateCartInnerItem.totalprice = selectedPrice
     }
 
     if (specialInstruction !== '') {
-      updateCartItem.instruction = specialInstruction
+      updateCartInnerItem.instruction = specialInstruction
     }
 
     if (selectedSelection.length !== 0) {
-      updateCartItem.selection = selectedSelection
+      updateCartInnerItem.selection = selectedSelection
     }
 
-    var newCartItem = this.state.cartitem;
-    newCartItem.splice(index, 1, updateCartItem)
+    //Update CartItem Array
+
+    var newCartItem = this.state.cartitem.slice();
+    newCartItem.splice(index, 1, updateCartInnerItem)
+    
+    //To Be Order Cart Item
+
+    var cartReadyToOrder = {
+      orderType: orderType,
+      catererID: restaurantInfo.catererID,
+      cartitem: newCartItem
+    }
+
+  //  alert(JSON.stringify(cartReadyToOrder))
+
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.UPDATEcart;
+
+    if (cartToBeOrder.length > 0) {
+      url = url + "?_id=" + cartToBeOrder[0]._id;
+    }
+
+    axios.put(url, cartReadyToOrder, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+     
+        if (response.status === 201) {
+          this.toggleMenuModal()
+          this.getCustomerCart()
+        } 
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          this.setState({
+            cartitem: newCartItem,
+            cartloading: false
+          },() => {
+            this.toggleMenuModal()
+            this.addToLocalStorage()
+          })
+        } 
+      }); 
+  }
+
+  deleteCart = (index) => {
 
     this.setState({
-      cartitem: newCartItem
-    },() => {
-      this.toggleMenuModal()
+      cartloading: true
     })
-  }
+    
+    const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction, cartToBeOrder, orderType, restaurantInfo} = this.state;
+
+    var newCartItem = this.state.cartitem.slice();
+    newCartItem.splice(index, 1)
+
+     //To Be Order Cart Item
+
+    var cartReadyToOrder = {
+      orderType: orderType,
+      catererID: restaurantInfo.catererID,
+      cartitem: newCartItem
+    }
+
+  //  alert(JSON.stringify(cartReadyToOrder))
+
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    if (newCartItem.length > 0) {
+     
+      var url = apis.UPDATEcart;
+
+      if (cartToBeOrder.length > 0) {
+        url = url + "?_id=" + cartToBeOrder[0]._id;
+      }
+
+      axios.put(url, cartReadyToOrder, {withCredentials: true}, {headers: headers})
+        .then((response) => {
+         
+          if (response.status === 201) {
+            //this.toggleMenuModal()
+            this.getCustomerCart()
+          } 
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            this.setState({
+              cartitem: newCartItem,
+              cartloading: false
+            },() => {
+             // this.toggleMenuModal()
+              this.addToLocalStorage()
+            })
+          } 
+        }); 
+    }
+    else {
+      var url = apis.DELETEcart;
+
+      if (cartToBeOrder.length > 0) {
+        url = url + "?_id=" + cartToBeOrder[0]._id;
+      }
+
+      axios.delete(url, {withCredentials: true}, {headers: headers})
+        .then((response) => {
+        
+          if (response.status === 200) {
+            this.getCustomerCart()
+          } 
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            this.setState({
+              cartitem: newCartItem,
+              cartloading: false
+            },() => {
+                this.deleteLocalStorage()
+            })
+          } 
+        }); 
+    }
+  };
 
   handleRadioBoxChange = (e, selectioncategory, selectionitemtitle, selectionitemprice, priceperunit) => {
 
@@ -879,34 +1216,109 @@ class CatererDetail extends Component {
     })
   }
 
+  reformatInput = (time) => {
+    if (time.length > 3 ) {
+      time = time.slice(0, 2) + ":" + time.slice(2, 4)
+      
+    }
+    else {
+      time = "0" + time.slice(0, 1) + ":" + time.slice(1, 3)
+    }
+    return time
+  }
  
-  renderNavItem(menutitle) {
-    return (
-      <NavItem>
-        <NavLink
-          onClick={() => this.navItemClicked(menutitle)}
-          style={{
-            paddingRight: 20,
-            paddingLeft: menutitle === "All Menu" ? 0 : 20,
-            fontWeight: "600",
-            color: this.state.selectedMenu === menutitle ? "#20a8d8" : "black",
-            fontSize: 15
-          }}
-          href="#"
-        >
-          {" "}
-          {menutitle}
-        </NavLink>
-        <div
-          style={{
-            height: 2,
-            width: "100%",
-            backgroundColor:
-              this.state.selectedMenu === menutitle ? "#20a8d8" : "transparent"
-          }}
-        />
-      </NavItem>
-    );
+  renderNavItem() {
+
+    var itemsarray = [];
+
+    var menutitle = this.state.menutitle;
+
+    for (let i = 0; i < menutitle.length; i++) {
+      if(i > 4 && i < menutitle.length) {
+        itemsarray.push(
+          <NavItem>
+            <UncontrolledDropdown
+              nav
+              isOpen={this.state.menuDropDownOpen}
+              toggle={() => {
+                this.toggleCuisineDropDown();
+              }}
+            >
+              <DropdownToggle
+                style={{
+                  fontWeight: "600",
+                  color:
+                    this.state.menutitle
+                      .slice(5, menutitle.length)
+                      .includes(this.state.selectedMenu) ||
+                    this.state.menuDropDownOpen
+                      ? "#20a8d8"
+                      : "black",
+                  backgroundColor: "white",
+                  fontSize: 15
+                }}
+                nav
+                caret
+              >
+                {this.state.menutitle
+                  .slice(5, menutitle.length)
+                  .includes(this.state.selectedMenu)
+                  ? this.state.selectedMenu
+                  : "More"}
+              </DropdownToggle>
+              <DropdownMenu right style={{ right: "auto" }}>
+                <Table style={{ margin: 0 }} borderless>
+                  <tbody>{this.renderMoreMenu(5, 12)}</tbody>
+                </Table>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+            <div
+              style={{
+                height: 2,
+                width: "100%",
+                backgroundColor: this.state.menutitle
+                  .slice(5, menutitle.length)
+                  .includes(this.state.selectedMenu)
+                  ? "#20a8d8"
+                  : "transparent"
+              }}
+            />
+          </NavItem>
+        )
+        break
+      }
+      else {
+        itemsarray.push(
+          <NavItem>
+            <NavLink
+              onClick={() => this.navItemClicked(menutitle[i])}
+              style={{
+                paddingRight: 20,
+                paddingLeft: menutitle[i] === "All Menu" ? 0 : 20,
+                fontWeight: "600",
+                color: this.state.selectedMenu === menutitle[i] ? "#20a8d8" : "black",
+                fontSize: 15
+              }}
+              href="#"
+            >
+              {" "}
+              {menutitle[i]}
+            </NavLink>
+            <div
+              style={{
+                height: 2,
+                width: "100%",
+                backgroundColor:
+                  this.state.selectedMenu === menutitle[i] ? "#20a8d8" : "transparent"
+              }}
+            />
+          </NavItem>
+        );
+      }
+    }
+
+    return  <Nav className="float-left" pills>{itemsarray}</Nav>;
+
   }
 
   renderMoreMenu(startindex, lastindex) {
@@ -943,6 +1355,12 @@ class CatererDetail extends Component {
           <b style={{ color: "#20a8d8", fontSize: 19 }}>{activeMenu.title}</b>
 
           <p style={{ fontWeight: '700', marginTop:10, fontSize: 14, opacity: 0.8}}>Serves: <b style={{color: 'green'}}>{activeMenu.serveperunit}</b> | Minimum order: <b style={{color: 'darkorange'}}>{activeMenu.minimumquantity}</b></p>
+
+          {activeMenu.src ? <img
+            style={{cursor:'pointer', marginTop:10, marginBottom: 10, objectFit: "cover", width: "100%", height: 200 }}
+            onClick={() => this.inputOpenFileRef.current.click()}
+            src={activeMenu.src}
+          /> : null }
 
           <div style={{ marginTop: 10 }}>
             <span>
@@ -1189,11 +1607,11 @@ class CatererDetail extends Component {
 
     for (let i = 0; i < cartitem.length; i++) {
       itemarray.push(
-        <tr style={{cursor: 'pointer',}} onClick={() => this.cartItemClicked(cartitem[i]._id, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
-          <td style={{  fontWeight: "500" }}>
+        <tr style={{cursor: 'pointer',}}>
+          <td style={{  fontWeight: "500", cursor: 'pointer' }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
             {cartitem[i].quantity}
           </td>
-          <td style={{  textAlign: "start" }}>
+          <td style={{  textAlign: "start", cursor: 'pointer' }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
             <Dotdotdot clamp={2}>
               <p
                 style={{
@@ -1219,24 +1637,24 @@ class CatererDetail extends Component {
             }
           </td>
 
-          <td style={{ width: "20%", textAlign: "start" }}>
+          <td style={{ width: "20%", textAlign: "start", cursor: 'pointer' }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
             €{Number(cartitem[i].totalprice).toFixed(2)}
           </td>
           <td
             style={{
               padding: 0,
               paddingTop: 10,
-              textAlign: "start"
+              textAlign: "start",
+              cursor: 'pointer'
             }}
+            onClick={() => this.deleteCart(i)}
           >
             <img
               style={{
-                cursor: "pointer",
                 height: 15,
                 width: 15,
                 objectFit: "cover"
               }}
-              onClick={() => this.cartItemDelete(i)}
               src={closeIcon}
               alt=""
             />
@@ -1252,6 +1670,58 @@ class CatererDetail extends Component {
     return (
       <CardBody style={{ textAlign: "center" }}>
         <Table borderless>{this.renderTableItems()}</Table>
+
+        <Row>
+          <Col>
+            <Card
+              style={{
+                cursor: "pointer",
+                borderColor: this.state.orderType === "delivery" ? "#20a8d8" : null
+              }}
+              onMouseOver=""
+              onClick={() => this.selectOrderType("delivery")}
+            >
+              <CardBody style={{margin: 0, padding:10}}>
+                <h6 style={{ marginTop: 5, textAlign: "center", color: this.state.orderType === "delivery" ? "#20a8d8" : null }}>
+                  Delivery
+                </h6>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col>
+            <Card
+              style={{
+                cursor: "pointer",
+                borderColor: this.state.orderType === "pickup" ? "#20a8d8" : null
+              }}
+              onMouseOver=""
+              onClick={() => this.selectOrderType("pickup")}
+            >
+              <CardBody style={{margin: 0, padding:10}}>
+                <h6 style={{ marginTop: 5, textAlign: "center", color: this.state.orderType === "pickup" ? "#20a8d8" : null }}>
+                  Pick Up
+                </h6>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+
+        <Collapse isOpen={this.state.orderType === "delivery"} >
+          <Table borderless>
+            <tbody>
+              <tr>
+                <td
+                  style={{ fontSize: 16, textAlign: "start" }}
+                >
+                  Delivery Fee
+                </td>
+                <td style={{ fontSize: 16, textAlign: "end" }}>
+                  €{Number(this.state.restaurantInfo.deliveryfee).toFixed(2)}
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Collapse>
 
         <div
           style={{
@@ -1292,6 +1762,21 @@ class CatererDetail extends Component {
           Checkout
         </Button>
 
+        {this.state.orderNotOverMinSpending ? 
+        <div>
+        <Label
+          style={{
+            marginTop: 20,
+            color: "red",
+            textAlign: "center",
+            fontSize: 15
+          }}
+        >
+          Total order price has to be more than minimum order €{Number(this.state.restaurantInfo.minspending).toFixed(2)}
+        </Label>
+        </div>
+        : null }
+
         <div>
         <Label
           style={{
@@ -1301,7 +1786,7 @@ class CatererDetail extends Component {
             fontSize: 15
           }}
         >
-          Minimum Order Value: €50.00
+          Minimum Order Value: €{Number(this.state.restaurantInfo.minspending).toFixed(2)}
         </Label>
         </div>
 
@@ -1371,10 +1856,85 @@ class CatererDetail extends Component {
             fontSize: 15
           }}
         >
-          Minimum Order Value: €50.00
+           Minimum Order Value: €{Number(this.state.restaurantInfo.minspending).toFixed(2)}
         </Label>
         </div>
       </CardBody>
+    );
+  }
+
+  renderCartLoadingItems() {
+    var itemsarray = [];
+
+    for (let i = 0; i < 4; i++) {
+      itemsarray.push(
+        <tr>
+          <td >
+            <ContentLoader height="250">
+              <rect x="0" y="0" rx="4" ry="4" width="50" height="20" />
+            </ContentLoader> 
+          </td>
+          <td >
+            <ContentLoader height="250">
+              <rect x="0" y="0" rx="4" ry="4" width="300" height="20" />
+              <rect x="0" y="40" rx="4" ry="4" width="200" height="20" />
+            </ContentLoader> 
+          </td>
+          <td >
+            <ContentLoader height="250">
+              <rect x="0" y="0" rx="4" ry="4" width="50" height="20" />
+            </ContentLoader> 
+          </td>
+          <td >
+            <ContentLoader height="250">
+              <rect x="0" y="0" rx="4" ry="4" width="50" height="20" />
+            </ContentLoader> 
+          </td>
+        </tr>
+      );
+    }
+
+    return (
+    <Card
+        style={{
+          boxShadow: "0px 3px 1px #9E9E9E",
+          borderWidth: 0
+        }}
+      >
+        <CardHeader
+          style={{
+            backgroundColor: "rgba(13, 152, 186, 0.8)",
+            textAlign: "center"
+          }}
+        >
+          <Label style={{ fontWeight: "600", color: "white", fontSize: 15 }}>
+            Your Cart
+          </Label>
+        </CardHeader>
+
+        <CardBody style={{ textAlign: "center" }}>
+        <Table>
+         <tbody>
+          {itemsarray}
+         </tbody>
+        </Table>
+        <Button
+          style={{
+            color: "white",
+            backgroundColor: "#ff7043",
+            marginTop: 30,
+            padding: 15,
+            fontWeight: "600",
+            fontSize: 16
+          }}
+          disabled
+          block
+        >
+          Checkout
+        </Button>
+      </CardBody>
+    </Card>
+ 
     );
   }
 
@@ -1412,8 +1972,10 @@ class CatererDetail extends Component {
     var menutab = this.state.menu;
 
     for (let i = 0; i < menutab.length; i++) {
+      this.refObj[i] = React.createRef();
       menuarray.push(
         <Col key={i} xs="12">
+          <div ref={this.refObj[i]} > </div>
           {i === 0 ? null : (
             <div
               style={{
@@ -1432,9 +1994,8 @@ class CatererDetail extends Component {
     }
 
     return (
-    <Row>
+    <Row >
       {menuarray}
-     
     </Row>
     );
   }
@@ -1688,20 +2249,52 @@ class CatererDetail extends Component {
           <Table style={{margin: 0, padding : 0}} borderless>
             <tbody>
               <tr>
-                <td><p style={{padding: 0, margin: 0}}>Working Hours:</p></td>
-                <td className="h6">{restaurantInfo.openinghours}</td>
+                <td><p style={{padding: 0, margin: 0, fontWeight: '600'}}>Delivery Fee:</p></td>
+                <td><p style={{padding: 0, margin: 0}}>€{Number(restaurantInfo.deliveryfee).toFixed(2)}</p></td>
               </tr>
               <tr>
-                <td><p style={{padding: 0, margin: 0}}>Delivery Fee:</p></td>
-                <td className="h6">€{Number(restaurantInfo.deliveryfee).toFixed(2)}</td>
+                <td><p style={{padding: 0, margin: 0, fontWeight: '600'}}>Minimum Spending:</p></td>
+                <td><p style={{padding: 0, margin: 0}}>€{Number(restaurantInfo.minspending).toFixed(2)}</p></td>
               </tr>
               <tr>
-                <td><p style={{padding: 0, margin: 0}}>Minimum Spending:</p></td>
-                <td className="h6">€{Number(restaurantInfo.minspending).toFixed(2)}</td>
+                <td><p style={{padding: 0, margin: 0, fontWeight: '600'}}>Opening Hours:</p></td>
+                <td><p style={{padding: 0, margin: 0}}>{this.renderOpeningHours()}</p></td>
               </tr>
             </tbody>
           </Table>
         </Col>
+      </Row>
+    );
+  }
+
+  renderOpeningHours() {
+    var itemsarray = [];
+
+    var openinghours = this.state.restaurantInfo.openinghours;
+
+    if (typeof this.state.restaurantInfo.openinghours !== 'undefined') {
+      if (openinghours.length > 0) {
+        for (let i = 0; i < openinghours.length; i++) {
+          itemsarray.push(
+            <Col xs="6" sm="6" md="4" lg="4">
+              <span style={{fontWeight: this.state.todayDay === openinghours[i].day ? '700' : null}}>
+                <p style={{margin: 0}}>
+                  {openinghours[i].day}
+                </p>
+                <p style={{margin: 0, marginBottom: 10}}>
+                  {this.reformatInput(openinghours[i].starttime.toString())}&nbsp;-&nbsp;{this.reformatInput(openinghours[i].closetime.toString())}
+                </p>
+              </span>
+            </Col>
+          );
+        }
+      }
+    }
+
+    return (
+      <Row
+      >
+        {itemsarray}
       </Row>
     );
   }
@@ -1860,61 +2453,8 @@ class CatererDetail extends Component {
               <Col xs="0" sm="1" md="3" lg="3" />
 
               <Col style={{ marginTop: 30, marginBottom: 20 }} xs="12" md="12">
-                <Nav className="float-left" pills>
-                  {this.renderNavItem(this.state.menutitle[0])}
-                  {this.renderNavItem(this.state.menutitle[1])}
-                  {this.renderNavItem(this.state.menutitle[2])}
-                  {this.renderNavItem(this.state.menutitle[3])}
-                  {this.renderNavItem(this.state.menutitle[4])}
-                  <NavItem>
-                    <UncontrolledDropdown
-                      nav
-                      isOpen={this.state.menuDropDownOpen}
-                      toggle={() => {
-                        this.toggleCuisineDropDown();
-                      }}
-                    >
-                      <DropdownToggle
-                        style={{
-                          fontWeight: "600",
-                          color:
-                            this.state.menutitle
-                              .slice(5, menutitlelength)
-                              .includes(this.state.selectedMenu) ||
-                            this.state.menuDropDownOpen
-                              ? "#20a8d8"
-                              : "black",
-                          backgroundColor: "white",
-                          fontSize: 15
-                        }}
-                        nav
-                        caret
-                      >
-                        {this.state.menutitle
-                          .slice(5, menutitlelength)
-                          .includes(this.state.selectedMenu)
-                          ? this.state.selectedMenu
-                          : "More"}
-                      </DropdownToggle>
-                      <DropdownMenu right style={{ right: "auto" }}>
-                        <Table style={{ margin: 0 }} borderless>
-                          <tbody>{this.renderMoreMenu(5, 12)}</tbody>
-                        </Table>
-                      </DropdownMenu>
-                    </UncontrolledDropdown>
-                    <div
-                      style={{
-                        height: 2,
-                        width: "100%",
-                        backgroundColor: this.state.menutitle
-                          .slice(5, menutitlelength)
-                          .includes(this.state.selectedMenu)
-                          ? "#20a8d8"
-                          : "transparent"
-                      }}
-                    />
-                  </NavItem>
-                </Nav>
+                {this.renderNavItem()}
+                
               </Col>
 
               <Col style={{ marginTop: 20 }} xs="12" sm="12" md="7" lg="7">
@@ -1922,7 +2462,7 @@ class CatererDetail extends Component {
               </Col>
 
               <Col style={{ marginTop: 20 }} xs="0" sm="0" md="5" lg="5">
-                {this.renderCart()}
+                {this.state.cartloading ? this.renderCartLoadingItems() : this.renderCart()}
               </Col>
 
               <div style={{marginTop:30, marginBottom:20, height:1, backgroundColor: 'gray', opacity: 0.3, width: '100%'}}/>

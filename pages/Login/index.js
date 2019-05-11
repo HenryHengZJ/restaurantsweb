@@ -9,8 +9,22 @@ import Layout from '../../components/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios';
 import apis from "../../apis";
+import {server} from "../../config"
 
 class Login extends Component {
+
+  static async getInitialProps({query: { returnurl }}) {
+    console.log('returnurl = ' + returnurl)
+    return {
+      returnurl: returnurl,
+    };
+  }
+
+  componentWillMount() {
+    this.setState({
+      returnurl: this.props.returnurl,
+    })
+  }
 
   constructor(props) {
     super(props);
@@ -21,6 +35,7 @@ class Login extends Component {
     this.state = {
       useremail: "",
       userpassword: "",
+      returnurl: "",
     }
   }
 
@@ -63,7 +78,8 @@ class Login extends Component {
         if (response.status === 200) {
          // alert(JSON.stringify(response.data))
           var userID = response.data.userID
-          Router.push(`/userprofile/Account%20Info`, `/userprofile/Account%20Info`)
+        //  Router.push(`/userprofile/Account%20Info`, `/userprofile/Account%20Info`)
+          window.location.assign(`${server}${this.state.returnurl}`);
         }
       })
       .catch((error) => {
@@ -90,7 +106,7 @@ class Login extends Component {
     return (
       <Layout title={'Login FoodieBee - Catering Service'}>
         <div style={{backgroundColor: 'white'}}>
-          <NavBar signIn={e=>this.signIn(e)}/>          
+          <NavBar signInHide={true} signIn={e=>this.signIn(e)}/>          
           <div className="app justify-content-center align-items-center">
           <Container>
             <Row style={{marginTop: 20, flex: 1, display: 'flex'}} className="justify-content-center">

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, CardBody, Table, Label, Container} from 'reactstrap';
 import './styles.css'
+import img from "../../assets/img"
 
 class Testimonial extends Component {
 
@@ -14,31 +15,31 @@ class Testimonial extends Component {
           name: 'John',
           position: 'Corporate Admin',
           comment: 'An order in a few clicks, a great customer service, delighted guests.',
-          src: '/static/testimonial_1.jpg'
+          src: img.testimonial_1
         },
         {
           name: 'Stefan',
           position: 'Caterer',
           comment: 'The perfect solution to manage my orders and sales.',
-          src: '/static/testimonial_2.jpg'
+          src: img.testimonial_2
         },
         {
           name: 'Shureen',
           position: 'Sales Manager',
           comment: 'Simply love it! Easy and efficient.',
-          src: '/static/testimonial_3.jpg'
+          src: img.testimonial_3
         },
         {
           name: 'Cian',
           position: 'Engineer',
           comment: 'Our team loves it!',
-          src: '/static/testimonial_4.jpg'
+          src: img.testimonial_4
         },
         {
           name: 'Kieran',
           position: 'Tax Manager',
           comment: 'I really appreciated the quality of the products and on-time delivery',
-          src: '/static/testimonial_5.jpg'
+          src: img.testimonial_5
         },
       ]
     }

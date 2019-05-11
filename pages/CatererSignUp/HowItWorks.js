@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Container, Row, Col } from "reactstrap";
 import "./styles.css";
+import img from "../../assets/img"
 
 class HowItWorks extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class HowItWorks extends React.Component {
             <Col xs="6" md="3" style={{ marginTop: 30, textAlign: "center" }}>
               <img
                 style={{ objectFit: "cover", width: 80, height: 80 }}
-                src={"/static/register.png"}
+                src={img.register}
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Register Account
@@ -55,7 +56,7 @@ class HowItWorks extends React.Component {
                   width: 80,
                   height: 80
                 }}
-                src={"/static/setupprofile.png"}
+                src={img.setupprofile}
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Setup Profile
@@ -73,7 +74,7 @@ class HowItWorks extends React.Component {
                   width: 80,
                   height: 80
                 }}
-                src={"/static/receiveorders.png"}
+                src={img.receiveorders}
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Receive Order
@@ -91,7 +92,7 @@ class HowItWorks extends React.Component {
                   width: 80,
                   height: 80
                 }}
-                src={"/static/paymentontime.png"}
+                src={img.paymentontime}
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Payment On-Time

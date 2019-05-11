@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Card, Container, CardBody, Table, Label } from "reactstrap";
 import "./styles.css";
+import img from "../../assets/img"
 
 class Benefit extends Component {
   constructor(props) {
@@ -12,32 +13,32 @@ class Benefit extends Component {
           title: "Orders management",
           descrip:
             "We help you to organize your orders, sales, customers, etc.",
-          src: "/static/orders.png"
+          src: img.orders
         },
         {
           title: "Performance Analytics",
           descrip: "Have insight into how well your dishes are selling",
-          src: "/static/performance.png"
+          src: img.performance
         },
         {
           title: "Feedback & Review",
           descrip: "Know your customers' thoughts of your restaurant",
-          src: "/static/feedback.png"
+          src: img.feedback
         },
         {
           title: "Free membership",
           descrip: "Free lifetime membership. No hidden charges.",
-          src: "/static/membership.png"
+          src: img.membership
         },
         {
           title: "Wider audience",
           descrip: "Your restaurant will be exposed to a wider audience",
-          src: "/static/audience.png"
+          src: img.audience
         },
         {
           title: "24/7 Support",
           descrip: "We are here to help you and your customers anytime.",
-          src: "/static/support.png"
+          src: img.support
         }
       ]
     };

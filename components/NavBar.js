@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import Router from 'next/router'
 import axios from 'axios';
 import apis from "../apis";
+import Cookies from 'js-cookie';
+import {server} from "../config"
 
 class NavBar extends Component {
 
@@ -17,25 +19,23 @@ class NavBar extends Component {
       isOpen: false,
       dropDown: false,
       userName: "",
+      signInHide: false,
     };
   }
 
   componentDidMount() {
-    var headers = {
-      'Content-Type': 'application/json',
-    }
-    var url = apis.GETcustomerstatus;
-   
-    axios.get(url, {withCredentials: true}, {headers: headers})
-      .then((response) => {
-        if (response.status === 200) {
-          this.setState({
-            userName: response.data.user.customerName
-          })
-        }
+
+    this.setState({
+      signInHide: typeof this.props.signInHide !== 'undefined' ? this.props.signInHide : false
+    })
+
+    if (typeof Cookies.get('userName') !== 'undefined') {
+    //  alert(Cookies.get('userName'))
+      this.setState({
+        userName: Cookies.get('userName'),
+        signInHide: true
       })
-      .catch((error) => {
-      });
+    }
   }
 
   toggle() {
@@ -62,7 +62,8 @@ class NavBar extends Component {
       axios.get(url, {withCredentials: true}, {headers: headers})
         .then((response) => {
           if (response.status === 200) {
-            Router.replace(`/`)
+            //Router.push(`/`)
+            window.location.assign(`${server}`);
           }
         })
         .catch((error) => {
@@ -79,7 +80,6 @@ class NavBar extends Component {
     const {
       theme,
       catererSignInVisible,
-      signInHide,
     } = this.props;
 
     const backgroundColorVal = theme === 'dark' ? this.state.isOpen ? '#696969' : 'transparent' : 'rgba(211,211,211,0.3)' ;
@@ -105,7 +105,7 @@ class NavBar extends Component {
               <NavItem>
                 <NavLink style={{ color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href= "" target="_blank">Contact</NavLink>
               </NavItem>
-              {!signInHide ?
+              {!this.state.signInHide ?
               <NavItem>
                 <NavLink onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
               </NavItem>

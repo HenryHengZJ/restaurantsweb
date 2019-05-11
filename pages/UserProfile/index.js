@@ -355,13 +355,6 @@ class UserProfile extends Component {
 
   ////////////////////////////////////////////////Other functions/////////////////////////////////////////////////////
 
-  signIn(e) {
-    e.preventDefault();
-    Router.push({
-      pathname: '/login'
-    })
-  }
-
   checkAddressInput = () => {
     const {
       address1,
@@ -982,7 +975,7 @@ class UserProfile extends Component {
     return (
       <Layout title={this.state.restaurantInfo.name + ' Caterer Detail FoodieBee - Catering Service'}>
       <div style={{backgroundColor: 'white'}}>
-         <NavBar signIn={e=>this.signIn(e)}/>
+         <NavBar signInHide={true}/>
       <div className="app align-items-center">
 
           <Container>
