@@ -15,6 +15,7 @@ import Dotdotdot from "react-dotdotdot";
 import axios from "axios";
 import apis from "../../apis";
 import Router from 'next/router'
+import { timeRanges } from  "../../utils"
 //import fetch from 'isomorphic-unfetch'
 
 import { server } from '../../config';
@@ -24,12 +25,28 @@ import { server } from '../../config';
 
 class SearchCaterer extends Component {
 
-  static async getInitialProps({query: { occasion, location }}) {
+  static async getInitialProps({query: { occasion, location, cuisine, price_lte, price_gt }}) {
+    console.log('cuisine = ' +  cuisine )
     console.log('occasion = ' +  Array.isArray(occasion) )
     console.log('location = ' + location)
+    console.log('price_lte = ' +  price_lte )
+    console.log('price_gt = ' +  price_gt )
     var url = `${server}${apis.GETcaterer}`
     var locationquerystring = "";
+    var cuisinequerystring = "";
     var occasionquerystring = "";
+    var price_ltequerystring = "";
+    var price_gtquerystring = "";
+    var selectedPrice = "All";
+    var priceAry = [
+      "All",
+      "50 (or less)",
+      "100 (or less)",
+      "200 (or less)",
+      "300 (or less)",
+      "500 (or less)",
+      "More than 500"
+    ];
     var occasionAry = [
       {
         name: "Breakfast",
@@ -86,6 +103,25 @@ class SearchCaterer extends Component {
       url = url + locationquerystring
     }
 
+    if (typeof cuisine !== 'undefined') {
+      cuisinequerystring = "&cuisine=" + cuisine
+      url = url + cuisinequerystring
+    }
+
+    if (typeof price_lte !== 'undefined') {
+      price_ltequerystring = "&price_lte=" + price_lte
+      url = url + price_ltequerystring
+      var priceindex = priceAry.findIndex(x => x.includes(price_lte));
+      selectedPrice = priceAry[priceindex]
+    }
+
+    if (typeof price_gt !== 'undefined') {
+      price_gtquerystring = "&price_gt=" + price_gt
+      url = url + price_gtquerystring
+      var priceindex = priceAry.findIndex(x => x.includes(price_lte));
+      selectedPrice = priceAry[priceindex]
+    }
+
     if (typeof occasion !== 'undefined') {
       if (Array.isArray(occasion)) {
         for(var i = 0; i < occasion.length; i++)
@@ -123,9 +159,14 @@ class SearchCaterer extends Component {
     console.log(`Show data fetched. Count: ${data.length}`);
     return {
       locationquerystring: locationquerystring,
+      cuisinequerystring: cuisinequerystring,
       occasionquerystring: occasionquerystring,
+      price_ltequerystring: price_ltequerystring,
+      price_gtquerystring: price_gtquerystring,
       data: data,
       location: location,
+      selectedCuisine: typeof cuisine !== 'undefined' ? cuisine : "All Cuisines",
+      selectedPrice: selectedPrice,
       occasion: occasionAry,
     };
   }
@@ -136,21 +177,16 @@ class SearchCaterer extends Component {
       loading: false,
       empty: this.props.data.length > 0 ? false : true,
       location: this.props.location,
+      selectedCuisine: this.props.selectedCuisine,
+      selectedPrice: this.props.selectedPrice,
       occasion: this.props.occasion,
-      occasionquerystring: this.props.occasionquerystring,
       locationquerystring: this.props.locationquerystring,
+      cuisinequerystring: this.props.cuisinequerystring,
+      occasionquerystring: this.props.occasionquerystring,
+      price_ltequerystring: this.props.price_ltequerystring,
+      price_gtquerystring: this.props.price_gtquerystring,
     })
   }
-
-  /*static async getInitialProps({query: { occasion }}) {
-    console.log('occasion = ' + occasion)
-    const res = await axios.get("/test/caterer");
-    const data = await res.data;
-    console.log(`Show data fetched. Count: ${data.length}`);
-    return {
-      data: data
-    };
-  }*/
 
   constructor(props) {
     super(props);
@@ -159,6 +195,8 @@ class SearchCaterer extends Component {
       baseurl: "/searchcaterer",
       locationquerystring: "",
       occasionquerystring: "",
+      price_ltequerystring: "",
+      price_gtquerystring: "",
       location: "",
       selectedOccasion: null,
       isMobile: false,
@@ -273,8 +311,8 @@ class SearchCaterer extends Component {
         "Vegetarian Friendly"
       ],
       filterArray: [],
-      selectedCuisine: "All Cuisines",
-      selectedPrice: "All",
+      selectedCuisine: null,
+      selectedPrice: null,
       selectedTime: "",
       selectedDate: "",
       maxDate: null,
@@ -285,17 +323,8 @@ class SearchCaterer extends Component {
       filterModalOpen: false,
     }
 
-    this.time  = [
-      {
-        value: "07:00"
-      },
-      {
-        value: "07:30"
-      },
-      {
-        value: "08:00"
-      },
-    ];
+    this.time  = timeRanges();
+
 
   }
 
@@ -330,7 +359,10 @@ class SearchCaterer extends Component {
         empty: this.props.data.length > 0 ? false : true,
         location: this.props.location,
         locationquerystring: this.props.locationquerystring,
-        occasionquerystring: this.props.occasionquerystring
+        occasionquerystring: this.props.occasionquerystring,
+        cuisinequerystring: this.props.cuisinequerystring,
+        price_ltequerystring: this.props.price_ltequerystring,
+        price_gtquerystring: this.props.price_gtquerystring,
       });
     });
 
@@ -424,9 +456,11 @@ class SearchCaterer extends Component {
       var city = address.address_components[1].long_name
       var url = this.state.baseurl;
       var locationquerystring = "?location=" + city;
+      var cuisinequerystring = this.state.cuisinequerystring;
       var occasionquerystring = this.state.occasionquerystring;
-      url = url + locationquerystring + occasionquerystring
-      alert(url)
+      var price_ltequerystring = this.state.price_ltequerystring;
+      var price_gtquerystring = this.state.price_gtquerystring;
+      url = url + locationquerystring + cuisinequerystring + occasionquerystring + price_ltequerystring + price_gtquerystring;
       this.setState({
         dropDownAddress: ! this.state.dropDownAddress,
         loading: true,
@@ -436,11 +470,20 @@ class SearchCaterer extends Component {
     }
   };
 
+  searchMenu = () => {
+    var location = this.state.location
+    var selectedDate = this.state.selectedDate
+    var selectedTime = this.state.selectedTime
+    
+  };
+
   navItemClicked = selectedCuisine => {
     this.setState({
       selectedCuisine: selectedCuisine,
       cuisineDropDownOpen: false
-    });
+    }, () => {
+      this.handleUrlChange('cuisine');
+    })
   };
 
   catererClicked = (_id) => {
@@ -453,12 +496,24 @@ class SearchCaterer extends Component {
     })
   }
 
-  handleChange = event => {
-    this.setState({ selectedPrice: event.target.value });
+  handlePriceChange = event => {
+    this.setState(
+      {
+        selectedPrice: event.target.value 
+      }, () => {
+        this.handleUrlChange('pricerange')
+      }
+    );
   };
 
   handleCuisineChange = event => {
-    this.setState({ selectedCuisine: event.target.value });
+    this.setState(
+      { 
+        selectedCuisine: event.target.value 
+      }, () => {
+        this.handleUrlChange('cuisine');
+      }
+    )
   };
 
   handleCheckBoxChange = (index, statename, event) => {
@@ -477,34 +532,75 @@ class SearchCaterer extends Component {
         [statename]: newArray 
       }, () => {
         if (statename === "occasion") {
-          this.handleOccasionUrlChange()
+          this.handleUrlChange('occasion')
         }
       }
     )
   };
 
-  handleOccasionUrlChange = () => {
+  handleUrlChange = (queryname) => {
     var url = this.state.baseurl;
     var locationquerystring = this.state.locationquerystring;
-    var occasionquerystring = "";
-    var selectedArray = this.state.occasion;
+    var cuisinequerystring = this.state.cuisinequerystring;
+    var occasionquerystring = this.state.occasionquerystring;
+    var price_ltequerystring = this.state.price_ltequerystring;
+    var price_gtquerystring = this.state.price_gtquerystring;
+    var selectedArray;
 
-    for(var i = 0; i < selectedArray.length; i++)
-    {
-      if(selectedArray[i].value == true)
+    if (queryname === 'occasion') {
+      occasionquerystring = "";
+      selectedArray = this.state.occasion;
+      for(var i = 0; i < selectedArray.length; i++)
       {
-        var fixedstr = "&occasion="
-        occasionquerystring = occasionquerystring + fixedstr + selectedArray[i].name 
+        if(selectedArray[i].value == true)
+        {
+          var fixedstr = "&occasion="
+          occasionquerystring = occasionquerystring + fixedstr + selectedArray[i].name 
+        }
       }
     }
-    url = url + locationquerystring + occasionquerystring
-    Router.replace(url)
-  //  window.location.assign(`${server}${url}`);
+
+    if (queryname === 'cuisine') {
+      cuisinequerystring = "";
+      if (this.state.selectedCuisine !== "All Cuisines") {
+        cuisinequerystring = "&cuisine=" + this.state.selectedCuisine;
+      }
+    }
+
+    if (queryname === 'pricerange') {
+      var selectedPrice = this.state.selectedPrice
+      if (selectedPrice !== "All") {
+        if (selectedPrice === "More than 500") {
+          price_gtquerystring = "";
+          var pricenumber = selectedPrice.split("than ")[1];
+          price_gtquerystring = "&price_gt=" + pricenumber;
+          price_ltequerystring = "";
+        }
+        else {
+          var pricenumber = selectedPrice.split(" (")[0];
+          price_ltequerystring = "&price_lte=" + pricenumber;
+          price_gtquerystring = "";
+        }
+      }
+      else {
+        price_gtquerystring = "";
+        price_ltequerystring = "";
+      }
+    }
+
+    url = url + locationquerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring;
+
+    this.setState({
+      loading: true,
+    },() => {
+      Router.replace(url)
+    })
+
   }
 
   handleDateChange(date){
 		this.setState({ 
-      selectedDate : moment(date).format("DD MMM, YYYY") 
+      selectedDate : moment(date).format("dddd, DD/MM/YY") 
     }, () => {
       this.toggleDropDown()
     })
@@ -606,7 +702,7 @@ class SearchCaterer extends Component {
 
     for (let i = startindex; i < lastindex; i++) {
       itemsarray.push(
-        <td>
+        <td key={i}>
           <Button
             onClick={() => this.navItemClicked(cuisine[i])}
             block
@@ -630,7 +726,7 @@ class SearchCaterer extends Component {
       itemsarray.push(
         <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="radio">
-          <div class="pretty p-default p-round">
+          <div className="pretty p-default p-round">
             <input 
               type="radio" 
               name="radio1"
@@ -639,7 +735,7 @@ class SearchCaterer extends Component {
               value={cuisine[i]}
               name={cuisine[i]}
               style={{padding:0, marginRight: 10}} />
-            <div class="state p-success-o">
+            <div className="state p-success-o">
                 <label></label>
             </div>
           </div>
@@ -669,16 +765,16 @@ class SearchCaterer extends Component {
         <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="radio">
 
-          <div class="pretty p-default p-round">
+          <div className="pretty p-default p-round">
             <input 
               type="radio" 
               name="radio2"
               checked={this.state.selectedPrice === price[i]}
-              onChange={this.handleChange}
+              onChange={this.handlePriceChange}
               value={price[i]}
               name={price[i]}
               style={{padding:0, marginRight: 10}} />
-            <div class="state p-success-o">
+            <div className="state p-success-o">
                 <label></label>
             </div>
           </div>
@@ -707,15 +803,15 @@ class SearchCaterer extends Component {
       itemsarray.push(
         <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
         <FormGroup style={{ paddingLeft: 0, marginTop: 10 }} check className="checkbox">
-          <div class="pretty p-svg p-curve">
+          <div className="pretty p-svg p-curve">
             <input 
               type="checkbox"
               checked={dietary[i].value}
               onChange={(e) => this.handleCheckBoxChange(i, 'dietary', e)}
               value={dietary[i].name}
               style={{padding:0, marginRight: 10}} />
-            <div class="state p-success">
-                <svg class="svg svg-icon" viewBox="0 0 20 20">
+            <div className="state p-success">
+                <svg className="svg svg-icon" viewBox="0 0 20 20">
                     <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style={{stroke: 'white', fill: 'white'}}></path>
                 </svg>
                 <label></label>
@@ -746,15 +842,15 @@ class SearchCaterer extends Component {
       itemsarray.push(
         <Col key={i} xs={this.state.filterModalOpen ? "6" : "12"}>
           <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
-            <div class="pretty p-svg p-curve">
+            <div className="pretty p-svg p-curve">
               <input 
                 type="checkbox"
                 checked={occasion[i].value}
                 onChange={(e) => this.handleCheckBoxChange(i, 'occasion', e)}
                 value={occasion[i].name}
                 style={{padding:0, marginRight: 10}} />
-              <div class="state p-success">
-                  <svg class="svg svg-icon" viewBox="0 0 20 20">
+              <div className="state p-success">
+                  <svg className="svg svg-icon" viewBox="0 0 20 20">
                       <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style={{stroke: 'white', fill: 'white'}}></path>
                   </svg>
                   <label></label>
@@ -1185,7 +1281,7 @@ class SearchCaterer extends Component {
                   <Input value={this.state.selectedTime} onChange={(e) => this.handleTimeChange(e)} style={{cursor: 'pointer', color: this.state.selectedTime === "" ? 'gray': 'black', fontSize: 15, height: 40, }} type="select">
                     <option value='' disabled>Select Time</option>
                     {this.time.map(time =>
-                      <option style={{color:'black'}} key={time.value} value={time.value}>{time.value}</option>
+                      <option style={{color:'black'}} key={time} value={time}>{time}</option>
                     )}
                   </Input>
                 </FormGroup>
@@ -1293,7 +1389,7 @@ class SearchCaterer extends Component {
                       <Input value={this.state.selectedTime} onChange={(e) => this.handleTimeChange(e)} style={{cursor: 'pointer', color: this.state.selectedTime === "" ? 'gray': 'black', fontSize: 15, height: 40, }} type="select">
                         <option value='' disabled>Select Time</option>
                         {this.time.map(time =>
-                          <option style={{color:'black'}} key={time.value} value={time.value}>{time.value}</option>
+                          <option style={{color:'black'}} key={time} value={time}>{time}</option>
                         )}
                       </Input>
                     </FormGroup>

@@ -36,7 +36,7 @@ import moment from "moment";
 import axios from "axios";
 import apis from "../../apis";
 import {server} from "../../config"
-
+import { timeRanges } from  "../../utils"
 
 import {
   formatCreditCardNumber,
@@ -143,17 +143,7 @@ class DeliveryConfirmation extends Component {
 
     this.CountyData = ["Dublin", "Limerick", "Cork"];
 
-    this.time = [
-      {
-        value: "07:00"
-      },
-      {
-        value: "07:30"
-      },
-      {
-        value: "08:00"
-      }
-    ];
+    this.time = timeRanges()
   }
 
   componentDidMount() {
@@ -951,10 +941,10 @@ class DeliveryConfirmation extends Component {
                     {this.time.map(time => (
                       <option
                         style={{ color: "black" }}
-                        key={time.value}
-                        value={time.value}
+                        key={time}
+                        value={time}
                       >
-                        {time.value}
+                        {time}
                       </option>
                     ))}
                   </Input>

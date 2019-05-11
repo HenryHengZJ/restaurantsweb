@@ -30,15 +30,15 @@ router.get('/getcaterer', (req, res) => {
 		console.log('matchquery 3 = ', JSON.stringify(matchquery))
 	}
 	
-	if (typeof req.query.price_lt !== 'undefined')
+	if (typeof req.query.price_lte !== 'undefined')
 	{
-		pricerange.$lt = req.query.price_lt
+		pricerange.$lte = req.query.price_lte
 		matchquery.minimumspend = pricerange
 	}
 	
-	if (typeof req.query.price_gte !== 'undefined')
+	if (typeof req.query.price_gt !== 'undefined')
 	{
-		pricerange.$gte = req.query.price_gte
+		pricerange.$gt = req.query.price_gt
 		matchquery.minimumspend = pricerange
 	}
 	
