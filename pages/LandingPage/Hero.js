@@ -36,7 +36,7 @@ class Hero extends React.Component {
           pathname: '/searchcaterer',
           query: { location: city, occasion: 'All' }
         })*/
-        Router.push(`/searchcaterer/${city}/All`, `/searchcaterer/${city}/All`)
+        Router.push(`/searchcaterer?location=${city}`, `/searchcaterer?location=${city}`)
       })
     }
     else {
@@ -48,7 +48,7 @@ class Hero extends React.Component {
           pathname: '/searchcaterer',
           query: { location: 'Dublin', occasion: 'All' }
         })*/
-        Router.push(`/searchcaterer/Dublin/All`, `/searchcaterer/Dublin/All`)
+        Router.push(`/searchcaterer?location=County%20Limerick`, `/searchcaterer?location=County%20Limerick`)
       })
     }
   }

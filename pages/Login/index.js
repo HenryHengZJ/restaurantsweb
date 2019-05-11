@@ -79,7 +79,12 @@ class Login extends Component {
          // alert(JSON.stringify(response.data))
           var userID = response.data.userID
         //  Router.push(`/userprofile/Account%20Info`, `/userprofile/Account%20Info`)
-          window.location.assign(`${server}${this.state.returnurl}`);
+          if (typeof this.state.returnurl === 'undefined') {
+            window.location.assign(`${server}/`);
+          }
+          else {
+            window.location.assign(`${server}${this.state.returnurl}`);
+          }
         }
       })
       .catch((error) => {

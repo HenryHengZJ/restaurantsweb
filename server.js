@@ -57,7 +57,7 @@ nextApp.prepare().then(() => {
 	app.use('/menu', menuPublishedRoutes);
 	app.use('/cart', cartRoutes);
 
-  app.get('/searchcaterer/:location/:occasion', (req,res) => {
+  app.get('/searchcaterer', (req,res) => {
     /*var location = "";
     var occasion = "" ;
     if (req.query.location) {
@@ -66,8 +66,8 @@ nextApp.prepare().then(() => {
     if (req.query.occasion) {
       occasion = req.query.occasion
     }*/
-    console.log(req.params.location)
-    return nextApp.render(req, res, '/SearchCaterer',  { location: req.params.location, occasion: req.params.occasion } )
+   // console.log(req.params.location)
+    return nextApp.render(req, res, '/SearchCaterer',  req.query )
   })  
 
   app.get('/catererdetail/:id', (req,res) => {

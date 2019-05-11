@@ -13,6 +13,7 @@ import { Calendar } from 'react-date-range';
 import ContentLoader, { Facebook } from "react-content-loader";
 import Dotdotdot from "react-dotdotdot";
 import axios from "axios";
+import apis from "../../apis";
 import Router from 'next/router'
 //import fetch from 'isomorphic-unfetch'
 
@@ -24,24 +25,108 @@ import { server } from '../../config';
 class SearchCaterer extends Component {
 
   static async getInitialProps({query: { occasion, location }}) {
-    console.log('occasion = ' + occasion)
-    //console.log('server = ' + server)
+    console.log('occasion = ' +  Array.isArray(occasion) )
     console.log('location = ' + location)
-    /*const res = await fetch(`${server}/test/caterer`)
-    const data = await res.json();
-   // console.log(`Show data fetched. Count: ${data}`);
-    return {
-      data: data,
-      location: location,
-    };*/
+    var url = `${server}${apis.GETcaterer}`
+    var locationquerystring = "";
+    var occasionquerystring = "";
+    var occasionAry = [
+      {
+        name: "Breakfast",
+        value: false,
+      },
+      {
+        name: "Brunch",
+        value: false,
+      },
+      {
+        name: "Buffet",
+        value: false,
+      },
+      {
+        name: "Christmas Party",
+        value: false,
+      },
+      {
+        name: "Dinner",
+        value: false,
+      },
+      {
+        name: "Event",
+        value: false,
+      },
+      {
+        name: "Finger Food",
+        value: false,
+      },
+      {
+        name: "Lunch",
+        value: false,
+      },
+      {
+        name: "Meeting",
+        value: false,
+      },
+      {
+        name: "Office Daily",
+        value: false,
+      },
+      {
+        name: "Wedding",
+        value: false,
+      },
+      {
+        name: "Snacks",
+        value: false,
+      },
+    ];
 
-    const res = await axios.get(`${server}/test/caterer`);
+    if (typeof location !== 'undefined') {
+      locationquerystring = "?location=" + location
+      url = url + locationquerystring
+    }
+
+    if (typeof occasion !== 'undefined') {
+      if (Array.isArray(occasion)) {
+        for(var i = 0; i < occasion.length; i++)
+        {
+          var fixedstr = "&occasion="
+          occasionquerystring = occasionquerystring + fixedstr + occasion[i] 
+
+          for(var x = 0; x < occasionAry.length; x++)
+          {
+            if(occasionAry[x].name === occasion[i])
+            {
+              occasionAry[x].value = true
+            }
+          }
+        }
+        url = url + occasionquerystring
+      }
+      else {
+        for(var i = 0; i < occasionAry.length; i++)
+        {
+          if(occasionAry[i].name === occasion)
+          {
+            occasionAry[i].value = true
+          }
+        }
+
+        occasionquerystring = "&occasion=" + occasion
+        url = url + occasionquerystring
+      }
+    }
+
+    console.log(url)
+    const res = await axios.get(url);
     const data = await res.data;
     console.log(`Show data fetched. Count: ${data.length}`);
     return {
+      locationquerystring: locationquerystring,
+      occasionquerystring: occasionquerystring,
       data: data,
       location: location,
-      occasion: occasion,
+      occasion: occasionAry,
     };
   }
 
@@ -52,6 +137,8 @@ class SearchCaterer extends Component {
       empty: this.props.data.length > 0 ? false : true,
       location: this.props.location,
       occasion: this.props.occasion,
+      occasionquerystring: this.props.occasionquerystring,
+      locationquerystring: this.props.locationquerystring,
     })
   }
 
@@ -69,8 +156,11 @@ class SearchCaterer extends Component {
     super(props);
 
     this.state = {
+      baseurl: "/searchcaterer",
+      locationquerystring: "",
+      occasionquerystring: "",
       location: "",
-      occasion: "",
+      selectedOccasion: null,
       isMobile: false,
       loading: true,
       empty: false,
@@ -110,56 +200,7 @@ class SearchCaterer extends Component {
           value: false,
         },
       ],
-      occasion: [
-        {
-          name: "Breakfast",
-          value: false,
-        },
-        {
-          name: "Brunch",
-          value: false,
-        },
-        {
-          name: "Buffet",
-          value: false,
-        },
-        {
-          name: "Christmas Party",
-          value: false,
-        },
-        {
-          name: "Dinner",
-          value: false,
-        },
-        {
-          name: "Event",
-          value: false,
-        },
-        {
-          name: "Finger Food",
-          value: false,
-        },
-        {
-          name: "Lunch",
-          value: false,
-        },
-        {
-          name: "Meeting",
-          value: false,
-        },
-        {
-          name: "Office Daily",
-          value: false,
-        },
-        {
-          name: "Wedding",
-          value: false,
-        },
-        {
-          name: "Snacks",
-          value: false,
-        },
-      ],
+      occasion: null,
       caterer: [
         /*{
           name: "Flannery Restaurant & Pub",
@@ -260,6 +301,7 @@ class SearchCaterer extends Component {
 
   componentDidMount() {
   //  this.getDataFromDb();
+
     var currentDate = moment().toDate();
     this.setState({
       maxDate: currentDate,
@@ -287,6 +329,8 @@ class SearchCaterer extends Component {
         caterer: this.props.data,
         empty: this.props.data.length > 0 ? false : true,
         location: this.props.location,
+        locationquerystring: this.props.locationquerystring,
+        occasionquerystring: this.props.occasionquerystring
       });
     });
 
@@ -311,11 +355,44 @@ class SearchCaterer extends Component {
     });
   };
 
+  findOccasionIndex = () => {
+    var selectedOccasion = this.state.selectedOccasion
+    alert(selectedOccasion)
+    var occasion = this.state.occasion.slice()
+
+    if (Array.isArray(selectedOccasion)) {
+      for(var x = 0; x < selectedOccasion.length; x++)
+      {
+        for(var i = 0; i < occasion.length; i++)
+        {
+          if(occasion[i].name === selectedOccasion[x])
+          {
+            occasion[i].value = true
+          }
+        }
+      }
+    }
+    else {
+      for(var i = 0; i < occasion.length; i++)
+      {
+        if(occasion[i].name === selectedOccasion)
+        {
+          occasion[i].value = true
+        }
+      }
+    }
+
+    this.setState({
+      occasion,
+    })
+
+  }
+
   signIn(e) {
     e.preventDefault()
     Router.push({
       pathname: '/login',
-      query: {'returnurl': `/searchcaterer/${this.state.location}/${this.state.occasion}`}
+      query: {'returnurl': `/searchcaterer?${this.state.locationquerystring}${this.state.occasionquerystring}`}
     })
   }
 
@@ -343,23 +420,20 @@ class SearchCaterer extends Component {
 
   saveAddress = () => {
     var address = this.state.address
-    var url;
-    var asurl;
     if (address != "") {
       var city = address.address_components[1].long_name
-      url = `/searchcaterer?location=${city}&occasion=All`;
-      asurl = `/searchcaterer?location=${city}&occasion=All`;
+      var url = this.state.baseurl;
+      var locationquerystring = "?location=" + city;
+      var occasionquerystring = this.state.occasionquerystring;
+      url = url + locationquerystring + occasionquerystring
+      alert(url)
+      this.setState({
+        dropDownAddress: ! this.state.dropDownAddress,
+        loading: true,
+      },() => {
+        Router.replace(url)
+      })
     }
-    else {
-      url = `/searchcaterer?location=Dublin&occasion=All`;
-      asurl = `/searchcaterer?location=Dublin&occasion=All`;
-    }
-    this.setState({
-      dropDownAddress: ! this.state.dropDownAddress,
-      loading: true,
-    },() => {
-      Router.replace(url, asurl)
-    })
   };
 
   navItemClicked = selectedCuisine => {
@@ -388,6 +462,7 @@ class SearchCaterer extends Component {
   };
 
   handleCheckBoxChange = (index, statename, event) => {
+
     var newArray = this.state[statename]
 
     if (newArray[index].value) {
@@ -396,8 +471,36 @@ class SearchCaterer extends Component {
     else {
       newArray[index].value = true
     }
-    this.setState({ [statename]: newArray });
+   
+    this.setState(
+      { 
+        [statename]: newArray 
+      }, () => {
+        if (statename === "occasion") {
+          this.handleOccasionUrlChange()
+        }
+      }
+    )
   };
+
+  handleOccasionUrlChange = () => {
+    var url = this.state.baseurl;
+    var locationquerystring = this.state.locationquerystring;
+    var occasionquerystring = "";
+    var selectedArray = this.state.occasion;
+
+    for(var i = 0; i < selectedArray.length; i++)
+    {
+      if(selectedArray[i].value == true)
+      {
+        var fixedstr = "&occasion="
+        occasionquerystring = occasionquerystring + fixedstr + selectedArray[i].name 
+      }
+    }
+    url = url + locationquerystring + occasionquerystring
+    Router.replace(url)
+  //  window.location.assign(`${server}${url}`);
+  }
 
   handleDateChange(date){
 		this.setState({ 
@@ -1003,20 +1106,43 @@ class SearchCaterer extends Component {
             <Col xs="8">
               <FormGroup>
                 <h6>Delivered To</h6>
-                <AutoCompleteAddress 
-                  borderTopRightRadius={5}
-                  borderBottomRightRadius = {5}
-                  borderTopLeftRadius={5}
-                  borderBottomLeftRadius={5}
-                  borderColor = 'rgba(211,211,211, 0.5)'
-                  paddingLeft = {10}
-                  paddingRight = {10}
-                  paddingTop = {5}
-                  paddingBottom = {5}
-                  fontSize = {15}
-                  color = 'black'
-                  height = {40}
-                  onPlaceChanged={this.showPlaceDetails.bind(this)} />
+                <UncontrolledDropdown isOpen={this.state.dropDownAddress}  toggle={() => this.toggleDropDownAddress()}>
+                  <DropdownToggle
+                    style={{
+                      height: 40,
+                      width: '100%',
+                      color: "rgba(0,0,0, 0.5)",
+                      borderColor: "rgba(211,211,211, 0.5)",
+                      backgroundColor: "white",
+                    }}
+                    caret
+                  >
+                  <Label style={{ cursor: 'pointer', fontSize: 15, paddingLeft:5, textAlign:'start', color: this.state.location === "" ? 'gray' : 'black', height:12, width: '98%'}}>{this.state.location}</Label> 
+                  </DropdownToggle>
+                  <DropdownMenu style={{width: '100%'}}>
+                    <Row style={{width: '100%'}}>
+                      <Col style={{paddingRight: 0}} xs="10">
+                        <AutoCompleteAddress 
+                          borderTopRightRadius={5}
+                          borderBottomRightRadius = {5}
+                          borderTopLeftRadius={5}
+                          borderBottomLeftRadius={5}
+                          borderColor = 'rgba(211,211,211, 0.5)'
+                          paddingLeft = {10}
+                          paddingRight = {10}
+                          paddingTop = {5}
+                          paddingBottom = {5}
+                          fontSize = {15}
+                          color = 'black'
+                          height = {40}
+                          onPlaceChanged={this.showPlaceDetails.bind(this)} />
+                      </Col>
+                      <Col xs="2">
+                        <Button onClick={() => this.saveAddress()} style={{ height: '100%'}} className="bg-primary" color="primary">Save</Button>
+                      </Col>
+                    </Row>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
               </FormGroup>
             </Col>
             <Col xs="4">

@@ -11,17 +11,23 @@ router.get('/getcaterer', (req, res) => {
 	
 	console.log(req.query.occasion)
 	console.log(req.query.cuisine)
+
+	if (typeof req.query.location !== 'undefined') 
+	{
+		matchquery.catererCounty = req.query.location
+		console.log('matchquery 1 = ', JSON.stringify(matchquery))
+	}
 	
 	if (typeof req.query.occasion !== 'undefined') 
 	{
 		matchquery.catererOccasion = { $in: req.query.occasion }
-		console.log('matchquery 1 = ', JSON.stringify(matchquery))
+		console.log('matchquery 2 = ', JSON.stringify(matchquery))
 	}
 	
 	if (typeof req.query.cuisine !== 'undefined')
 	{
 		matchquery.catererCuisine = { $in: req.query.cuisine }
-		console.log('matchquery 2 = ', JSON.stringify(matchquery))
+		console.log('matchquery 3 = ', JSON.stringify(matchquery))
 	}
 	
 	if (typeof req.query.price_lt !== 'undefined')
@@ -41,7 +47,7 @@ router.get('/getcaterer', (req, res) => {
 		//matchquery.dietaryconcern = req.query.dietaryconcern
 	}
 
-    console.log('matchquery 3 = ', JSON.stringify(matchquery))
+    console.log('matchquery 4 = ', JSON.stringify(matchquery))
 	
 	Caterer.find( matchquery , (err,doc) => {
         if (err) return res.status(500).send({ error: err });

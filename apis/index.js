@@ -3,6 +3,7 @@ export default {
 
     /*Caterer API*/
     GETcatererprofile: "/caterer/getcatererprofile",
+    GETcaterer: "/caterer/getcaterer",
 
     /*Menu API*/
     GETmenu: "/menu/getmenu",

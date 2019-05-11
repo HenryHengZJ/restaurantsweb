@@ -58,6 +58,14 @@ class Register extends Component {
                         </InputGroupAddon>
                         <Input type="text" placeholder="Email" autoComplete="email" />
                       </InputGroup>
+                       <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <a style={{color: 'gray', marginLeft: 2.5, marginRight: 2}} className="fa fa-phone"></a>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="text" placeholder="Phone Number" autoComplete="phonenumber" />
+                      </InputGroup>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
