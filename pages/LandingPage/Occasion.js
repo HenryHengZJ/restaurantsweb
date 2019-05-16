@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Row, Col, Card, CardBody } from 'reactstrap';
 import './styles.css'
 import img from "../../assets/img"
+import Router from 'next/router'
 
 class Occasion extends Component {
 
@@ -20,7 +21,7 @@ class Occasion extends Component {
           hover: false,
         },
         {
-          title: 'Events',
+          title: 'Event',
           src: img.landingpage_events,
           descrip: 'Choose your ideal food catering service for different types of occasions.',
           hover: false,
@@ -38,7 +39,7 @@ class Occasion extends Component {
           hover: false,
         },
         {
-          title: 'Buffets',
+          title: 'Buffet',
           src: img.landingpage_buffet,
           descrip: 'Order your perfect buffets choice according to your budgets, headcounts, etc.',
           hover: false,
@@ -53,9 +54,8 @@ class Occasion extends Component {
     }
   }
 
-  handleSelectedCardClick(index) {
-
-  
+  handleSelectedCardClick = (title) => {
+    Router.push(`/searchcaterer?location=County%20Limerick&occasion=${title}`)
   }
 
   toggle(index) {
@@ -73,7 +73,7 @@ class Occasion extends Component {
     for(let i = 0; i < occasions.length; i++){
       itemsarray.push(
         <Col key={i} xs="12" sm="6" md="6" lg="4">
-          <Card onMouseEnter={() => this.toggle(i)} onMouseLeave={() => this.toggle(i)} style={{cursor: 'pointer', marginTop:0,  boxShadow: 'none', borderWidth: 0}}  onClick={() => this.handleSelectedCardClick(i)}>
+          <Card onMouseEnter={() => this.toggle(i)} onMouseLeave={() => this.toggle(i)} style={{cursor: 'pointer', marginTop:0,  boxShadow: 'none', borderWidth: 0}}  onClick={() => this.handleSelectedCardClick(occasions[i].title)}>
             <CardBody style={{position:'relative', padding: 0}}>
               <img style={ { objectFit:'cover', width: '100%', height: 220 }} src={occasions[i].src}  />
               <div style={{ backgroundColor: 'black', opacity: occasions[i].hover ? 0.1 : 0.3, position: 'absolute', top: 0, left: 0, width: '100%', height: 220}}> </div> 

@@ -4,6 +4,7 @@ export default {
     /*Caterer API*/
     GETcatererprofile: "/caterer/getcatererprofile",
     GETcaterer: "/caterer/getcaterer",
+    POSTnewcaterersignup: "/newcaterer/newcaterersignup",
 
     /*Menu API*/
     GETmenu: "/menu/getmenu",
@@ -16,8 +17,6 @@ export default {
     /*Auth API*/
     POSTcustomerlogin: "/auth/customerlogin",
     GETcustomerlogout: "/auth/logout",
-    GETcustomerstatus: "/auth/checkstatus"
-
 
   };
 

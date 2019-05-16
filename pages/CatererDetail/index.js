@@ -837,6 +837,11 @@ class CatererDetail extends Component {
         cartloading: false
       })
     }
+    else {
+      this.setState({
+        cartloading: false
+      })
+    }
   }
 
   addToLocalStorage = () => {

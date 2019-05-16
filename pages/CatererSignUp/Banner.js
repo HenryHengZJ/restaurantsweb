@@ -13,11 +13,16 @@ import {
   DropdownItem,
   DropdownMenu,
   Card,
-  CardBody
+  CardBody,
+  Modal,
+  ModalBody,
+  ModalHeader
 } from "reactstrap";
 import "./styles.css";
 import PropTypes from "prop-types";
 import img from "../../assets/img"
+import axios from "axios";
+import apis from "../../apis";
 
 const propTypes = {
   children: PropTypes.node
@@ -47,7 +52,10 @@ class Banner extends React.Component {
       isEmailEmpty: false,
       restaurantPhoneNumber: "",
       isPhoneNumberEmpty: false,
-      isMobile: false
+      isMobile: false,
+      isModalOpen: false,
+      enquiryStatus: null,
+      getStarting: false,
     };
   }
 
@@ -79,7 +87,11 @@ class Banner extends React.Component {
   handleRestaurantPhoneNumber(e) {
     if (isNaN(e.target.value)) {
       //Letters
-    } else {
+    } 
+    else if (e.target.value.includes("+") || e.target.value.includes("-") || e.target.value.includes(".")) {
+      //Letters
+    }
+    else {
       //Valid Number
       this.setState({
         restaurantPhoneNumber: e.target.value,
@@ -107,6 +119,24 @@ class Banner extends React.Component {
     return regexp.test(String(email).toLowerCase());
   }
 
+  validatePhoneNumber (phone) {
+    var returnval;
+    if (phone.length === 10) {
+      returnval = true
+    }
+    else {
+      returnval = false
+    }
+    return returnval
+  }
+
+  toggleModal = (status) => {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen,
+      enquiryStatus: status
+    })
+  }
+
   onGetStartedClick = () => {
     const {
       restaurantName,
@@ -126,12 +156,96 @@ class Banner extends React.Component {
       this.setState({
         isEmailEmpty: true
       });
-    } else if (restaurantPhoneNumber === "") {
+    } else if ((restaurantPhoneNumber === "") || !this.validatePhoneNumber(restaurantPhoneNumber)) {
       this.setState({
         isPhoneNumberEmpty: true
       });
+    } else {
+
+      this.setState({
+        getStarting: true,
+      })
+      
+      var headers = {
+        'Content-Type': 'application/json',
+      }
+
+      var body = {
+        catererName: restaurantName,
+        catererEmail: restaurantEmail,
+        catererPhoneNumber: restaurantPhoneNumber,
+        catererAddress: restaurantAddress
+      }
+  
+      var url = apis.POSTnewcaterersignup;
+
+      axios.post(url, body, {headers: headers})
+        .then((response) => {
+          if (response.status === 200) {
+            this.toggleModal("Success")
+            this.setState({
+              restaurantName: "",
+              isNameEmpty: false,
+              restaurantAddress: "",
+              isAddressEmpty: false,
+              restaurantEmail: "",
+              isEmailEmpty: false,
+              restaurantPhoneNumber: "",
+              isPhoneNumberEmpty: false,
+              getStarting: false,
+            })
+          } 
+        })
+        .catch((error) => {
+          if (error) {
+            this.toggleModal("Failed")
+            this.setState({
+              restaurantName: "",
+              isNameEmpty: false,
+              restaurantAddress: "",
+              isAddressEmpty: false,
+              restaurantEmail: "",
+              isEmailEmpty: false,
+              restaurantPhoneNumber: "",
+              isPhoneNumberEmpty: false,
+              getStarting: false,
+            })
+          } 
+        }); 
     }
   };
+
+  renderSuccessModal() {
+    return (
+      <Modal isOpen={this.state.isModalOpen} toggle={() => this.toggleModal()}>
+        <ModalHeader toggle={() => this.toggleModal()}>Enquiry Sent</ModalHeader>
+        <ModalBody>
+          <div style={{ textAlign: 'center' }} >
+           <img style={{ objectFit:'cover', width: 50, height: 50 }} src={"https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/checked.png"}  />
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <p>Thank you for your interest in FoodieBee. We are now processing your enquiry and will get back to you as soon as we can. </p>
+          </div>
+        </ModalBody>
+      </Modal>
+    )
+  }
+
+  renderFailedModal() {
+    return (
+      <Modal isOpen={this.state.isModalOpen} toggle={() => this.toggleModal()}>
+        <ModalHeader toggle={() => this.toggleModal()}>Enquiry Failed to Send</ModalHeader>
+        <ModalBody>
+          <div style={{ textAlign: 'center' }} >
+            <img style={{objectFit:'cover', width: 50, height: 50 }} src={"https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/cancel.png"}  />
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <p>Unfortunately, your enquiry has failed to send. Please try again.</p>
+          </div>
+        </ModalBody>
+      </Modal>
+    )
+  }
 
   render() {
     const { isMobile } = this.state;
@@ -215,21 +329,23 @@ class Banner extends React.Component {
                     placeholder="Owner phone number"
                     invalid={this.state.isPhoneNumberEmpty ? true : false}
                   />
-                  <FormFeedback>Please enter owner phone number</FormFeedback>
+                  <FormFeedback>Please enter owner phone number. Phone numbers should be 10 digits</FormFeedback>
                 </FormGroup>
                 <Button
                   style={{ marginTop: 30, paddingTop: 10, paddingBottom: 10 }}
                   color="primary"
                   block
+                  disabled={this.state.getStarting ? true : false}
                   onClick={() => this.onGetStartedClick()}
                 >
-                  Get Started
+                  {this.state.getStarting ? "Sending" : "Get Started"}
                 </Button>
               </CardBody>
             </Card>
           </Col>
           {isMobile ? null : <Col xs="1" />}
         </Row>
+        {this.state.enquiryStatus === "Success" ? this.renderSuccessModal() : this.state.enquiryStatus === "Failed" ? this.renderFailedModal() : null}
       </section>
     );
   }

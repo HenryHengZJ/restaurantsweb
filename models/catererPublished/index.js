@@ -14,6 +14,7 @@ var openingHoursSchema = mongoose.Schema({
 var catererSchema = mongoose.Schema({
 	catererName: String,
     catererDescrip: String,
+    catererPhoneNumber: String,
     catererAddress: String,
     catererFullAddress: String,
     catererCity: String,
@@ -59,6 +60,7 @@ catererSchema.methods.toAuthJSON = function() {
     _id			 		: this._id,
 	catererName			: this.catererName,
     catererDescrip		: this.catererDescrip,
+    catererPhoneNumber  : this.catererPhoneNumber,
     catererAddress		: this.catererAddress,
     catererFullAddress  : this.catererFullAddress,
     catererCity			: this.catererCity,

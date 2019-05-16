@@ -48,25 +48,18 @@ nextApp.prepare().then(() => {
 	var customerRoutes   = require('./routes/customer');
 	var menuPublishedRoutes   = require('./routes/menuPublished');
 	var cartRoutes   = require('./routes/cart');
-	
+  var newCatererRoutes   = require('./routes/newcaterer');
+
 	// routes ======================================================================
 	app.use('/test', testRoutes);
   app.use('/auth', authRoutes);
 	app.use('/caterer', catererPublishedRoutes);
 	app.use('/customer', customerRoutes);
 	app.use('/menu', menuPublishedRoutes);
-	app.use('/cart', cartRoutes);
+  app.use('/cart', cartRoutes);
+  app.use('/newcaterer', newCatererRoutes);
 
   app.get('/searchcaterer', (req,res) => {
-    /*var location = "";
-    var occasion = "" ;
-    if (req.query.location) {
-      location = req.query.location
-    }
-    if (req.query.occasion) {
-      occasion = req.query.occasion
-    }*/
-   // console.log(req.params.location)
     return nextApp.render(req, res, '/SearchCaterer',  req.query )
   })  
 
@@ -101,19 +94,6 @@ nextApp.prepare().then(() => {
   app.get('*', (req,res) => {
     return handle(req,res) // for all the react stuff
   })  
-
-  app.get('/checkLoggedIn',
-    passport.authenticate('jwt', {session: false, failWithError: true}),
-    function(req, res, next) {
-      // Handle success
-      const { user } = req;
-      return res.status(200).json(user);
-    },
-    function(err, req, res, next) {
-      // Handle error
-      return res.status(401).send({ error: err });
-    }
-  )
 
   //start server
   app.listen(port, (req, res) => {
