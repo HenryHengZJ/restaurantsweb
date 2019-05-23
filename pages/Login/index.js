@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import  Link  from 'next/link';
 import Head from 'next/head';
 import Router from 'next/router'
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Label, Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
@@ -33,6 +33,7 @@ class Login extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
  
     this.state = {
+      invalidUser: false,
       useremail: "",
       userpassword: "",
       returnurl: "",
@@ -47,24 +48,21 @@ class Login extends Component {
   }
 
   handleEmailChange(e) {
-    this.setState({ useremail: e.target.value });
+    this.setState({ useremail: e.target.value, invalidUser: false });
   }
 
   handlePasswordChange(e) {
-    this.setState({ userpassword: e.target.value });
+    this.setState({ userpassword: e.target.value, invalidUser: false });
   }
 
   login = (e) => {
     e.preventDefault()
 
     const {userpassword, useremail, } = this.state;
-    if (useremail === 'user' && userpassword === '12345') {
-
-    }
 
     var data = {
-      email: "lala@gg.com",
-      password: "1234567"
+      email: useremail,
+      password: userpassword
     }
 
     var headers = {
@@ -76,9 +74,6 @@ class Login extends Component {
     axios.post(url, data, {withCredentials: true}, {headers: headers})
       .then((response) => {
         if (response.status === 200) {
-         // alert(JSON.stringify(response.data))
-          var userID = response.data.userID
-        //  Router.push(`/userprofile/Account%20Info`, `/userprofile/Account%20Info`)
           if (typeof this.state.returnurl === 'undefined') {
             window.location.assign(`${server}/`);
           }
@@ -88,7 +83,9 @@ class Login extends Component {
         }
       })
       .catch((error) => {
-        alert("error login! " + error)
+        this.setState({
+          invalidUser: true
+        })
       });
     
   }
@@ -97,6 +94,13 @@ class Login extends Component {
     e.preventDefault()
     Router.push({
       pathname: '/caterersignup'
+    })
+  }
+
+  forgotpasswordClicked = (e) => {
+    e.preventDefault()
+    Router.push({
+      pathname: '/forgotpassword'
     })
   }
 
@@ -135,12 +139,13 @@ class Login extends Component {
                         </InputGroupAddon>
                         <Input value={this.state.userpassword} onChange={(e) => this.handlePasswordChange(e)} type="password" placeholder="Password" autoComplete="current-password" />
                       </InputGroup>
+                      {this.state.invalidUser ? <Label style={{color: 'red', marginBottom: 20, fontSize: 13}}>Invalid email / password</Label> : null }
                       <Row>
                         <Col xs="6" md="6">
                           <Button style={{backgroundColor: '#20a8d8'}} onClick={e => this.login(e)} color="primary" className="px-4">Login</Button>
                         </Col>
                         <Col xs="6" md="6" >
-                          <Button style={{boxShadow: 'none', background: 'none', fontWeight: '500'}} color="link" className="px-4">Forgot password?</Button>
+                          <Button onClick={e => this.forgotpasswordClicked(e)} style={{boxShadow: 'none', background: 'none', fontWeight: '500'}} color="link" className="px-4">Forgot password?</Button>
                         </Col>
                       </Row>
                     </Form>

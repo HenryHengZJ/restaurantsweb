@@ -23,8 +23,8 @@ smtpTransport = nodemailer.createTransport(smtpTransport({
    // secure: mailConfig.secure,
   //  port: mailConfig.port,
     auth: {
-        user: '24hiresmy@gmail.com',
-        pass: 'Getsthejobdone!'
+        user: 'foodiebeeie@gmail.com',
+        pass: 'Welovetoeat!'
     }
 }));
 
@@ -38,7 +38,7 @@ exports.sendWelcomeEmail = function (path, sendtoemail) {
         };
         var htmlToSend = template(replacements);
         var mailOptions = {
-            from: '24hiresmy@gmail.com',
+            from: 'foodiebeeie@gmail.com',
             to : sendtoemail,
             subject : 'Welcome to FoodieBee',
             html : htmlToSend
@@ -59,7 +59,7 @@ exports.sendNewCatererRegisterEmail = function (path, sendtoemail) {
         };
         var htmlToSend = template(replacements);
         var mailOptions = {
-            from: '24hiresmy@gmail.com',
+            from: 'foodiebeeie@gmail.com',
             to : sendtoemail,
             subject : 'Welcome to FoodieBee',
             html : htmlToSend
@@ -97,7 +97,7 @@ exports.sendNewCatererRegisterAdminEmail = function (path, body) {
             };
             var htmlToSend = template(replacements);
             var mailOptions = {
-                from: '24hiresmy@gmail.com',
+                from: 'foodiebeeie@gmail.com',
                 to : finalEmailArray,
                 subject : 'NewCaterer to FoodieBee',
                 html : htmlToSend
@@ -112,6 +112,67 @@ exports.sendNewCatererRegisterAdminEmail = function (path, body) {
 
        // return res.status(200).json(admin);
       });
+}
 
-    
+exports.sendCustomerMessageEmail = function (path, body) {
+
+    Admin.find( (err,admin) => {
+        if (err) return res.send(err);
+		var emailArray = [];
+		
+		for(var i = 0; i < admin.length;i++){
+			 emailArray.push(admin[i].adminEmail)
+		}
+
+        var finalEmailArray = JSON.stringify(emailArray).replace("[", "").replace("]", "")
+
+        readHTMLFile(__dirname + path, function(err, html) {
+            var template = handlebars.compile(html);
+            var replacements = {
+                email    	: body.email,
+                message	 	 	: body.message,
+            };
+            var htmlToSend = template(replacements);
+            var mailOptions = {
+                from: 'foodiebeeie@gmail.com',
+                to : finalEmailArray,
+                subject : 'New Message',
+                html : htmlToSend
+             };
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+                if (error) {
+                    console.log(error);
+                    callback(error);
+                }
+            });
+        });
+
+       // return res.status(200).json(admin);
+      });
+}
+
+
+exports.sendResetPasswordEmail = function (path, sendtoemail, resetlink) {
+    readHTMLFile(__dirname + path, function(err, html) {
+        var template = handlebars.compile(html);
+        var replacements = {
+            resetlink: resetlink
+        };
+        var htmlToSend = template(replacements);
+        var mailOptions = {
+            from: 'foodiebeeie@gmail.com',
+            to : sendtoemail,
+            subject : 'Password Reset',
+            html : htmlToSend
+         };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+            if (error) {
+                console.log(error);
+                callback(error);
+            }
+            else {
+                console.log(response);
+            }
+        });
+    });
 }

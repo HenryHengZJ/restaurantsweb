@@ -1,13 +1,15 @@
 
 export default {
 
-    /*Caterer API*/
-    GETcatererprofile: "/caterer/getcatererprofile",
-    GETcaterer: "/caterer/getcaterer",
-    POSTnewcaterersignup: "/newcaterer/newcaterersignup",
+    /*Published Caterer API*/
+    GETcatererprofile: "/catererPublished/getcatererprofile",
+    GETcaterer: "/catererPublished/getcaterer",
+
+     /*Caterer API*/
+    POSTnewcaterersignup: "/caterer/newcaterersignup",
 
     /*Menu API*/
-    GETmenu: "/menu/getmenu",
+    GETmenu: "/menuPublished/getmenu",
 
     /*Cart API*/
     GETcart: "/cart/getcart",
@@ -17,6 +19,12 @@ export default {
     /*Auth API*/
     POSTcustomerlogin: "/auth/customerlogin",
     GETcustomerlogout: "/auth/logout",
+    POSTpasswordreset: "/auth/resetpassword",
+    GETresetpassword: '/auth/getresetpassword',
+    PUTupdatepassword: '/auth/updatepassword',
+
+    /*Report & Message API*/
+    POSTcustomermessage: "/postmessage"
 
   };
 

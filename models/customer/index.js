@@ -15,6 +15,16 @@ var customerSchema = mongoose.Schema({
     customerCounty: String,
     customerCountry: String,
     customerOrderID: [String],
+    status: {
+        type: String,
+        default: "new"
+    },
+    statusUpdated: {
+        type : Date, 
+        default: Date.now
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 }, {
     timestamps: true
 });
@@ -35,24 +45,6 @@ customerSchema.methods.generateJWT = function() {
     id: this._id,
   }, 'FoodieBeeSecretKey', {expiresIn: '24h'} );
 }
-
-customerSchema.methods.toAuthJSON = function() {
-  return {
-    _id			 		: this._id,
-    customerFirstName   : this.customerFirstName,
-	customerLastName   : this.customerLastName,
-    customerEmail       : this.customerEmail,
-	customerPassword    : this.customerPassword,
-    customerPhoneNumber : this.customerPhoneNumber,
-    customerAddress     : this.customerAddress,
-    customerCity        : this.customerCity,
-    customerCounty      : this.customerCounty,
-    customerCountry     : this.customerCountry,
-    customerOrderID     : this.customerOrderID,
-	token		 		: this.generateJWT(),
-  };
-};
-
 
 //Connect to specific database
 const db = mongoose.connection.useDb('foodiebee');

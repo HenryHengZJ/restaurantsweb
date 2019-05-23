@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var newCaterer = require('../../models/newCaterer');
+var Caterer = require('../../models/caterer');
 var mail = require('../../nodeMailerWithTemp');
 
 router.post('/newcaterersignup', (req, res) => {
 	
     var email = req.body.catererEmail.toLowerCase();
 
-	newCaterer.findOne({ 'newCatererEmail' :  email }, function(err, caterer) {
+	Caterer.findOne({ 'catererEmail' :  email }, function(err, caterer) {
 		// if there are any errors, return the error
 		if (err) {
 			return res.status(404).json({
@@ -22,11 +22,7 @@ router.post('/newcaterersignup', (req, res) => {
 		} 
 		else {
 			// create the customer
-			var newCatererDetails = new newCaterer();
-			newCatererDetails.catererEmail    	     	 = email;
-			newCatererDetails.catererName	 	 		 = req.body.catererName;
-            newCatererDetails.catererPhoneNumber    	 = req.body.catererPhoneNumber;
-            newCatererDetails.catererAddress        	 = req.body.catererAddress;
+			var newCatererDetails = new Caterer(req.body);
 			newCatererDetails.save().then(() =>
 			{
 				mail.sendNewCatererRegisterEmail('/templates/newcatererregister/email.html', email);

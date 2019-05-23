@@ -174,7 +174,9 @@ class Banner extends React.Component {
         catererName: restaurantName,
         catererEmail: restaurantEmail,
         catererPhoneNumber: restaurantPhoneNumber,
-        catererAddress: restaurantAddress
+        catererFullAddress: restaurantAddress,
+        catererCountry: "Ireland",
+        catererCountryCode: "+353"
       }
   
       var url = apis.POSTnewcaterersignup;

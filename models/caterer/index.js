@@ -12,6 +12,9 @@ var openingHoursSchema = mongoose.Schema({
 
 // define the schema for our catererSchema model
 var catererSchema = mongoose.Schema({
+	catererEmail: String,
+    catererPassword: String,
+    catererRegistrationNumber: String,
 	catererName: String,
     catererDescrip: String,
     catererPhoneNumber: String,
@@ -23,7 +26,7 @@ var catererSchema = mongoose.Schema({
     catererCountryCode: String,
     catererCuisine: [String],
     catererOccasion: [String],
-	catererDietaryConcern: [String],
+    catererDietaryConcern: [String],
     catererPickup: Boolean,
 	catererDelivery: Boolean,
 	location: { type: {type:String}, coordinates: [Number]},
@@ -53,14 +56,32 @@ var catererSchema = mongoose.Schema({
     statusUpdated: {
         type : Date, 
         default: Date.now
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 }, {
     timestamps: true
 });
 
+// generating a hash
+catererSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+catererSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.catererPassword);
+};
+
+catererSchema.methods.generateJWT = function() {
+  return jwt.sign({
+    catererEmail: this.catererEmail,
+    id: this._id,
+  }, 'foodiebeecaterer', {expiresIn: '24h'} );
+}
 
 //Connect to specific database
 const db = mongoose.connection.useDb('foodiebee');
 
 // create the model
-module.exports = db.model('catererPublished', catererSchema, 'catererPublished');
+module.exports = db.model('caterer', catererSchema, 'caterer');

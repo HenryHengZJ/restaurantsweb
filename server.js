@@ -1,6 +1,5 @@
 // set up ===============================================================
 require('dotenv').config()
-require('newrelic');
 const express = require('express');
 const path = require('path');
 const port = process.env.PORT || 5000;
@@ -14,6 +13,7 @@ const handle = nextApp.getRequestHandler() //part of next config
 var cors = require('cors');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+var mail = require('./nodeMailerWithTemp');
 require('./middleware/passport')(passport);
 
 // DB configuration ===============================================================
@@ -44,21 +44,27 @@ nextApp.prepare().then(() => {
   // router files ===============================================================
 	var testRoutes   = require('./routes/test');
 	var authRoutes   = require('./routes/auth');
-	var catererPublishedRoutes   = require('./routes/catererPublished');
+  var catererPublishedRoutes   = require('./routes/catererPublished');
+  var catererRoutes   = require('./routes/caterer');
 	var customerRoutes   = require('./routes/customer');
 	var menuPublishedRoutes   = require('./routes/menuPublished');
 	var cartRoutes   = require('./routes/cart');
-  var newCatererRoutes   = require('./routes/newcaterer');
 
 	// routes ======================================================================
 	app.use('/test', testRoutes);
   app.use('/auth', authRoutes);
-	app.use('/caterer', catererPublishedRoutes);
+  app.use('/catererPublished', catererPublishedRoutes);
+  app.use('/caterer', catererRoutes);
 	app.use('/customer', customerRoutes);
-	app.use('/menu', menuPublishedRoutes);
+	app.use('/menuPublished', menuPublishedRoutes);
   app.use('/cart', cartRoutes);
-  app.use('/newcaterer', newCatererRoutes);
 
+  app.post('/postmessage', (req,res) => {
+    var bodymsg = req.body
+    mail.sendCustomerMessageEmail('/templates/customer_message/email.html', bodymsg);
+    res.status(200).json({});
+  })  
+ 
   app.get('/searchcaterer', (req,res) => {
     return nextApp.render(req, res, '/SearchCaterer',  req.query )
   })  
@@ -90,6 +96,22 @@ nextApp.prepare().then(() => {
   app.get('/userprofile/:userprofilepage', (req,res) => {
     return nextApp.render(req, res, '/UserProfile', { userprofilepage: req.params.userprofilepage })
   }) 
+
+  app.get('/forgotpassword', (req,res) => {
+    return nextApp.render(req, res, '/ForgotPassword')
+  })  
+
+  app.get('/resetpassword/:resetPasswordToken', (req,res) => {
+    return nextApp.render(req, res, '/ResetPassword',  { resetPasswordToken: req.params.resetPasswordToken } )
+  })  
+
+  app.get('/aboutus', (req,res) => {
+    return nextApp.render(req, res, '/AboutUs')
+  })  
+
+  app.get('/contactus', (req,res) => {
+    return nextApp.render(req, res, '/ContactUs')
+  })  
 
   app.get('*', (req,res) => {
     return handle(req,res) // for all the react stuff

@@ -748,7 +748,7 @@ class CatererDetail extends Component {
     var cartTotalPrice = 0;
     for (let i = 0; i < cartitem.length; i++) { 
       var index = fetchedmenu.findIndex(x => x._id===cartitem[i].menuID);
-      if (index > 0) {
+      if (index >= 0) {
         var singlemenuprice = fetchedmenu[index].priceperunit
         var quantitychosen = cartitem[i].quantity
         cartTotalPrice =  cartTotalPrice + (quantitychosen * singlemenuprice);
@@ -907,7 +907,6 @@ class CatererDetail extends Component {
 
     axios.put(url, cartReadyToOrder, {withCredentials: true}, {headers: headers})
       .then((response) => {
-      
         if (response.status === 201) {
           this.toggleMenuModal()
           this.getCustomerCart()

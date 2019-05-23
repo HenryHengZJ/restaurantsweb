@@ -28,7 +28,10 @@ var menuSchema = mongoose.Schema({
 	markitem: [String],
 	priceperunit: Number,
 	selection: [selectionSchema],
-	soldamount: Number,
+	soldamount: {
+        type: Number,
+        default: 0
+    },
 	src: String,
 });
 

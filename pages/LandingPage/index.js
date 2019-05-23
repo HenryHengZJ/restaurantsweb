@@ -16,7 +16,6 @@ class LandingPage extends Component {
     e.preventDefault()
     Router.push({
       pathname: '/login',
-      query: {'returnurl': `/`}
     })
   }
 

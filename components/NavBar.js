@@ -50,6 +50,15 @@ class NavBar extends Component {
     });
   }
 
+  aboutUsClicked = () => {
+    Router.push(`/aboutus`)
+  }
+
+  contactUsClicked = () => {
+    Router.push(`/contactus`)
+  }
+
+
   navItemClicked = (selectedMenu) => {
     if(selectedMenu === "Log Out") {
      
@@ -100,10 +109,10 @@ class NavBar extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink style={{ color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href="">About Us</NavLink>
+                <NavLink onClick={e => this.aboutUsClicked(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">About Us</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink style={{ color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} href= "" target="_blank">Contact</NavLink>
+                <NavLink onClick={e => this.contactUsClicked(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Contact</NavLink>
               </NavItem>
               {!this.state.signInHide ?
               <NavItem>
