@@ -28,13 +28,36 @@ smtpTransport = nodemailer.createTransport(smtpTransport({
     }
 }));
 
-exports.sendWelcomeEmail = function (path, sendtoemail) {
+exports.sendWelcomeEmail = function (path, body, password) {
+    console.log(password)
+    console.log(body.catererEmail)
     readHTMLFile(__dirname + path, function(err, html) {
         var template = handlebars.compile(html);
         var replacements = {
-             username: "Henry Heng",
+             useremail: body.catererEmail,
+             userpassword: password
+        };
+        var htmlToSend = template(replacements);
+        var mailOptions = {
+            from: 'foodiebeeie@gmail.com',
+            to : body.catererEmail,
+            subject : 'Welcome to FoodieBee',
+            html : htmlToSend
+         };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+            if (error) {
+                console.log(error);
+                callback(error);
+            }
+        });
+    });
+}
+
+exports.sendRejectedEmail = function (path, sendtoemail) {
+    readHTMLFile(__dirname + path, function(err, html) {
+        var template = handlebars.compile(html);
+        var replacements = {
              useremail: sendtoemail,
-             userpassword: "894jgnOSDF"
         };
         var htmlToSend = template(replacements);
         var mailOptions = {

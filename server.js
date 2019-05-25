@@ -61,7 +61,7 @@ nextApp.prepare().then(() => {
 
   app.post('/postmessage', (req,res) => {
     var bodymsg = req.body
-    mail.sendCustomerMessageEmail('/templates/customer_message/email.html', bodymsg);
+    mail.sendCustomerMessageEmail('/templates/customer_message_admin/email.html', bodymsg);
     res.status(200).json({});
   })  
  
@@ -111,6 +111,14 @@ nextApp.prepare().then(() => {
 
   app.get('/contactus', (req,res) => {
     return nextApp.render(req, res, '/ContactUs')
+  }) 
+  
+  app.get('/termscondition', (req,res) => {
+    return nextApp.render(req, res, '/TermsCondition')
+  })  
+
+  app.get('/privacypolicy', (req,res) => {
+    return nextApp.render(req, res, '/PrivacyPolicy')
   })  
 
   app.get('*', (req,res) => {

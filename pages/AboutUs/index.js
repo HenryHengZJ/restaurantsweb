@@ -19,7 +19,7 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout title={'About Us FoodieBee - Catering Service'}>
         <div id="app">
           <NavBar theme={'dark'} signIn={e=>this.signIn(e)}/>
           <Banner/>
