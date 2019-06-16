@@ -18,7 +18,8 @@ withSass(
 
 const nextConfig = {
   publicRuntimeConfig: {
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
+    STIRPE_CLIENT_KEY: process.env.STIRPE_CLIENT_KEY
   }
 };
 

@@ -24,10 +24,15 @@ class Hero extends React.Component {
 
   searchAddress = (e, address) => {
     e.preventDefault()
-    //alert(JSON.stringify(address))
+   // console.log(address)
    // alert(address.address_components[1].long_name)
     if (address != "") {
       var city = address.address_components[1].long_name
+      var formatted_address = address.formatted_address
+      var longitude = address.geometry.location.lng()
+      console.log(longitude)
+      var latitude = address.geometry.location.lat()
+      console.log(latitude)
       this.setState({
         address: ""
       }, () => {
@@ -36,10 +41,18 @@ class Hero extends React.Component {
           pathname: '/searchcaterer',
           query: { location: city, occasion: 'All' }
         })*/
-        Router.push(`/searchcaterer?location=${city}`, `/searchcaterer?location=${city}`)
+        var selectedAddress = {
+          formatted_address: formatted_address,
+          longitude: address.geometry.location.lng(),
+          latitude: address.geometry.location.lat()
+        }
+        sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+        Router.push(`/searchcaterer?location=${formatted_address}&longitude=${longitude}&latitude=${latitude}`, `/searchcaterer?location=${formatted_address}&longitude=${longitude}&latitude=${latitude}`)
       })
     }
     else {
+      var longitude = "-8.630498"
+      var latitude = "52.6638"
       this.setState({
         address: ""
       }, () => {
@@ -48,7 +61,13 @@ class Hero extends React.Component {
           pathname: '/searchcaterer',
           query: { location: 'Dublin', occasion: 'All' }
         })*/
-        Router.push(`/searchcaterer?location=County%20Limerick`, `/searchcaterer?location=County%20Limerick`)
+        var selectedAddress = {
+          formatted_address: "County%20Limerick",
+          longitude:  "-8.630498",
+          latitude: "52.6638"
+        }
+        sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+        Router.push(`/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`, `/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`)
       })
     }
   }

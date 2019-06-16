@@ -21,7 +21,7 @@ class Layout extends React.Component {
       title
     } = this.props;
 
-    const titleVal = title || 'FoodieBee - Catering Service';
+    const titleVal = title + ' | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers' || 'FoodieBee - Corporate Catering Services and Marketplace | Local Caterers';
 
     return (
       <div>
@@ -29,9 +29,8 @@ class Layout extends React.Component {
             <meta charSet="utf-8"/>
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"/>
-            <meta name="description" content="FoodieBee - Catering Service"/>
-            <meta name="author" content="Henry Heng"/>
-            <meta name="keyword" content="FoodieBee,Catering,Corporate,Event"/>
+            <meta name="description" content="FoodieBee provides wide range of restaurants and local caterers suitable for corporate caterings such as breakfast, lunch, events, and meetings. Order online for free through FoodieBee."/>
+            <meta name="author" content="FoodieBee"/>
             <title>{titleVal}</title>
             <link rel="manifest" href="/manifest.json"/>
             <link rel="shortcut icon" href="/static/favicon.ico"/>
@@ -40,6 +39,7 @@ class Layout extends React.Component {
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFHrZBb72wmg5LTiMjUgI_CLhsoMLmlBk&libraries=places"></script>
+            <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
             <link href="/static/css/9.099cafef.chunk.css" rel="stylesheet"/>
             <link href="/static/css/main.4ac54e74.chunk.css" rel="stylesheet"/>
         </Head>

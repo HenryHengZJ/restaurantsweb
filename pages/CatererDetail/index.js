@@ -43,6 +43,8 @@ import Router from 'next/router'
 import axios from "axios";
 import apis from "../../apis";
 import { server } from '../../config';
+import moment from "moment";
+import NextSeo from 'next-seo';
 
 const glutenfreeIcon = '/static/glutenfree1.png';
 const hotIcon = '/static/fire.png';
@@ -85,6 +87,7 @@ class CatererDetail extends Component {
     this.handleSpecialInstruction = this.handleSpecialInstruction.bind(this);
 
     this.state = {
+      cartID: null,
       todayDay: null,
       loading: true,
       cartloading: true,
@@ -99,346 +102,13 @@ class CatererDetail extends Component {
       menuModalOpen: false,
       selectedMenu: "All Menu",
       menuDropDownOpen: false,
-      fetchedmenu: [
-        /*{
-          _id: '1',
-          title: "Hot Dog",
-          categoryname: "Appetizer",
-          categorytag: "Appetizer",
-          descrip:
-            "Tomato sauce, oregano, mozzarella and fresh basil. Home made hot dog with extra cheese plus toppings such as garlic dips",
-          dishtype: "single",
-          serveperunit: 1,
-          minimumquantity: 1,
-          markitem: ["Hot", "Spicy"],
-          priceperunit: 4.50,
-          selection: [
-            {
-              selectioncategory: "Starter",
-              selectionmaxnum: 2,
-              selectionitem: [
-                {
-                  selectionitemtitle: "Pork Rib",
-                  selectionitemprice: 2.00
-                },
-                {
-                  selectionitemtitle: "Sring Roll",
-                  selectionitemprice: 1.00
-                },
-                {
-                  selectionitemtitle: "Fried Ball",
-                  selectionitemprice: 1.00
-                },
-                {
-                  selectionitemtitle: "Hot n Sour Soup",
-                  selectionitemprice: 1.50
-                }
-              ]
-            },
-            {
-              selectioncategory: "Bread",
-              selectionmaxnum: 1,
-              selectionitem: [
-                {
-                  selectionitemtitle: "Pita Bread",
-                  selectionitemprice: 0.00
-                },
-                {
-                  selectionitemtitle: "Tortilla Bread",
-                  selectionitemprice: 0.00
-                }
-              ]
-            }
-          ],
-        },
-        {
-          _id: '2',
-          title: "Breakfast Prosciutto",
-          categoryname: "Appetizer",
-          categorytag: "Appetizer",
-          descrip: "Tomato sauce, mozzarella, prosciutto",
-          dishtype: "bulk",
-          serveperunit: 6,
-          minimumquantity: 1,
-          markitem: ["Halal", "Healthy"],
-          priceperunit: 28.00,
-        },
-        {
-          _id: '3',
-          title: "Meatball with Swedish Pork Rib",
-          categoryname: "Appetizer",
-          categorytag: "Appetizer",
-          descrip: "Tomato sauce, mozzarella, prosciutto",
-          dishtype: "bulk",
-          serveperunit: 4,
-          minimumquantity: 1,
-          markitem: [],
-          priceperunit: 15.00,
-          selection: [],
-        },
-        {
-          _id: '4',
-          title: "Fried Rice Ball",
-          categoryname: "Appetizer",
-          categorytag: "Appetizer",
-          descrip: "Golden fried rice ball with tomato sauce dip",
-          dishtype: "bulk",
-          serveperunit: 4,
-          minimumquantity: 1,
-          markitem: ["Vegetarian", "Hot"],
-          priceperunit: 15.00,
-          selection: [],
-        },
-        {
-          _id: '5',
-          title: "Tortilla Wrap",
-          categoryname: "Morning wraps",
-          categorytag: "Appetizer",
-          descrip: "Tomato sauce, oregano, mozzarella and fresh basil",
-          dishtype: "bulk",
-          serveperunit: 4,
-          minimumquantity: 2,
-          markitem: ["Hot"],
-          priceperunit: 12.00,
-          selection: [],
-        },
-        {
-          _id: '6',
-          title: "Mexican Burrito",
-          categoryname: "Morning wraps",
-          categorytag: "Appetizer",
-          descrip: "Tomato sauce, mozzarella, prosciutto",
-          dishtype: "single",
-          serveperunit: 1,
-          minimumquantity: 4,
-          markitem: ["Spicy", "Hot"],
-          priceperunit: 5.00,
-          selection: [],
-        },
-        {
-          _id: '7',
-          title: "Cheese Egg",
-          categoryname: "Supa Breakfast",
-          categorytag: "Breakfast",
-          descrip:
-            "Tomato sauce, oregano, mozzarella and fresh basil. Home made hot dog with extra cheese plus toppings such as garlic dips",
-          dishtype: "bulk",
-          serveperunit: 4,
-          minimumquantity: 1,
-          markitem: ["Hot", "Spicy"],
-          priceperunit: 10.00,
-          selection: [],
-        },
-        {
-          _id: '8',
-          title: "English Breakfast with Tea",
-          categoryname: "Supa Breakfast",
-          categorytag: "Breakfast",
-          descrip: "Tomato sauce, mozzarella, prosciutto",
-          dishtype: "bulk",
-          serveperunit: 6,
-          minimumquantity: 1,
-          markitem: ["Hot", "Healthy"],
-          priceperunit: 22.00,
-          selection: [],
-        }*/
-      ],
-      menu: [
-        /*{
-          menutitle: "Appetizer",
-          menuitem: [
-            {
-              categoryname: "Appetizer",
-              items: [
-                {
-                  title: "Hot Dog",
-                  descrip:
-                    "Tomato sauce, oregano, mozzarella and fresh basil. Home made hot dog with extra cheese plus toppings such as garlic dips",
-                  dishtype: "single",
-                  serveperunit: 1,
-                  minimumquantity: 1,
-                  markitem: ["Hot", "Spicy"],
-                  priceperunit: 4.50,
-                  selection: [
-                    {
-                      selectioncategory: "Starter",
-                      selectionmaxnum: 2,
-                      selectionitem: [
-                        {
-                          selectionitemtitle: "Pork Rib",
-                          selectionitemprice: 2.00
-                        },
-                        {
-                          selectionitemtitle: "Sring Roll",
-                          selectionitemprice: 1.00
-                        },
-                        {
-                          selectionitemtitle: "Fried Ball",
-                          selectionitemprice: 1.00
-                        },
-                        {
-                          selectionitemtitle: "Hot n Sour Soup",
-                          selectionitemprice: 1.50
-                        }
-                      ]
-                    },
-                    {
-                      selectioncategory: "Bread",
-                      selectionmaxnum: 1,
-                      selectionitem: [
-                        {
-                          selectionitemtitle: "Pita Bread",
-                          selectionitemprice: 0.00
-                        },
-                        {
-                          selectionitemtitle: "Tortilla Bread",
-                          selectionitemprice: 0.00
-                        }
-                      ]
-                    }
-                  ],
-                },
-                {
-                  title: "Breakfast Prosciutto",
-                  descrip: "Tomato sauce, mozzarella, prosciutto",
-                  dishtype: "bulk",
-                  serveperunit: 6,
-                  minimumquantity: 1,
-                  markitem: ["Halal", "Healthy"],
-                  priceperunit: 28.00,
-                 
-                },
-                {
-                  title: "Meatball with Swedish Pork Rib",
-                  descrip: "Tomato sauce, mozzarella, prosciutto",
-                  dishtype: "bulk",
-                  serveperunit: 4,
-                  minimumquantity: 1,
-                  markitem: [],
-                  priceperunit: 15.00,
-                  selection: [],
-                },
-                {
-                  title: "Fried Rice Ball",
-                  descrip: "Golden fried rice ball with tomato sauce dip",
-                  dishtype: "bulk",
-                  serveperunit: 4,
-                  minimumquantity: 1,
-                  markitem: ["Vegetarian", "Hot"],
-                  priceperunit: 15.00,
-                  selection: [],
-                }
-              ]
-            },
-            {
-              categoryname: "Morning Wraps",
-              items: [
-                {
-                  title: "Tortilla Wraps",
-                  descrip: "Tomato sauce, oregano, mozzarella and fresh basil",
-                  dishtype: "bulk",
-                  serveperunit: 4,
-                  minimumquantity: 2,
-                  markitem: ["Hot"],
-                  priceperunit: 12.00,
-                  selection: [],
-                },
-                {
-                  title: "Mexican Bagel",
-                  descrip: "Tomato sauce, mozzarella, prosciutto",
-                  dishtype: "single",
-                  serveperunit: 1,
-                  minimumquantity: 4,
-                  markitem: ["Spicy", "Hot"],
-                  priceperunit: 5.00,
-                  selection: [],
-                }
-              ]
-            }
-          ]
-        },
-        {
-          menutitle: "Breakfast",
-          menuitem: [
-            {
-              categoryname: "Supa Breakfast",
-              items: [
-                {
-                  title: "Cheese Egg",
-                  descrip:
-                    "Tomato sauce, oregano, mozzarella and fresh basil. Home made hot dog with extra cheese plus toppings such as garlic dips",
-                  dishtype: "bulk",
-                  serveperunit: 4,
-                  minimumquantity: 1,
-                  markitem: ["Hot", "Spicy"],
-                  priceperunit: 10.00,
-                  selection: [],
-                },
-                {
-                  title: "English Breakfast with Tea",
-                  descrip: "Tomato sauce, mozzarella, prosciutto",
-                  dishtype: "bulk",
-                  serveperunit: 6,
-                  minimumquantity: 1,
-                  markitem: ["Hot", "Healthy"],
-                  priceperunit: 22.00,
-                  selection: [],
-                }
-              ]
-            }
-          ]
-        }*/
-      ],
-      menutitle: [
-       
-      ],
-      cartitem: [
-        /*{
-          _id: '1',
-          quantity: 1,
-          title: "Pasta Bolognese with Cheese and Mushroom",
-          instruction: 'More spicy please. Extra pepper and chili sauce',
-          selection: [
-            {
-              selectioncategory: "Starter",
-              selectionmaxnum: 2,
-              selectionitem: [
-                {
-                  selectionitemtitle: "Pork Rib",
-                  selectionitemprice: 2.00
-                },
-                {
-                  selectionitemtitle: "Hot n Sour Soup",
-                  selectionitemprice: 2.00
-                },
-               
-              ]
-            },
-            {
-              selectioncategory: "Bread",
-              selectionmaxnum: 1,
-              selectionitem: [
-                {
-                  selectionitemtitle: "Pita Bread",
-                  selectionitemprice: 0.00
-                }
-              ]
-            }
-          ],
-          serveperunit: 3,
-          totalprice: 12.00
-        },
-        {
-          _id: '2',
-          quantity: 2,
-          title: "Item",
-          serveperunit: 1,
-          totalprice: 15.00
-        }*/
-      ],
+      fetchedmenu: [],
+      menu: [],
+      menutitle: [],
+      cartitem: [],
       cartToBeOrder: [],
       review: [
-        {
+       /* {
           name: "Kieran",
           location: 'Limerick, Ireland',
           comment: "Everyone was very happy. Hearty sandwiches. Very nice dessert sandwiches",
@@ -472,7 +142,7 @@ class CatererDetail extends Component {
           comment: "First time ordering from Italian Gourmet for this group. Everything was a big hit--even though they were a bit early.",
           time: "1 month ago",
           rating: 5,
-        },
+        },*/
       ],
       quantity: [1,2,3,4,5,6,7,8,9,10,11,12,13],
       restaurantInfo: {
@@ -484,9 +154,9 @@ class CatererDetail extends Component {
         catererAddress: "30, O'Connell St, Dublin, Ireland",
         rating: "4.7",
         numofreview: "150",
-        openinghours: "Mon-Fri: 10am-3pm",
+        deliveryhours: "Mon-Fri: 10am-3pm",
         deliveryfee: 3,
-        minspending: 50*/
+        minimumspend: 50*/
       },
       orderNotOverMinSpending: false
     };
@@ -496,7 +166,8 @@ class CatererDetail extends Component {
     this.getCatererDetail();
     this.getCatererMenu();
     this.getCustomerCart();
-   // this.deleteLocalStorage()
+    this.getCatererReview();
+
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     var d = new Date();
     var dayName = days[d.getDay()];
@@ -571,15 +242,15 @@ class CatererDetail extends Component {
         if (response.status === 200) {
           var restaurantInfo = this.state.restaurantInfo
           restaurantInfo.catererID = response.data[0]._id;
-          restaurantInfo.catererName = typeof response.data[0].catererName !== 'undefined' ? response.data[0].catererName : "",
-          restaurantInfo.profilesrc = typeof response.data[0].profilesrc !== 'undefined' ? response.data[0].profilesrc : "",
-          restaurantInfo.coversrc = typeof response.data[0].coversrc !== 'undefined' ? response.data[0].coversrc : "https://stmed.net/sites/default/files/food-wallpapers-28249-101905.jpg",
-          restaurantInfo.catererAddress = typeof response.data[0].catererAddress !== 'undefined' ? response.data[0].catererAddress : "",
-          restaurantInfo.rating = typeof response.data[0].rating !== 'undefined' ? response.data[0].rating : 0,
-          restaurantInfo.numofreview = typeof response.data[0].numofreview !== 'undefined' ? response.data[0].numofreview : 0,
-          restaurantInfo.deliveryfee = typeof response.data[0].deliveryfee !== 'undefined' ? response.data[0].deliveryfee : 0,
-          restaurantInfo.minspending = typeof response.data[0].minspending !== 'undefined' ? response.data[0].minspending : 0,
-          restaurantInfo.openinghours = typeof response.data[0].openinghours !== 'undefined' ? response.data[0].openinghours : [],
+          restaurantInfo.catererName = typeof response.data[0].catererName !== 'undefined' ? response.data[0].catererName : "";
+          restaurantInfo.profilesrc = typeof response.data[0].profilesrc !== 'undefined' ? response.data[0].profilesrc : "";
+          restaurantInfo.coversrc = typeof response.data[0].coversrc !== 'undefined' ? response.data[0].coversrc : "https://stmed.net/sites/default/files/food-wallpapers-28249-101905.jpg";
+          restaurantInfo.catererAddress = typeof response.data[0].catererAddress !== 'undefined' ? response.data[0].catererAddress : "";
+          restaurantInfo.rating = typeof response.data[0].rating !== 'undefined' ? response.data[0].rating : 0;
+          restaurantInfo.numofreview = typeof response.data[0].numofreview !== 'undefined' ? response.data[0].numofreview : 0;
+          restaurantInfo.deliveryfee = typeof response.data[0].deliveryfee !== 'undefined' ? response.data[0].deliveryfee : 0;
+          restaurantInfo.minimumspend = typeof response.data[0].minimumspend !== 'undefined' ? response.data[0].minimumspend : 0;
+          restaurantInfo.deliveryhours = typeof response.data[0].deliveryhours !== 'undefined' ? response.data[0].deliveryhours : [];
           this.setState({
             restaurantInfo: restaurantInfo
           })
@@ -610,6 +281,26 @@ class CatererDetail extends Component {
       });
   }
 
+  getCatererReview= () => {
+    var headers = {
+      'Content-Type': 'application/json',
+    }
+
+    var url = apis.GETcaterer_review + "?catererID=" + this.state.restaurantInfo.catererID;
+
+    axios.get(url, {withCredentials: true}, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            review: response.data,
+          })
+        } 
+      })
+      .catch((error) => {
+      });
+  }
+
+  
   getCustomerCart= () => {
     var headers = {
       'Content-Type': 'application/json',
@@ -619,8 +310,10 @@ class CatererDetail extends Component {
 
     axios.get(url, {withCredentials: true}, {headers: headers})
       .then((response) => {
+       // alert(response.data)
         if (response.status === 200) {
           this.setState({
+            cartID: response.data.length > 0 ? response.data[0]._id : null,
             cartToBeOrder: response.data.length > 0 ? response.data : [],
             cartitem: response.data.length > 0 ? response.data[0].cartitem.length > 0 ? response.data[0].cartitem : [] : [],
             orderType: response.data.length > 0 ? typeof response.data[0].orderType !== 'undefined' ? response.data[0].orderType : "" : "",
@@ -629,7 +322,7 @@ class CatererDetail extends Component {
         } 
       })
       .catch((error) => {
-        this.getLocalStorage()
+        this.getSessionStorage()
       });
   }
 
@@ -687,24 +380,26 @@ class CatererDetail extends Component {
   };
 
   checkOutClicked = () => {
-    var cartToBeOrder = {
-      orderType: this.state.orderType,
-      cartitem: this.state.cartitem,
-      catererID: this.state.restaurantInfo.catererID,
-      deliveryfee: this.state.restaurantInfo.deliveryfee,
-      totalOrderPrice: this.calculateCartTotalPrice()
-    }
 
-    if (this.calculateCartTotalPrice() >= this.state.restaurantInfo.minspending) {
-      Router.push(`/checkout/${this.state.restaurantInfo.catererID}`, `/checkout/${this.state.restaurantInfo.catererID}`)
+    var totalcartprice = this.calculateCartTotalPrice() - this.state.restaurantInfo.deliveryfee
+
+    if (totalcartprice >= this.state.restaurantInfo.minimumspend) {
+      var cartObjectId;
+      var url = ""
+      if (!this.state.cartID) {
+        cartObjectId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
+        url = `/checkout/${cartObjectId}/${this.state.restaurantInfo.catererID}`
+      }
+      else {
+        url = `/checkout/${this.state.cartID}/${this.state.restaurantInfo.catererID}`
+      }
+      Router.push(url, url)
     }
     else {
       this.setState({
         orderNotOverMinSpending: true
       })
     }
-   
-  //  this.props.store.storecart(cartToBeOrder)
 
   }
 
@@ -751,7 +446,8 @@ class CatererDetail extends Component {
       if (index >= 0) {
         var singlemenuprice = fetchedmenu[index].priceperunit
         var quantitychosen = cartitem[i].quantity
-        cartTotalPrice =  cartTotalPrice + (quantitychosen * singlemenuprice);
+       // cartTotalPrice =  cartTotalPrice + (quantitychosen * singlemenuprice);
+        cartTotalPrice =  cartTotalPrice + cartitem[i].totalprice;
       }
       else {
         cartTotalPrice =  cartTotalPrice;
@@ -788,6 +484,30 @@ class CatererDetail extends Component {
     })
   }
 
+  calculateCartReadyToBeOrderPrice = (newitemprice) => {
+    const {cartitem, orderType, restaurantInfo, fetchedmenu} = this.state
+    var cartTotalPrice = 0;
+    for (let i = 0; i < cartitem.length; i++) { 
+      var index = fetchedmenu.findIndex(x => x._id===cartitem[i].menuID);
+      if (index >= 0) {
+        var singlemenuprice = fetchedmenu[index].priceperunit
+        var quantitychosen = cartitem[i].quantity
+       // cartTotalPrice =  cartTotalPrice + (quantitychosen * singlemenuprice);
+        cartTotalPrice =  cartTotalPrice + cartitem[i].totalprice;
+      }
+      else {
+        cartTotalPrice =  cartTotalPrice;
+      }
+    }
+
+    if (orderType === "delivery") {
+      cartTotalPrice =  cartTotalPrice + restaurantInfo.deliveryfee
+    }
+
+    cartTotalPrice = cartTotalPrice + newitemprice
+
+    return (Number(cartTotalPrice).toFixed(2));
+  }
 
   findSelectionIndex = (selectioncategory, selectionitemtitle) => {
     var returnval;
@@ -828,12 +548,13 @@ class CatererDetail extends Component {
     })
   }
 
-  getLocalStorage = () => {
-    if (localStorage.getItem(this.state.restaurantInfo.catererID) !== null) {
-      var localstoragecartitem = JSON.parse(localStorage.getItem(this.state.restaurantInfo.catererID));
+  getSessionStorage = () => {
+    if (sessionStorage.getItem(this.state.restaurantInfo.catererID) !== null) {
+      var sessionStorageCartToBeOrder = JSON.parse(sessionStorage.getItem(this.state.restaurantInfo.catererID));
       this.setState({
-        cartitem: localstoragecartitem.cartitem,
-        orderType: localstoragecartitem.orderType,
+        cartToBeOrder: sessionStorageCartToBeOrder.length > 0 ? sessionStorageCartToBeOrder : [],
+        cartitem: sessionStorageCartToBeOrder.length > 0 ? sessionStorageCartToBeOrder[0].cartitem.length > 0 ? sessionStorageCartToBeOrder[0].cartitem : [] : [],
+        orderType: sessionStorageCartToBeOrder.length > 0 ? typeof sessionStorageCartToBeOrder[0].orderType !== 'undefined' ? sessionStorageCartToBeOrder[0].orderType : "" : "",
         cartloading: false
       })
     }
@@ -844,16 +565,21 @@ class CatererDetail extends Component {
     }
   }
 
-  addToLocalStorage = () => {
-    var addItem = {
+  addToSessionStorage = () => {
+
+    var cartReadyToOrder = [{
+      orderType: this.state.orderType,
+      catererID: this.state.restaurantInfo.catererID,
       cartitem: this.state.cartitem,
-      orderType: this.state.orderType
-    }
-    localStorage.setItem(this.state.restaurantInfo.catererID, JSON.stringify(addItem));
+      totalOrderPrice: this.calculateCartTotalPrice(),
+      deliveryfee: this.state.restaurantInfo.deliveryfee
+    }]
+
+    sessionStorage.setItem(this.state.restaurantInfo.catererID, JSON.stringify(cartReadyToOrder));
   }
 
-  deleteLocalStorage = () => {
-    localStorage.removeItem(this.state.restaurantInfo.catererID);
+  deleteSessionStorage = () => {
+    sessionStorage.removeItem(this.state.restaurantInfo.catererID);
   }
 
   addToCart = () => {
@@ -864,12 +590,14 @@ class CatererDetail extends Component {
 
     const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction, restaurantInfo, orderType, cartToBeOrder} = this.state;
     
+    var itemprice = selectedPrice === 0 ? activeMenu.priceperunit : selectedPrice
+
     var cartInnerItem = {
       title: activeMenu.title,
       serveperunit: activeMenu.serveperunit,
       menuID: activeMenu._id,
       quantity: selectedQuantity,
-      totalprice: selectedPrice === 0 ? activeMenu.priceperunit : selectedPrice,
+      totalprice: itemprice,
     }
 
     if (specialInstruction !== '') {
@@ -886,11 +614,12 @@ class CatererDetail extends Component {
     newCartItem.push(cartInnerItem)
 
     //To Be Order Cart Item
-
     var cartReadyToOrder = {
       orderType: orderType === "" ? "delivery" : orderType,
       catererID: restaurantInfo.catererID,
-      cartitem: newCartItem
+      cartitem: newCartItem,
+      totalOrderPrice: this.calculateCartReadyToBeOrderPrice(itemprice),
+      deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
    // alert(JSON.stringify(cartReadyToOrder))
@@ -908,18 +637,19 @@ class CatererDetail extends Component {
     axios.put(url, cartReadyToOrder, {withCredentials: true}, {headers: headers})
       .then((response) => {
         if (response.status === 201) {
+         // alert(JSON.stringify(response.data))
           this.toggleMenuModal()
           this.getCustomerCart()
         } 
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error) {
           this.setState({
             cartitem: newCartItem,
             cartloading: false
           },() => {
             this.toggleMenuModal()
-            this.addToLocalStorage()
+            this.addToSessionStorage()
           })
         } 
       });
@@ -936,6 +666,8 @@ class CatererDetail extends Component {
     //To Be Order Cart Item
     var cartReadyToOrder = {
       orderType: orderType,
+      totalOrderPrice: this.calculateCartReadyToBeOrderPrice(0),
+      deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
     var headers = {
@@ -956,11 +688,11 @@ class CatererDetail extends Component {
         } 
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error) {
           this.setState({
             cartloading: false
           },() => {
-            this.addToLocalStorage()
+            this.addToSessionStorage()
           })
         } 
       }); 
@@ -1007,7 +739,9 @@ class CatererDetail extends Component {
     var cartReadyToOrder = {
       orderType: orderType,
       catererID: restaurantInfo.catererID,
-      cartitem: newCartItem
+      cartitem: newCartItem,
+      totalOrderPrice: this.calculateCartReadyToBeOrderPrice(updateCartInnerItem.totalprice),
+      deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
   //  alert(JSON.stringify(cartReadyToOrder))
@@ -1031,13 +765,13 @@ class CatererDetail extends Component {
         } 
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error) {
           this.setState({
             cartitem: newCartItem,
             cartloading: false
           },() => {
             this.toggleMenuModal()
-            this.addToLocalStorage()
+            this.addToSessionStorage()
           })
         } 
       }); 
@@ -1051,15 +785,17 @@ class CatererDetail extends Component {
     
     const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction, cartToBeOrder, orderType, restaurantInfo} = this.state;
 
+    var itemprice = 0 - this.state.cartitem[index].totalprice
     var newCartItem = this.state.cartitem.slice();
     newCartItem.splice(index, 1)
 
      //To Be Order Cart Item
-
     var cartReadyToOrder = {
       orderType: orderType,
       catererID: restaurantInfo.catererID,
-      cartitem: newCartItem
+      cartitem: newCartItem,
+      totalOrderPrice: this.calculateCartReadyToBeOrderPrice(itemprice),
+      deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
   //  alert(JSON.stringify(cartReadyToOrder))
@@ -1085,13 +821,13 @@ class CatererDetail extends Component {
           } 
         })
         .catch((error) => {
-          if (error.response.status === 401) {
+          if (error) {
             this.setState({
               cartitem: newCartItem,
               cartloading: false
             },() => {
              // this.toggleMenuModal()
-              this.addToLocalStorage()
+              this.addToSessionStorage()
             })
           } 
         }); 
@@ -1111,12 +847,12 @@ class CatererDetail extends Component {
           } 
         })
         .catch((error) => {
-          if (error.response.status === 401) {
+          if (error) {
             this.setState({
               cartitem: newCartItem,
               cartloading: false
             },() => {
-                this.deleteLocalStorage()
+                this.deleteSessionStorage()
             })
           } 
         }); 
@@ -1358,7 +1094,7 @@ class CatererDetail extends Component {
         <ModalBody>
           <b style={{ color: "#20a8d8", fontSize: 19 }}>{activeMenu.title}</b>
 
-          <p style={{ fontWeight: '700', marginTop:10, fontSize: 14, opacity: 0.8}}>Serves: <b style={{color: 'green'}}>{activeMenu.serveperunit}</b> | Minimum order: <b style={{color: 'darkorange'}}>{activeMenu.minimumquantity}</b></p>
+          <p style={{ fontStyle: 'italic', fontWeight: '500', marginTop:5, fontSize: 14, opacity: 0.5}}>Serves: {activeMenu.serveperunit}, Minimum order: {activeMenu.minimumquantity}</p>
 
           {activeMenu.src ? <img
             style={{cursor:'pointer', marginTop:10, marginBottom: 10, objectFit: "cover", width: "100%", height: 200 }}
@@ -1367,16 +1103,16 @@ class CatererDetail extends Component {
           /> : null }
 
           <div style={{ marginTop: 10 }}>
-            <span>
+            <p>
               {activeMenu.descrip}
-            </span>
+            </p>
           </div>
 
           {typeof activeMenu.markitem === 'undefined' || activeMenu.markitem.length === 0 ? null : this.renderIcon(activeMenu.markitem)} 
 
           <div style={{ marginTop: 20 }}>
             <FormGroup>
-              <Label>Select Quantity</Label>
+              <Label style={{fontWeight: '600'}}>Select Quantity</Label>
               <Input value={this.state.selectedQuantity} onChange={(e) => this.handleQuantityChange(e, activeMenu.priceperunit)} style={{color:'black'}} type="select">
               {this.findQuantityRange(activeMenu.minimumquantity).map(quantity =>
                 <option style={{color:'black'}} key={quantity} value={quantity}>{quantity}</option>
@@ -1401,9 +1137,9 @@ class CatererDetail extends Component {
             <Col xs="6">
 
               {activeMenu.dishtype === 'bulk' ? 
-              <span> <b style={{fontSize: 19, fontWeight: '600'}}>€{Number(this.state.selectedPrice === 0 ? activeMenu.priceperunit : this.state.selectedPrice).toFixed(2)}</b> <Label style={{fontStyle: 'italic'}}>(€{this.calculatePricePerPerson(this.state.selectedPrice === 0 ? activeMenu.priceperunit : this.state.selectedPrice, activeMenu.serveperunit)} / person)</Label></span>
+              <span> <b style={{fontSize: 19, fontWeight: '600'}}>€{Number(this.state.selectedPrice === 0 ? activeMenu.priceperunit : this.state.selectedPrice).toFixed(2)}</b> <Label style={{fontStyle: 'italic'}}>/ {this.state.selectedQuantity > 1 ? this.state.selectedQuantity + " trays" : " tray"}</Label></span>
               :
-              <span> <b style={{fontSize: 19, fontWeight: '600'}}>€{Number(this.state.selectedPrice === 0 ? activeMenu.priceperunit : this.state.selectedPrice).toFixed(2)}</b> <Label style={{fontStyle: 'italic'}}>/ person</Label></span>
+              <span> <b style={{fontSize: 19, fontWeight: '600'}}>€{Number(this.state.selectedPrice === 0 ? activeMenu.priceperunit : this.state.selectedPrice).toFixed(2)}</b> <Label style={{fontStyle: 'italic'}}>/ {this.state.selectedQuantity > 1 ? this.state.selectedQuantity + " people" : " person"}</Label></span>
               }
 
             </Col>
@@ -1776,7 +1512,7 @@ class CatererDetail extends Component {
             fontSize: 15
           }}
         >
-          Total order price has to be more than minimum order €{Number(this.state.restaurantInfo.minspending).toFixed(2)}
+          Total order price has to be more than minimum order €{Number(this.state.restaurantInfo.minimumspend).toFixed(2)}
         </Label>
         </div>
         : null }
@@ -1790,7 +1526,7 @@ class CatererDetail extends Component {
             fontSize: 15
           }}
         >
-          Minimum Order Value: €{Number(this.state.restaurantInfo.minspending).toFixed(2)}
+          Minimum Order Value: €{Number(this.state.restaurantInfo.minimumspend).toFixed(2)}
         </Label>
         </div>
 
@@ -1860,7 +1596,7 @@ class CatererDetail extends Component {
             fontSize: 15
           }}
         >
-           Minimum Order Value: €{Number(this.state.restaurantInfo.minspending).toFixed(2)}
+           Minimum Order Value: €{Number(this.state.restaurantInfo.minimumspend).toFixed(2)}
         </Label>
         </div>
       </CardBody>
@@ -2143,13 +1879,13 @@ class CatererDetail extends Component {
                   <Label
                     className="h5"
                   >
-                    {review[i].name}
+                    {review[i].customerFirstName}
                   </Label>
                 </Col>
 
                 <Col xs="12">
                   <Label>
-                    {review[i].location}
+                    {review[i].customerCity}
                   </Label>
                 </Col>
 
@@ -2160,7 +1896,7 @@ class CatererDetail extends Component {
                     emptyStarColor="#D3D3D3"
                     starCount={5}
                     editing={false}
-                    value={review[i].rating}
+                    value={review[i].customerRating}
                   />
                   <Label
                     style={{
@@ -2169,14 +1905,14 @@ class CatererDetail extends Component {
                       fontfStyle: "italic"
                     }}
                   >
-                    {review[i].time}
+                    {moment(review[i].createdAt).format("DD MMM, YYYY")}
                   </Label>
                   </Row>
                 </Col>
 
                 <Col xs="12">
                   <p style={{ overflow: "hidden" }}>
-                    {review[i].comment}
+                    {review[i].customerComment}
                   </p>
                 </Col>
               </Row>
@@ -2190,7 +1926,7 @@ class CatererDetail extends Component {
       <Row>
         <Col xs="12">
           <Label style={{ marginBottom: 30, fontSize: 19, }} className="h5">
-            Reviews for Flannery Resturant & Pub
+            Reviews for {this.state.restaurantInfo.catererName}
           </Label>
         </Col>
         {itemsarray}
@@ -2258,10 +1994,10 @@ class CatererDetail extends Component {
               </tr>
               <tr>
                 <td><p style={{padding: 0, margin: 0, fontWeight: '600'}}>Minimum Spending:</p></td>
-                <td><p style={{padding: 0, margin: 0}}>€{Number(restaurantInfo.minspending).toFixed(2)}</p></td>
+                <td><p style={{padding: 0, margin: 0}}>€{Number(restaurantInfo.minimumspend).toFixed(2)}</p></td>
               </tr>
               <tr>
-                <td><p style={{padding: 0, margin: 0, fontWeight: '600'}}>Opening Hours:</p></td>
+                <td><p style={{padding: 0, margin: 0, fontWeight: '600'}}>Delivery Hours:</p></td>
                 <td><p style={{padding: 0, margin: 0}}>{this.renderOpeningHours()}</p></td>
               </tr>
             </tbody>
@@ -2274,20 +2010,21 @@ class CatererDetail extends Component {
   renderOpeningHours() {
     var itemsarray = [];
 
-    var openinghours = this.state.restaurantInfo.openinghours;
+    var deliveryhours = this.state.restaurantInfo.deliveryhours;
 
-    if (typeof this.state.restaurantInfo.openinghours !== 'undefined') {
-      if (openinghours.length > 0) {
-        for (let i = 0; i < openinghours.length; i++) {
+    if (typeof this.state.restaurantInfo.deliveryhours !== 'undefined') {
+      if (deliveryhours.length > 0) {
+        for (let i = 0; i < deliveryhours.length; i++) {
           itemsarray.push(
             <Col xs="6" sm="6" md="4" lg="4">
-              <span style={{fontWeight: this.state.todayDay === openinghours[i].day ? '700' : null}}>
-                <p style={{margin: 0}}>
-                  {openinghours[i].day}
-                </p>
+              <span style={{fontWeight: this.state.todayDay === deliveryhours[i].day ? '700' : null}}>
+                {deliveryhours[i].starttime === 0 && deliveryhours[i].closetime === 0 ? 
+                 <p style={{margin: 0, marginBottom: 10}}>Off</p>
+                 :
                 <p style={{margin: 0, marginBottom: 10}}>
-                  {this.reformatInput(openinghours[i].starttime.toString())}&nbsp;-&nbsp;{this.reformatInput(openinghours[i].closetime.toString())}
+                  {this.reformatInput(deliveryhours[i].starttime.toString())}&nbsp;-&nbsp;{this.reformatInput(deliveryhours[i].closetime.toString())}
                 </p>
+                }
               </span>
             </Col>
           );
@@ -2398,7 +2135,13 @@ class CatererDetail extends Component {
     const menutitlelength = this.state.menutitle.length;
 
     return (
-      <Layout title= {typeof this.state.restaurantInfo.catererName !== 'undefined' ? this.state.restaurantInfo.catererName + ' Caterer Detail FoodieBee - Catering Service' : 'Caterer Detail FoodieBee - Catering Service'}>
+      <Layout title= {typeof this.state.restaurantInfo.catererName !== 'undefined' ? this.state.restaurantInfo.catererName + ' Caterer Details' : 'Caterer Details'}>
+       <NextSeo
+        config={{
+          title: typeof this.state.restaurantInfo.catererName !== 'undefined' ? this.state.restaurantInfo.catererName + ' Caterer Details' : 'Caterer Details'
+        }}
+      />
+      
       <div style={{backgroundColor: 'white'}}>
          <NavBar signIn={e=>this.signIn(e)}/>
       <div className="app align-items-center">

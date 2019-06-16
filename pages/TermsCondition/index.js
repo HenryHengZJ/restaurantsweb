@@ -16,6 +16,7 @@ import {
 import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
+import NextSeo from 'next-seo';
 
 class TermsCondition extends Component {
   constructor(props) {
@@ -108,7 +109,7 @@ class TermsCondition extends Component {
             ,
             `9.3. The Customer can cancel the Agreement with FoodieBee according to the following provisions:
               You have the right to cancel this Agreement within fourteen days of you receiving the order confirmation without stating a reason.
-              To exercise this right, you just have to let us know. You can do this by contacting us by email at support@FoodieBee.com, or by phone on +353 83 1861716 .You can use the sample cancellation form at section 9.5 below but this is not mandatory to exercise your right of cancellation. To comply with the cancellation period, it is sufficient to send the notification of the exercising of the cancellation right before the expiry of the cancellation period.
+              To exercise this right, you just have to let us know. You can do this by contacting us by email at support@FoodieBee.eu, or by phone on +353 83 1861716 .You can use the sample cancellation form at section 9.5 below but this is not mandatory to exercise your right of cancellation. To comply with the cancellation period, it is sufficient to send the notification of the exercising of the cancellation right before the expiry of the cancellation period.
               `,
             `9.4. Consequences of cancellation
               If you cancel this Agreement within the cancellation period, we will repay all payments which received from you, including the costs of delivery (the maximum refund for delivery costs will be the costs of delivery by the least expensive delivery method we offer) without delay and no later than fourteen days from the day on which the notification of your cancellation of this Agreement has reached us. For this repayment, we use the same means of payment which you used in the original transaction, unless something to the contrary has expressly been agreed with you; under no circumstances will you be charged fees as a result of this repayment.              
@@ -118,7 +119,7 @@ class TermsCondition extends Component {
         {
           title: "10. Cancellation, cancellation fee",
           descrip: [
-            "10.1. Following conclusion of the Agreement, business Customers (and consumer Customers whose orders are subject to the statutory exclusion set out in section 9.1), have the possibility of cancelling an order free of charge up to the point stated in the following section by an e-mail notification to FoodieBee at support@foodiebee.com. The cancellation fee stated shall be charged for cancellations which are received later than the point in time stated in the list.",
+            "10.1. Following conclusion of the Agreement, business Customers (and consumer Customers whose orders are subject to the statutory exclusion set out in section 9.1), have the possibility of cancelling an order free of charge up to the point stated in the following section by an e-mail notification to FoodieBee at support@foodiebee.eu. The cancellation fee stated shall be charged for cancellations which are received later than the point in time stated in the list.",
             "10.2. The cancellation fee to be paid shall be reduced accordingly if the Customer renders proof that damage or a reduction of value has not occurred or is considerably lower than the amount to be paid by the Customer. The right to prove higher damage shall be reserved for FoodieBee.",
             "10.3. The statutory cancellation right (see Section 9 above) shall remain unaffected by the aforementioned regulations in this section."
           ]
@@ -169,7 +170,7 @@ class TermsCondition extends Component {
         {
           title: "16. Contact",
           descrip: [
-            "The FoodieBee customer service is available to you for questions, suggestions or criticism. The FoodieBee customer service can be reached by e-mail under support@foodiebee.com or at 353 83 1861716 (Mon-Fri from 08:00 – 18:00. and Sat-Sun from 09:00 – 18:00)."
+            "The FoodieBee customer service is available to you for questions, suggestions or criticism. The FoodieBee customer service can be reached by e-mail under support@foodiebee.eu or at 353 83 1861716 (Mon-Fri from 08:00 – 18:00. and Sat-Sun from 09:00 – 18:00)."
           ]
         },
         {
@@ -230,7 +231,12 @@ class TermsCondition extends Component {
 
   render() {
     return (
-      <Layout title={'Terms & Conditions FoodieBee - Catering Service'}>
+      <Layout title={'Terms & Conditions'}>
+      <NextSeo
+        config={{
+          title: 'Terms & Conditions | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+        }}
+      />
       <div style={{backgroundColor: 'white'}}>
         <NavBar/>
         <div className="app align-items-center">

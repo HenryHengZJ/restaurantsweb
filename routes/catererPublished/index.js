@@ -14,8 +14,8 @@ router.get('/getcaterer', (req, res) => {
 
 	if (typeof req.query.location !== 'undefined') 
 	{
-		matchquery.catererCounty = req.query.location
-		console.log('matchquery 1 = ', JSON.stringify(matchquery))
+		//matchquery.catererCounty = req.query.location
+		//console.log('matchquery 1 = ', JSON.stringify(matchquery))
 	}
 	
 	if (typeof req.query.occasion !== 'undefined') 
@@ -45,6 +45,23 @@ router.get('/getcaterer', (req, res) => {
 	if (typeof req.query.dietaryconcern !== 'undefined')
 	{
 		//matchquery.dietaryconcern = req.query.dietaryconcern
+	}
+
+	if (typeof req.query.date !== 'undefined' && typeof req.query.time !== 'undefined')
+	{
+		var reqdate = req.query.date.split(",")[0]
+		console.log(reqdate)
+		matchquery.deliveryhours = {$elemMatch:{timerange: { $gte: parseInt(req.query.time), $lte: parseInt(req.query.time) }, day: reqdate }}
+	}
+	
+	if (typeof req.query.longitude !== 'undefined' && typeof req.query.latitude !== 'undefined')
+	{
+		matchquery.location = { $nearSphere: { $geometry: { type: "Point", coordinates: [ parseFloat(req.query.latitude), parseFloat(req.query.longitude) ] }, $maxDistance: 12000 } }
+	}
+	
+	if (typeof req.query.catererName !== 'undefined')
+	{
+		matchquery.catererName = {$regex: req.query.catererName,$options:'i'}
 	}
 
     console.log('matchquery 4 = ', JSON.stringify(matchquery))

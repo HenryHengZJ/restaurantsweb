@@ -11,6 +11,13 @@ import Router from 'next/router'
 import Layout from '../../components/Layout'
 
 class LandingPage extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.refObj = React.createRef();
+
+  }
   
   signIn(e) {
     e.preventDefault()
@@ -21,7 +28,7 @@ class LandingPage extends Component {
 
   findFoodNow(e) {
     e.preventDefault()
-    Router.push(`/searchcaterer`, `/searchcaterer`)
+    this.refObj.current.scrollIntoView({behavior: 'smooth'});
   }
 
   registerCatererClicked(e) {
@@ -34,8 +41,9 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout title={"Corporate Catering Service and Marketplace"}>
         <div id="app">
+          <div ref={this.refObj} > </div>
           <NavBar theme={'dark'} signIn={e=>this.signIn(e)}/>
           <Hero/>
           <Shops/>

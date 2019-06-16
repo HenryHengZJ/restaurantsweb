@@ -2,6 +2,19 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+var deliveryAddressSchema = mongoose.Schema({
+	default: {
+        type: Boolean,
+        default: false
+    },
+    address1: String,
+    address2: String,
+    address3: String,
+    city: String,
+	county: String,
+});
 
 // define the schema for our customerSchema model
 var customerSchema = mongoose.Schema({
@@ -10,11 +23,15 @@ var customerSchema = mongoose.Schema({
     customerEmail: String,
 	customerPassword: String,
     customerPhoneNumber: String,
-    customerAddress: String,
+    customerDeliveryAddress: [deliveryAddressSchema],
     customerCity: String,
     customerCounty: String,
     customerCountry: String,
-    customerOrderID: [String],
+    customerCountryCode: String,
+    customerOrderCount: {
+        type: Number,
+        default: 0
+    },
     status: {
         type: String,
         default: "new"
@@ -24,7 +41,8 @@ var customerSchema = mongoose.Schema({
         default: Date.now
     },
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    customerPaymentAccoundID: String,
 }, {
     timestamps: true
 });
@@ -43,7 +61,7 @@ customerSchema.methods.generateJWT = function() {
   return jwt.sign({
     customerEmail: this.customerEmail,
     id: this._id,
-  }, 'FoodieBeeSecretKey', {expiresIn: '24h'} );
+  }, process.env.jwtSecretKey, {expiresIn: '24h'} );
 }
 
 //Connect to specific database

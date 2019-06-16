@@ -16,6 +16,7 @@ import {
 import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
+import NextSeo from 'next-seo';
 
 
 class PrivacyPolicy extends Component {
@@ -28,7 +29,7 @@ class PrivacyPolicy extends Component {
           title: "1. Contact Details",
           descrip: [
             `If you have any queries or requests concerning this privacy policy or how we handle your data more generally, please get in touch with us using the following details.
-              - By contacting our general customer services team at: support@foodiebee.com
+              - By contacting our general customer services team at: support@foodiebee.eu
               `
           ]
         },
@@ -281,7 +282,12 @@ class PrivacyPolicy extends Component {
 
   render() {
     return (
-      <Layout title={'Privacy Policy FoodieBee - Catering Service'}>
+      <Layout title={'Privacy Policy'}>
+      <NextSeo
+        config={{
+          title: 'Privacy Policy | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+        }}
+      />
       <div style={{backgroundColor: 'white'}}>
         <NavBar/>
         <div className="app align-items-center">

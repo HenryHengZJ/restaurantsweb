@@ -7,6 +7,7 @@ import Benefit from "./Benefit";
 import Banner from "./Banner";
 import Layout from "../../components/Layout";
 import Router from 'next/router'
+import NextSeo from 'next-seo';
 
 class CatererSignUp extends Component {
 
@@ -17,7 +18,7 @@ class CatererSignUp extends Component {
 
   caterersignIn(e) {
     e.preventDefault();
-    window.open('https://foodiebeecaterer.herokuapp.com', '_blank');
+    window.open('https://caterer.foodiebee.eu', '_blank');
   }
 
   joinNowClicked(e) {
@@ -27,7 +28,12 @@ class CatererSignUp extends Component {
 
   render() {
     return (
-      <Layout title={'Caterer Sign Up FoodieBee - Catering Service'}>
+      <Layout title={'Caterer Sign Up'}>
+      <NextSeo
+        config={{
+          title: 'Caterer Sign Up | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+        }}
+      />
       <div id="CatererSignUp">
         <div ref={this.myRef} style={{backgroundColor: 'transparent', height:1, width: '100%'}}></div>
         <NavBar signInHide={true} catererSignInVisible={true} theme={'dark'} caterersignIn={e => this.caterersignIn(e)} />

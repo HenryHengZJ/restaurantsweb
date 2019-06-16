@@ -7,6 +7,7 @@ import axios from "axios";
 import apis from "../../apis";
 import Router from 'next/router'
 import img from "../../assets/img"
+import NextSeo from 'next-seo';
 
 class ForgotPassword extends Component {
 
@@ -132,7 +133,12 @@ class ForgotPassword extends Component {
     const { isMobile, invalidUser } = this.state;
   
     return (
-    <Layout title={"Forgot Password - FoodieBee Catering Service"}>
+    <Layout title={"Forgot Password"}>
+    <NextSeo
+        config={{
+          title: 'Forgot Password | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+        }}
+      />
     <div style={{backgroundColor: 'white'}}>
         <NavBar signIn={e=>this.signIn(e)}/>
         <div className="app justify-content-center align-items-center">

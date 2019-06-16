@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios';
 import apis from "../../apis";
 import {server} from "../../config"
+import NextSeo from 'next-seo';
 
 class Login extends Component {
 
@@ -113,7 +114,12 @@ class Login extends Component {
 
   render() {
     return (
-      <Layout title={'Login FoodieBee - Catering Service'}>
+      <Layout title={'Login'}>
+        <NextSeo
+          config={{
+            title: 'Login | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          }}
+        />
         <div style={{backgroundColor: 'white'}}>
           <NavBar signInHide={true} signIn={e=>this.signIn(e)}/>          
           <div className="app justify-content-center align-items-center">

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import  Link  from 'next/link';
 import { Button, Card, CardHeader, CardBody, CardGroup, Col, Container, Form, Modal, ModalBody, ModalHeader, ModalFooter,
-  Input, InputGroup, InputGroupAddon, InputGroupText, Row, Label, FormGroup,
+  Input, InputGroup, InputGroupAddon, InputGroupText, Row, Label, FormGroup, Popover, PopoverBody, PopoverHeader ,
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, Nav, NavItem, NavLink, Table, Collapse } from 'reactstrap';
 import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
@@ -16,6 +16,7 @@ import axios from "axios";
 import apis from "../../apis";
 import Router from 'next/router'
 import { timeRanges } from  "../../utils"
+import NextSeo from 'next-seo';
 //import fetch from 'isomorphic-unfetch'
 
 import { server } from '../../config';
@@ -25,7 +26,7 @@ import { server } from '../../config';
 
 class SearchCaterer extends Component {
 
-  static async getInitialProps({query: { occasion, location, cuisine, price_lte, price_gt }}) {
+  static async getInitialProps({query: { occasion, location, cuisine, price_lte, price_gt, date, time, longitude, latitude, catererName }}) {
     console.log('cuisine = ' +  cuisine )
     console.log('occasion = ' +  Array.isArray(occasion) )
     console.log('location = ' + location)
@@ -33,11 +34,19 @@ class SearchCaterer extends Component {
     console.log('price_gt = ' +  price_gt )
     var url = `${server}${apis.GETcaterer}`
     var locationquerystring = "";
+    var longitudequerystring = "";
+    var latitudequerystring = "";
     var cuisinequerystring = "";
     var occasionquerystring = "";
     var price_ltequerystring = "";
     var price_gtquerystring = "";
+    var datequerystring = "";
+    var timequerystring = "";
+    var catererName_querystring = "";
     var selectedPrice = "All";
+    var selectedDate = "";
+    var selectedTime = "";
+    var searchName = "";
     var priceAry = [
       "All",
       "50 (or less)",
@@ -103,6 +112,16 @@ class SearchCaterer extends Component {
       url = url + locationquerystring
     }
 
+    if (typeof longitude !== 'undefined') {
+      longitudequerystring = "&longitude=" + longitude
+      url = url + longitudequerystring
+    }
+
+    if (typeof latitude !== 'undefined') {
+      latitudequerystring = "&latitude=" + latitude
+      url = url + latitudequerystring
+    }
+
     if (typeof cuisine !== 'undefined') {
       cuisinequerystring = "&cuisine=" + cuisine
       url = url + cuisinequerystring
@@ -120,6 +139,24 @@ class SearchCaterer extends Component {
       url = url + price_gtquerystring
       var priceindex = priceAry.findIndex(x => x.includes(price_lte));
       selectedPrice = priceAry[priceindex]
+    }
+
+    if (typeof date !== 'undefined') {
+      datequerystring = "&date=" + date
+      url = url + datequerystring
+      selectedDate = date
+    }
+
+    if (typeof time !== 'undefined') {
+      timequerystring = "&time=" + time
+      url = url + timequerystring
+      selectedTime = time
+    }
+
+    if (typeof catererName !== 'undefined') {
+      catererName_querystring = "&catererName=" + catererName
+      url = url + catererName_querystring
+      searchName = catererName
     }
 
     if (typeof occasion !== 'undefined') {
@@ -159,15 +196,23 @@ class SearchCaterer extends Component {
     console.log(`Show data fetched. Count: ${data.length}`);
     return {
       locationquerystring: locationquerystring,
+      longitudequerystring: longitudequerystring,
+      latitudequerystring: latitudequerystring,
       cuisinequerystring: cuisinequerystring,
       occasionquerystring: occasionquerystring,
       price_ltequerystring: price_ltequerystring,
       price_gtquerystring: price_gtquerystring,
+      datequerystring: datequerystring,
+      timequerystring: timequerystring,
+      catererName_querystring: catererName_querystring,
       data: data,
       location: location,
       selectedCuisine: typeof cuisine !== 'undefined' ? cuisine : "All Cuisines",
       selectedPrice: selectedPrice,
       occasion: occasionAry,
+      selectedTime,
+      selectedDate,
+      searchName,
     };
   }
 
@@ -181,22 +226,48 @@ class SearchCaterer extends Component {
       selectedPrice: this.props.selectedPrice,
       occasion: this.props.occasion,
       locationquerystring: this.props.locationquerystring,
+      longitudequerystring: this.props.longitudequerystring,
+      latitudequerystring: this.props.latitudequerystring,
       cuisinequerystring: this.props.cuisinequerystring,
       occasionquerystring: this.props.occasionquerystring,
       price_ltequerystring: this.props.price_ltequerystring,
       price_gtquerystring: this.props.price_gtquerystring,
+      datequerystring: this.props.datequerystring,
+      timequerystring: this.props.timequerystring,
+      catererName_querystring: this.props.catererName_querystring,
+      selectedTime: this.props.selectedTime !== "" ? this.reformatInput(this.props.selectedTime) : "",
+      selectedDate: this.props.selectedDate,
+      searchName: this.props.searchName,
     })
+  }
+
+  reformatInput = (time) => {
+    if (time.length > 3 ) {
+      time = time.slice(0, 2) + ":" + time.slice(2, 4)
+      
+    }
+    else {
+      time = "0" + time.slice(0, 1) + ":" + time.slice(1, 3)
+    }
+    return time
   }
 
   constructor(props) {
     super(props);
 
+    this.refObj = React.createRef();
+  
     this.state = {
       baseurl: "/searchcaterer",
       locationquerystring: "",
+      longitudequerystring: "",
+      latitudequerystring: "",
       occasionquerystring: "",
       price_ltequerystring: "",
       price_gtquerystring: "",
+      datequerystring: "",
+      timequerystring: "",
+      catererName_querystring: "",
       location: "",
       selectedOccasion: null,
       isMobile: false,
@@ -315,22 +386,23 @@ class SearchCaterer extends Component {
       selectedPrice: null,
       selectedTime: "",
       selectedDate: "",
+      searchName: "",
       maxDate: null,
       cuisineDropDownOpen: false,
       dropDownAddress: false,
       dropDownDate: false,
       isSearchBarOpen: false,
       filterModalOpen: false,
+      timeEmptyPopoverOpen: false,
+      dateEmptyPopoverOpen: false,
     }
 
     this.time  = timeRanges();
-
-
   }
 
   componentDidMount() {
   //  this.getDataFromDb();
-
+  
     var currentDate = moment().toDate();
     this.setState({
       maxDate: currentDate,
@@ -359,10 +431,15 @@ class SearchCaterer extends Component {
         empty: this.props.data.length > 0 ? false : true,
         location: this.props.location,
         locationquerystring: this.props.locationquerystring,
+        longitudequerystring: this.props.longitudequerystring,
+        latitudequerystring: this.props.latitudequerystring,
         occasionquerystring: this.props.occasionquerystring,
         cuisinequerystring: this.props.cuisinequerystring,
         price_ltequerystring: this.props.price_ltequerystring,
         price_gtquerystring: this.props.price_gtquerystring,
+        datequerystring: this.props.datequerystring,
+        timequerystring: this.props.timequerystring,
+        catererName_querystring: this.props.catererName_querystring,
       });
     });
 
@@ -422,15 +499,31 @@ class SearchCaterer extends Component {
 
   signIn(e) {
     e.preventDefault()
+
+    var url = this.state.baseurl;
+    var locationquerystring = this.state.locationquerystring;
+    var longitudequerystring = this.state.longitudequerystring;
+    var latitudequerystring = this.state.latitudequerystring;
+    var cuisinequerystring = this.state.cuisinequerystring;
+    var occasionquerystring = this.state.occasionquerystring;
+    var price_ltequerystring = this.state.price_ltequerystring;
+    var price_gtquerystring = this.state.price_gtquerystring;
+    var datequerystring = this.state.datequerystring;
+    var timequerystring = this.state.timequerystring;
+    var catererName_querystring = this.state.catererName_querystring;
+ 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+
     Router.push({
       pathname: '/login',
-      query: {'returnurl': `/searchcaterer?${this.state.locationquerystring}${this.state.occasionquerystring}`}
+      query: {'returnurl': url}
     })
   }
 
   toggleDropDown = () => {
     this.setState({
-      dropDownDate: !this.state.dropDownDate
+      dropDownDate: !this.state.dropDownDate,
+      dateEmptyPopoverOpen: false
     })
   }
 
@@ -452,29 +545,55 @@ class SearchCaterer extends Component {
 
   saveAddress = () => {
     var address = this.state.address
+   
     if (address != "") {
       var city = address.address_components[1].long_name
+      var formatted_address = address.formatted_address
       var url = this.state.baseurl;
-      var locationquerystring = "?location=" + city;
+      var locationquerystring = "?location=" + formatted_address;
+      var longitudequerystring = "&longitude=" + address.geometry.location.lng();
+      var latitudequerystring = "&latitude=" + address.geometry.location.lat();
       var cuisinequerystring = this.state.cuisinequerystring;
       var occasionquerystring = this.state.occasionquerystring;
       var price_ltequerystring = this.state.price_ltequerystring;
       var price_gtquerystring = this.state.price_gtquerystring;
-      url = url + locationquerystring + cuisinequerystring + occasionquerystring + price_ltequerystring + price_gtquerystring;
+      var datequerystring = this.state.datequerystring;
+      var timequerystring = this.state.timequerystring;
+      var catererName_querystring = this.state.catererName_querystring;
+
+      url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_ltequerystring + price_gtquerystring + datequerystring + timequerystring + catererName_querystring;
       this.setState({
         dropDownAddress: ! this.state.dropDownAddress,
         loading: true,
       },() => {
+        var selectedAddress = {
+          formatted_address: formatted_address,
+          longitude: address.geometry.location.lng(),
+          latitude: address.geometry.location.lat()
+        }
+        sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
         Router.replace(url)
       })
     }
   };
 
   searchMenu = () => {
-    var location = this.state.location
-    var selectedDate = this.state.selectedDate
-    var selectedTime = this.state.selectedTime
     
+    if (this.state.selectedDate === "") {
+      this.setState({
+        dateEmptyPopoverOpen: true
+      })
+    }
+    else if (this.state.selectedTime === "") {
+      this.setState({
+        timeEmptyPopoverOpen: true
+      })
+    }
+    else {
+      var selectedDate = this.state.selectedDate
+      var selectedTime = Number(this.state.selectedTime.replace(":", ""))
+      this.handleTopSearch(selectedDate, selectedTime)
+    }
   };
 
   navItemClicked = selectedCuisine => {
@@ -487,12 +606,32 @@ class SearchCaterer extends Component {
   };
 
   catererClicked = (_id) => {
-    Router.push(`/catererdetail/${_id}`, `/catererdetail/${_id}`)
+    if (this.state.selectedDate !== "" && this.state.selectedTime !== "") {
+      Router.push(`/catererdetail/${_id}`, `/catererdetail/${_id}`)
+    }
+    else {
+      if (this.state.selectedDate === "") {
+        this.setState({
+          dateEmptyPopoverOpen: true
+        })
+      }
+      else if (this.state.selectedTime === "") {
+        this.setState({
+          timeEmptyPopoverOpen: true
+        })
+      }
+      this.refObj.current.scrollIntoView({behavior: 'smooth'});
+    }
   };
 
   handleTimeChange(e) {
     this.setState({ 
       selectedTime: e.target.value,
+      timeEmptyPopoverOpen: false
+    },() => {
+      var selectedTime = Number(this.state.selectedTime.replace(":", ""))
+      this.handleTimeSearch(selectedTime)
+      sessionStorage.setItem('selectedTime', this.state.selectedTime);
     })
   }
 
@@ -538,13 +677,107 @@ class SearchCaterer extends Component {
     )
   };
 
-  handleUrlChange = (queryname) => {
+  searchNameClicked = () => {
+    console.log('gg')
     var url = this.state.baseurl;
+    var searchName = this.state.searchName
     var locationquerystring = this.state.locationquerystring;
+    var longitudequerystring = this.state.longitudequerystring;
+    var latitudequerystring = this.state.latitudequerystring;
     var cuisinequerystring = this.state.cuisinequerystring;
     var occasionquerystring = this.state.occasionquerystring;
     var price_ltequerystring = this.state.price_ltequerystring;
     var price_gtquerystring = this.state.price_gtquerystring;
+    var datequerystring = this.state.datequerystring;
+    var timequerystring = this.state.timequerystring;
+    var catererName_querystring = this.state.catererName_querystring;
+    
+    if (searchName === "") {
+      catererName_querystring = ""
+    }
+    else {
+      catererName_querystring = "&catererName=" + searchName;
+    }
+ 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+
+    this.setState({
+      loading: true,
+    },() => {
+      Router.replace(url)
+    })
+  }
+
+  handleTimeSearch = (selectedTime) => {
+    var url = this.state.baseurl;
+    var searchName = this.state.searchName
+    var locationquerystring = this.state.locationquerystring;
+    var longitudequerystring = this.state.longitudequerystring;
+    var latitudequerystring = this.state.latitudequerystring;
+    var cuisinequerystring = this.state.cuisinequerystring;
+    var occasionquerystring = this.state.occasionquerystring;
+    var price_ltequerystring = this.state.price_ltequerystring;
+    var price_gtquerystring = this.state.price_gtquerystring;
+    var datequerystring = this.state.datequerystring;
+    var timequerystring = this.state.timequerystring;
+    var catererName_querystring = this.state.catererName_querystring;
+
+    timequerystring = "&time=" + selectedTime;
+
+    if (searchName === "") {
+      catererName_querystring = ""
+    }
+    
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+
+    this.setState({
+      loading: true,
+    },() => {
+      Router.replace(url)
+    })
+  }
+
+  handleDateSearch = (selectedDate) => {
+    var url = this.state.baseurl;
+    var searchName = this.state.searchName
+    var locationquerystring = this.state.locationquerystring;
+    var longitudequerystring = this.state.longitudequerystring;
+    var latitudequerystring = this.state.latitudequerystring;
+    var cuisinequerystring = this.state.cuisinequerystring;
+    var occasionquerystring = this.state.occasionquerystring;
+    var price_ltequerystring = this.state.price_ltequerystring;
+    var price_gtquerystring = this.state.price_gtquerystring;
+    var datequerystring = this.state.datequerystring;
+    var timequerystring = this.state.timequerystring;
+    var catererName_querystring = this.state.catererName_querystring;
+   
+    datequerystring = "&date=" + selectedDate;
+
+    if (searchName === "") {
+      catererName_querystring = ""
+    }
+    
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+
+    this.setState({
+      loading: true,
+    },() => {
+      Router.replace(url)
+    })
+  }
+
+  handleUrlChange = (queryname) => {
+    var url = this.state.baseurl;
+    var locationquerystring = this.state.locationquerystring;
+    var longitudequerystring = this.state.longitudequerystring;
+    var latitudequerystring = this.state.latitudequerystring;
+    var cuisinequerystring = this.state.cuisinequerystring;
+    var occasionquerystring = this.state.occasionquerystring;
+    var price_ltequerystring = this.state.price_ltequerystring;
+    var price_gtquerystring = this.state.price_gtquerystring;
+    var datequerystring = this.state.datequerystring;
+    var timequerystring = this.state.timequerystring;
+    var catererName_querystring = this.state.catererName_querystring;
     var selectedArray;
 
     if (queryname === 'occasion') {
@@ -588,7 +821,7 @@ class SearchCaterer extends Component {
       }
     }
 
-    url = url + locationquerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring;
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
       loading: true,
@@ -598,11 +831,19 @@ class SearchCaterer extends Component {
 
   }
 
+  handleSearchNameChange(e) {
+    this.setState({
+      searchName: e.target.value,
+    });
+  }
+
   handleDateChange(date){
 		this.setState({ 
       selectedDate : moment(date).format("dddd, DD/MM/YY") 
     }, () => {
       this.toggleDropDown()
+      this.handleDateSearch(this.state.selectedDate)
+      sessionStorage.setItem('selectedDate', this.state.selectedDate);
     })
   }
   
@@ -904,18 +1145,7 @@ class SearchCaterer extends Component {
             OCCASION
           </h6>
           {this.renderOccasion()}
-          <h6
-            style={{
-              fontWeight: "700",
-              color: "black",
-              fontSize: 15,
-              marginBottom: 10,
-              marginTop: 30
-            }}
-          >
-            DIETARY CONCERN
-          </h6>
-          {this.renderDietary()}
+         
           <h6
             style={{
               fontWeight: "700",
@@ -964,17 +1194,13 @@ class SearchCaterer extends Component {
         </Col>
         <Col style={{ textAlign: "center" }} xs="12">
           <p
-            style={{ fontSize: 15, opacity: 0.8, marginTop: 10 }}
+            style={{ fontSize: 15, opacity: 0.8, marginTop: 10, paddingLeft:20, paddingRight: 20 }}
             className="big"
           >
-            We recommend you to make special request to our team by filling out
-            the form below. We will make response to you as soon as possible for
-            a tailor-made proposal.
+            We recommend you to make special request to our team by contacting us at foodiebeeie@gmail.com. We will make response to you as soon as possible.
           </p>
         </Col>
-        <Col style={{ textAlign: "center" }} xs="12">
-          <Button color="primary">Make Request</Button>
-        </Col>
+      
       </Row>
     );
   }
@@ -1213,7 +1439,11 @@ class SearchCaterer extends Component {
                     }}
                     caret
                   >
-                  <Label style={{ cursor: 'pointer', fontSize: 15, paddingLeft:5, textAlign:'start', color: this.state.location === "" ? 'gray' : 'black', height:12, width: '98%'}}>{this.state.location}</Label> 
+                  
+                  <Label style={{ padding:0, margin: 0, cursor: "pointer", overflow: "hidden", fontSize: 15, marginRight:5, textAlign:'start', color: this.state.location === "" ? 'gray' : 'black', width: '90%' }}>
+                  {this.state.location}
+                  </Label>
+                  
                   </DropdownToggle>
                   <DropdownMenu style={{width: '100%'}}>
                     <Row style={{width: '100%'}}>
@@ -1242,7 +1472,7 @@ class SearchCaterer extends Component {
               </FormGroup>
             </Col>
             <Col xs="4">
-              <Button  outline onClick={() => this.searchBarToggle()} block style={{marginTop: 25, height: '50%', fontWeight: '700', }} color="primary"> {this.state.isSearchBarOpen? "SAVE" : "CHANGE"}</Button>
+              <Button  outline onClick={() => this.searchBarToggle()} block style={{marginTop: 25, height: '50%', fontWeight: '700', }} color="primary"> {this.state.isSearchBarOpen? "HIDE" : "SHOW"}</Button>
             </Col>
           </Row>
 
@@ -1251,7 +1481,7 @@ class SearchCaterer extends Component {
               <Col xs="6">
                 <FormGroup>
                   <h6>When</h6>
-                  <UncontrolledDropdown isOpen={this.state.dropDownDate}  toggle={() => this.toggleDropDown()}>
+                  <UncontrolledDropdown id="Popover2" isOpen={this.state.dropDownDate}  toggle={() => this.toggleDropDown()}>
                     <DropdownToggle
                       style={{
                         height: 40,
@@ -1262,7 +1492,11 @@ class SearchCaterer extends Component {
                       }}
                       caret
                     >
-                    <Label style={{ cursor: 'pointer', fontSize: 15, paddingLeft:5, textAlign:'start', color: this.state.selectedDate === "" ? 'gray' : 'black', height:12, width: '98%'}}>{this.state.selectedDate === "" ? 'Select Date' : this.state.selectedDate}</Label> 
+
+                       <Label style={{ padding:0, margin: 0, cursor: "pointer", overflow: "hidden", fontSize: 15, marginRight:5, textAlign:'start', color: this.state.selectedDate === "" ? 'gray' : 'black', width: '90%' }}>
+                        {this.state.selectedDate === "" ? 'Select Date' : this.state.selectedDate}
+                      </Label>
+
                     </DropdownToggle>
                     <DropdownMenu>
                       <div >
@@ -1273,18 +1507,28 @@ class SearchCaterer extends Component {
                       </div>
                     </DropdownMenu>
                   </UncontrolledDropdown>
+
+                  <Popover placement="bottom" isOpen={this.state.dateEmptyPopoverOpen} target="Popover2" >
+                    <PopoverHeader style={{color: 'red'}}>Select Date</PopoverHeader>
+                    <PopoverBody>Please select date of catering event</PopoverBody>
+                  </Popover>
+
                 </FormGroup>
               </Col>
               <Col xs="6">
                 <FormGroup>
                   <h6>Time</h6>
-                  <Input value={this.state.selectedTime} onChange={(e) => this.handleTimeChange(e)} style={{cursor: 'pointer', color: this.state.selectedTime === "" ? 'gray': 'black', fontSize: 15, height: 40, }} type="select">
+                  <Input id="Popover1" value={this.state.selectedTime} onChange={(e) => this.handleTimeChange(e)} style={{cursor: 'pointer', color: this.state.selectedTime === "" ? 'gray': 'black', fontSize: 15, height: 40, backgroudColor: 'white'}} type="select">
                     <option value='' disabled>Select Time</option>
                     {this.time.map(time =>
                       <option style={{color:'black'}} key={time} value={time}>{time}</option>
                     )}
                   </Input>
                 </FormGroup>
+                <Popover placement="bottom" isOpen={this.state.timeEmptyPopoverOpen} target="Popover1" >
+                  <PopoverHeader style={{color: 'red'}}>Select Time</PopoverHeader>
+                  <PopoverBody>Please select the arrival time of caterings</PopoverBody>
+                </Popover>
               </Col>
             </Row>
           </Collapse>
@@ -1301,8 +1545,14 @@ class SearchCaterer extends Component {
     const slicedCuisine = this.state.cuisine.slice(4, cuisinelength)
 
     return (
-      <Layout title={this.state.location === "" || typeof this.state.location === "undefined" ? 'Caterers Nearby FoodieBee - Catering Service' : this.state.location + " Caterers FoodieBee - Catering Service"}>
-      <div style={{backgroundColor: 'white'}}>
+      <Layout title={this.state.location === "" || typeof this.state.location === "undefined" ? 'Caterers Nearby' : this.state.location + " Caterers Nearby"}>
+      <NextSeo
+        config={{
+          title: this.state.location === "" || typeof this.state.location === "undefined" ? 'Caterers Nearby' : this.state.location + " Caterers Nearby",
+        }}
+      />
+      
+      <div ref={this.refObj} style={{backgroundColor: 'white'}}>
          <NavBar signIn={e=>this.signIn(e)}/>
 
          {this.state.isMobile ? this.renderTopSearchBar() : null}
@@ -1316,7 +1566,7 @@ class SearchCaterer extends Component {
               <Card style={{backgroundColor: 'rgba(211,211,211,0.1)', boxShadow: '1px 1px 1px #9E9E9E'}}>
               <CardBody style={{paddingTop: 15, paddingBottom: 0,}}>
                 <Row>
-                  <Col xs="12" md="4">
+                  <Col xs="12" md="5">
                     <FormGroup>
                       <h6>Delivered To</h6>
                       <UncontrolledDropdown isOpen={this.state.dropDownAddress}  toggle={() => this.toggleDropDownAddress()}>
@@ -1329,8 +1579,12 @@ class SearchCaterer extends Component {
                             backgroundColor: "white",
                           }}
                           caret
-                        >
-                        <Label style={{ cursor: 'pointer', fontSize: 15, paddingLeft:5, textAlign:'start', color: this.state.location === "" ? 'gray' : 'black', height:12, width: '98%'}}>{this.state.location}</Label> 
+                        > 
+                       
+                          <Label style={{ padding:0, margin: 0, cursor: "pointer", overflow: "hidden", fontSize: 15, marginRight:5, textAlign:'start', color: this.state.location === "" ? 'gray' : 'black', width: '90%' }}>
+                          {this.state.location}
+                          </Label>
+                        
                         </DropdownToggle>
                         <DropdownMenu style={{width: '100%'}}>
                           <Row style={{width: '100%'}}>
@@ -1356,10 +1610,10 @@ class SearchCaterer extends Component {
                       
                     </FormGroup>
                   </Col>
-                  <Col xs="6" md="3">
+                  <Col xs="6" md="4">
                     <FormGroup>
                       <h6>When</h6>
-                      <UncontrolledDropdown isOpen={this.state.dropDownDate}  toggle={() => this.toggleDropDown()}>
+                      <UncontrolledDropdown id="Popover2" isOpen={this.state.dropDownDate}  toggle={() => this.toggleDropDown()}>
                         <DropdownToggle
                           style={{
                             height: 40,
@@ -1370,7 +1624,11 @@ class SearchCaterer extends Component {
                           }}
                           caret
                         >
-                        <Label style={{ cursor: 'pointer', fontSize: 15, paddingLeft:5, textAlign:'start', color: this.state.selectedDate === "" ? 'gray' : 'black', height:12, width: '98%'}}>{this.state.selectedDate === "" ? 'Select Date' : this.state.selectedDate}</Label> 
+
+                         <Label style={{ padding:0, margin: 0, cursor: "pointer", overflow: "hidden", fontSize: 15, marginRight:5, textAlign:'start', color: this.state.selectedDate === "" ? 'gray' : 'black', width: '90%' }}>
+                         {this.state.selectedDate === "" ? 'Select Date' : this.state.selectedDate}
+                        </Label>
+
                         </DropdownToggle>
                         <DropdownMenu >
                           <div >
@@ -1382,21 +1640,31 @@ class SearchCaterer extends Component {
                         </DropdownMenu>
                       </UncontrolledDropdown>
                     </FormGroup>
+
+                     <Popover placement="bottom" isOpen={this.state.dateEmptyPopoverOpen} target="Popover2" >
+                      <PopoverHeader style={{color: 'red'}}>Select Date</PopoverHeader>
+                      <PopoverBody>Please select date of catering event</PopoverBody>
+                    </Popover>
+
                   </Col>
                   <Col xs="6" md="3">
-                    <FormGroup>
+                    <FormGroup >
                       <h6>Time</h6>
-                      <Input value={this.state.selectedTime} onChange={(e) => this.handleTimeChange(e)} style={{cursor: 'pointer', color: this.state.selectedTime === "" ? 'gray': 'black', fontSize: 15, height: 40, }} type="select">
+                      <Input id="Popover1" value={this.state.selectedTime} onChange={(e) => this.handleTimeChange(e)} style={{cursor: 'pointer', color: this.state.selectedTime === "" ? 'gray': 'black', fontSize: 15, height: 40, backgroudColor: 'white'}} type="select">
                         <option value='' disabled>Select Time</option>
                         {this.time.map(time =>
                           <option style={{color:'black'}} key={time} value={time}>{time}</option>
                         )}
                       </Input>
                     </FormGroup>
+
+                    <Popover placement="bottom" isOpen={this.state.timeEmptyPopoverOpen} target="Popover1" >
+                      <PopoverHeader style={{color: 'red'}}>Select Time</PopoverHeader>
+                      <PopoverBody>Please select the arrival time of caterings</PopoverBody>
+                    </Popover>
+
                   </Col>
-                  <Col xs="12" md="2">
-                    <Button block style={{marginTop: 25, height: '50%', fontWeight: '600', }} className="bg-primary" color="primary">SEARCH</Button>
-                  </Col>
+                
                 </Row>
               </CardBody>
               </Card>
@@ -1414,9 +1682,9 @@ class SearchCaterer extends Component {
                 <FormGroup row>
                   <Col md="12">
                     <InputGroup >
-                      <Input style={{ borderWidth:1.5, color:'black', fontSize: 15, height: 40, borderTopLeftRadius: 15, borderBottomLeftRadius: 15}} type="text" id="input1-group2" name="input1-group2" placeholder="Caterer, Cuisine etc" />
+                      <Input onChange={e => this.handleSearchNameChange(e)} value={this.state.searchName} style={{ borderWidth:1.5, color:'black', fontSize: 15, height: 40, borderTopLeftRadius: 15, borderBottomLeftRadius: 15}} type="text" id="input1-group2" name="input1-group2" placeholder="Caterer, Cuisine etc" />      
                       <InputGroupAddon addonType="prepend">
-                        <Button style={{borderTopRightRadius: 15, borderBottomRightRadius: 15}}  type="button" color="primary"><i className="fa fa-search"></i></Button>
+                        <Button onClick={() => this.searchNameClicked()} style={{borderTopRightRadius: 15, borderBottomRightRadius: 15}}  type="button" color="primary"><i className="fa fa-search"></i></Button>
                       </InputGroupAddon>
                     </InputGroup>
                   </Col>
@@ -1502,6 +1770,8 @@ class SearchCaterer extends Component {
                               id="input1-group2"
                               name="input1-group2"
                               placeholder="Caterer, Cuisine etc"
+                              onChange={e => this.handleSearchNameChange(e)} 
+                              value={this.state.searchName}
                             />
                             <InputGroupAddon addonType="prepend">
                               <Button
@@ -1511,6 +1781,7 @@ class SearchCaterer extends Component {
                                 }}
                                 type="button"
                                 color="primary"
+                                onClick={() => this.searchNameClicked()} 
                               >
                                 <i className="fa fa-search" />
                               </Button>
@@ -1554,18 +1825,7 @@ class SearchCaterer extends Component {
                   OCCASION
                 </h6>
                 {this.renderOccasion()}
-                <h6
-                  style={{
-                    fontWeight: "700",
-                    color: "black",
-                    fontSize: 15,
-                    marginBottom: 10,
-                    marginTop: 30
-                  }}
-                >
-                  DIETARY CONCERN
-                </h6>
-                {this.renderDietary()}
+              
                 <h6
                   style={{
                     fontWeight: "700",

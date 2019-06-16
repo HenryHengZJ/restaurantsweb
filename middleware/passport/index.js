@@ -3,6 +3,7 @@ const passport = require('passport');
 const LocalStrategy    = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
+require('dotenv').config();
 
 const Customer = require('../../models/customer');
 
@@ -59,7 +60,7 @@ var myLocalConfig = (passport) => {
 	
 	passport.use(new JWTStrategy({
 		jwtFromRequest: req => req.cookies.jwt,
-		secretOrKey: "FoodieBeeSecretKey",
+		secretOrKey: process.env.jwtSecretKey,
 	  },
 	  (jwtPayload, done) => {
 		if (new Date() > new Date(jwtPayload.expires)) {

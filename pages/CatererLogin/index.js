@@ -6,7 +6,7 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import NavBar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import Layout from '../../components/Layout';
-
+import NextSeo from 'next-seo';
 
 class CatererLogin extends Component {
 
@@ -37,7 +37,12 @@ class CatererLogin extends Component {
 
   render() {
     return (
-      <Layout title={'Caterer Login FoodieBee - Catering Service'}>
+      <Layout title={'Caterer Login'}>
+        <NextSeo
+          config={{
+            title: 'Caterer Login | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          }}
+        />
         <div style={{backgroundColor: 'white'}}>
           <NavBar signInHide={true}/>
           <div className="app justify-content-center align-items-center">

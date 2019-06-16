@@ -7,6 +7,7 @@ import axios from "axios";
 import apis from "../../apis";
 import Router from 'next/router'
 import { server } from '../../config';
+import NextSeo from 'next-seo';
 
 class ResetPassword extends Component {
 
@@ -147,7 +148,12 @@ class ResetPassword extends Component {
   render() {
 
     return (
-    <Layout title={"Reset Password - FoodieBee Catering Service"}>
+    <Layout title={"Reset Password"}>
+      <NextSeo
+        config={{
+          title: 'Reset Password | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+        }}
+      />
       <div style={{backgroundColor: 'white'}}>
         <NavBar signIn={e=>this.signIn(e)}/>
         <div className="app justify-content-center align-items-center">

@@ -1,5 +1,44 @@
 import Payment from 'payment';
 
+export function listCounties() {
+  var CountyData = [
+    "Dublin",
+    "Cork",
+    "Limerick",      
+    "Galway",
+    "Waterford",
+    "Antrim",
+    "Armagh",
+    "Carlow",
+    "Cavan",
+    "Clare",
+    "Cork",
+    "Donegal",
+    "Down",
+    "Fermanagh",
+    "Kerry",
+    "Kildare",
+    "Kilkenny",
+    "Laois",
+    "Leitrim",
+    "Londonderry",
+    "Longford",
+    "Louth",
+    "Mayo",
+    "Meath",
+    "Monaghan",
+    "Offaly",
+    "Roscommon",
+    "Sligo",
+    "Tipperary",
+    "Tyrone",
+    "Westmeath",
+    "Wexford",
+    "Wicklow",
+  ]
+  return CountyData
+}
+
 export function timeRanges() {
   var timerange = [];
   var countval = 0

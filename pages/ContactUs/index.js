@@ -6,6 +6,7 @@ import ContactInfo from './ContactInfo';
 import ContactForm from './ContactForm';
 import Router from 'next/router'
 import Layout from '../../components/Layout'
+import NextSeo from 'next-seo';
 
 class LandingPage extends Component {
   
@@ -19,7 +20,12 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <Layout title={'Contact Us FoodieBee - Catering Service'}>
+      <Layout title={'Contact Us'}>
+        <NextSeo
+          config={{
+            title: 'Contact Us | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          }}
+        />
         <div id="app">
           <NavBar theme={'dark'} signIn={e=>this.signIn(e)}/>
           <Banner/>

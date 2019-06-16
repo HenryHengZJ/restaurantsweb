@@ -4,12 +4,13 @@ var Customer = require('../../models/customer');
 var ObjectId = require('mongodb').ObjectID;
 var passport = require('passport');
 
-router.get('/getcustomerprofile/:_id', (req, res) => {
+router.get('/getcustomerprofile', passport.authenticate('jwt', {session: false}), (req, res) => {
 
-    var matchquery = {};
-	
-	if (typeof req.params._id !== 'undefined')
-		matchquery._id = new ObjectId(req.params._id)
+    const { user } = req;
+    var userID = user.customerID
+
+    var matchquery;
+    matchquery = {_id: new ObjectId(userID)}
 
     Customer.find(matchquery, (err,doc) => {
         if (err) return res.status(500).send({ error: err });
@@ -33,5 +34,33 @@ router.put('/updatecustomerprofile', passport.authenticate('jwt', {session: fals
     });
 });
 
+router.put('/updatecustomerpassword', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const { user } = req;
+    var userID = user.customerID
+
+    var matchquery;
+    matchquery = {_id: new ObjectId(userID)}
+    
+    var updateData = req.body
+    var originalpassword = updateData.originalpassword
+    var newpassword = updateData.newpassword
+
+    Customer.findOne(matchquery, function(err, customer) {
+        // if there are any errors, return the error
+        if (err) return res.status(500).send({ error: err });
+        // if no customer is found, return the message
+        if (!customer) return res.status(404).send({ error: err });
+        // check customer's password
+        if (customer.validPassword(originalpassword))
+        {
+            customer.update({
+                customerPassword: customer.generateHash(newpassword)
+            }).then(() => res.status(201).json(customer));
+        }
+        else {
+            return res.status(401).send({ error: 'invalid password' });
+        } 
+    });
+});
 
 module.exports = router;

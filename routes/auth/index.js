@@ -9,6 +9,7 @@ var ObjectId = require('mongodb').ObjectID;
 var bcrypt   = require('bcrypt-nodejs');
 var twiliocall = require('../../twilioAction')
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
+require('dotenv').config();
 
 router.post('/customersignup', (req, res) => {
 	
@@ -29,17 +30,16 @@ router.post('/customersignup', (req, res) => {
 		} 
 		else {
 			// create the customer
-			var newCustomer = new Customer();
-			newCustomer.customerEmail    	     = email;
-			newCustomer.customerPassword 	     = newCustomer.generateHash(req.body.customerPassword);
-			newCustomer.customerFirstName	 	 = req.body.customerFirstName;
-			newCustomer.customerLastName	 	 = req.body.customerLastName;
-            newCustomer.customerPhoneNumber    	 = req.body.customerPhoneNumber;
-            newCustomer.customerAddress        	 = req.body.customerAddress;
-			newCustomer.customerCity			 = req.body.customerCity;
-			newCustomer.customerCounty			 = req.body.customerCounty;
-			newCustomer.customerCountry			 = req.body.customerCountry;
-			newCustomer.save().then(() => res.json(newCustomer));
+			var newCustomer = new Customer(req.body);
+			newCustomer.customerPassword = newCustomer.generateHash(req.body.customerPassword);
+            newCustomer.save().then(() => 
+                {
+                    res.json(newCustomer)
+
+                   
+                }
+                
+            );
 		}
 	});
 });
@@ -119,7 +119,7 @@ router.post('/customerlogin', (req, res) => {
                 }
                 else {
                     /** generate a signed json web token and return it in the response */
-                    const token = jwt.sign(payload, "FoodieBeeSecretKey", {expiresIn: '24h'} );
+                    const token = jwt.sign(payload, process.env.jwtSecretKey, {expiresIn: '24h'} );
 
                     /** assign our jwt to the cookie */
                     res.cookie('jwt', token, { httpOnly: true});
@@ -169,30 +169,10 @@ router.get('/getresetpassword', (req, res) => {
       });
 });
 
-router.get('/checkstatus', passport.authenticate('jwt', {session: false}), (req, res) => {
-    const { user } = req;
-    console.log('req = ', user)
-    res.status(200).send({ user });
-});
-
-
 router.get('/logout', (req, res) => {
     req.logout();
     res.clearCookie('userName')
     res.status(200).clearCookie('jwt', {path: '/'}).json({message: "successfully logout"});
 });
 
-router.get('/testcall', (req, res) => {
-    twiliocall.callToCaterer()
-});
-
-router.get('/voice-call', (req, res) => {
-    // Use the Twilio Node.js SDK to build an XML response
-    const twiml = new VoiceResponse();
-    twiml.say({ voice: 'alice' }, 'Hello! I am calling from Hertz Corporation which is located at Ontorio, Canada. May I please speak to Claire Lieu please?');
-   
-    // Render the response as XML
-    res.set('Content-Type', 'text/xml');
-    res.status(200).send(twiml.toString());
-  });
 module.exports = router;

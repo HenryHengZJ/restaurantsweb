@@ -49,6 +49,11 @@ nextApp.prepare().then(() => {
 	var customerRoutes   = require('./routes/customer');
 	var menuPublishedRoutes   = require('./routes/menuPublished');
 	var cartRoutes   = require('./routes/cart');
+  var orderRoutes   = require('./routes/order');
+  var paymentRoutes   = require('./routes/payment');
+  var reviewRoutes   = require('./routes/review');
+  var twilioRoutes   = require('./routes/twilio');
+
 
 	// routes ======================================================================
 	app.use('/test', testRoutes);
@@ -58,12 +63,16 @@ nextApp.prepare().then(() => {
 	app.use('/customer', customerRoutes);
 	app.use('/menuPublished', menuPublishedRoutes);
   app.use('/cart', cartRoutes);
-
+  app.use('/order', orderRoutes);
+  app.use('/payment', paymentRoutes);
+  app.use('/review', reviewRoutes);
+  app.use('/twilio', twilioRoutes);
+  
   app.post('/postmessage', (req,res) => {
     var bodymsg = req.body
     mail.sendCustomerMessageEmail('/templates/customer_message_admin/email.html', bodymsg);
     res.status(200).json({});
-  })  
+  }) 
  
   app.get('/searchcaterer', (req,res) => {
     return nextApp.render(req, res, '/SearchCaterer',  req.query )
@@ -78,7 +87,7 @@ nextApp.prepare().then(() => {
   }) 
 
   app.get('/register', (req,res) => {
-    return nextApp.render(req, res, '/Register')
+    return nextApp.render(req, res, '/Register', req.query)
   }) 
 
   app.get('/caterersignup', (req,res) => {
@@ -89,12 +98,14 @@ nextApp.prepare().then(() => {
     return nextApp.render(req, res, '/CatererLogin')
   })
 
-  app.get('/checkout/:id', (req,res) => {
-    return nextApp.render(req, res, '/DeliveryConfirmation', { id: req.params.id })
+  app.get('/checkout/:cartID/:catererID', (req,res) => {
+    return nextApp.render(req, res, '/CheckOut', { cartID: req.params.cartID, catererID: req.params.catererID })
   }) 
 
   app.get('/userprofile/:userprofilepage', (req,res) => {
-    return nextApp.render(req, res, '/UserProfile', { userprofilepage: req.params.userprofilepage })
+    var returnquery = req.query
+    returnquery.userprofilepage = req.params.userprofilepage
+    return nextApp.render(req, res, '/UserProfile', returnquery)
   }) 
 
   app.get('/forgotpassword', (req,res) => {

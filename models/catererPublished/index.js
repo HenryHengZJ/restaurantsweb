@@ -4,10 +4,11 @@ var bcrypt   = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 
 // define the schema for our openingHoursSchema model
-var openingHoursSchema = mongoose.Schema({
+var deliveryHoursSchema = mongoose.Schema({
 	day: String,
 	starttime: Number,
-	closetime: Number,
+    closetime: Number,
+    timerange: [Number]
 });
 
 // define the schema for our catererSchema model
@@ -30,7 +31,7 @@ var catererSchema = mongoose.Schema({
 	deliveryradius: Number,
     deliveryfee: Number,
 	minimumspend: Number,
-	openinghours: [openingHoursSchema],
+	deliveryhours: [deliveryHoursSchema],
 	catererOrderLater: Boolean,
 	inAdvanceMin: Number,
 	inAdvanceDay: Number,
