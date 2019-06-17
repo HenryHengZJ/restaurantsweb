@@ -33,7 +33,7 @@ class Shops extends Component {
         <Col key={i} xs="3" sm="3" md="2" lg="2">
           <Card style={{borderWidth: 0, borderColor: 'white', boxShadow: 'none'}}>
           <CardBody style={{padding: 0, height: 80}}>
-            <img className="grayscaleimg" style={{ objectFit:'cover', width: '100%', height: '100%' }} src={icons[i]}  />
+            <img className="grayscaleimg" style={{ objectFit:'cover', width: '100%', height: '100%' }} src={icons[i]} alt={"Restaurant" + i} />
           </CardBody>
           </Card>
         </Col>

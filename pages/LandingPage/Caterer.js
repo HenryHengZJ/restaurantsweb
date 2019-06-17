@@ -28,15 +28,15 @@ class Caterer extends React.Component {
               <Table borderless style={{ marginTop: 30}}>
                 <tbody>
                   <tr>
-                    <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} /></td>
+                    <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} alt=""/></td>
                     <td style={{fontSize: 16}}><b>More orders.</b> We connect nationwide businesspeople with our caterer partners.</td>
                   </tr>
                   <tr>
-                    <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} /></td>
+                    <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} alt=""/></td>
                     <td style={{fontSize: 16}}><b>Operational support.</b> When customers need help, they talk to us. We make sure they’re happy, and you get some relief from distracting phone calls.</td>
                   </tr>
                   <tr>
-                    <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} /></td>
+                    <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} alt=""/></td>
                     <td style={{fontSize: 16}}><b>Wider insight.</b> Which marketing channels drive the most orders? What do customers say when reviewing you? We give you fast access to the info that matters most.</td>
                   </tr>
                 </tbody>
@@ -50,7 +50,7 @@ class Caterer extends React.Component {
     
             </Col>
             <Col xs="12" md="6" >
-              <img style={ { objectFit:'cover', width: '100%', height: '100%' }} src={img.caterer_dashboard}  />
+              <img style={ { objectFit:'cover', width: '100%', height: '100%' }} src={img.caterer_dashboard} alt="FoodieBee caterer dashboard"/>
             </Col>
 
             <div style={{height: 1, marginTop:100, opacity: 0.2, backgroundColor: 'gray', borderWidth: 1}} className="col l1"></div>

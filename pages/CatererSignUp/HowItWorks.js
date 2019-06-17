@@ -39,6 +39,7 @@ class HowItWorks extends React.Component {
               <img
                 style={{ objectFit: "cover", width: 80, height: 80 }}
                 src={img.register}
+                alt="Register Account"
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Register Account
@@ -57,6 +58,7 @@ class HowItWorks extends React.Component {
                   height: 80
                 }}
                 src={img.setupprofile}
+                alt="Setup Profile"
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Setup Profile
@@ -75,6 +77,7 @@ class HowItWorks extends React.Component {
                   height: 80
                 }}
                 src={img.receiveorders}
+                alt=" Receive Order"
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Receive Order
@@ -93,6 +96,7 @@ class HowItWorks extends React.Component {
                   height: 80
                 }}
                 src={img.paymentontime}
+                alt="Payment On-Time"
               />
               <h6 style={{ fontWeight: "600", fontSize: 18, marginTop: 20 }}>
                 Payment On-Time

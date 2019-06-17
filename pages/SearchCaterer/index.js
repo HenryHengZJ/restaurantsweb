@@ -395,6 +395,8 @@ class SearchCaterer extends Component {
       filterModalOpen: false,
       timeEmptyPopoverOpen: false,
       dateEmptyPopoverOpen: false,
+      mobile_timeEmptyPopoverOpen: false,
+      mobile_dateEmptyPopoverOpen: false,
     }
 
     this.time  = timeRanges();
@@ -523,7 +525,8 @@ class SearchCaterer extends Component {
   toggleDropDown = () => {
     this.setState({
       dropDownDate: !this.state.dropDownDate,
-      dateEmptyPopoverOpen: false
+      dateEmptyPopoverOpen: false,
+      mobile_dateEmptyPopoverOpen: false,
     })
   }
 
@@ -581,12 +584,14 @@ class SearchCaterer extends Component {
     
     if (this.state.selectedDate === "") {
       this.setState({
-        dateEmptyPopoverOpen: true
+        dateEmptyPopoverOpen: this.state.isMobile ? false : true,
+        mobile_dateEmptyPopoverOpen: this.state.isMobile ? true : false,
       })
     }
     else if (this.state.selectedTime === "") {
       this.setState({
-        timeEmptyPopoverOpen: true
+        timeEmptyPopoverOpen: this.state.isMobile ? false : true,
+        mobile_timeEmptyPopoverOpen: this.state.isMobile ? true : false,
       })
     }
     else {
@@ -611,14 +616,30 @@ class SearchCaterer extends Component {
     }
     else {
       if (this.state.selectedDate === "") {
-        this.setState({
-          dateEmptyPopoverOpen: true
-        })
+        if (this.state.isMobile) {
+          this.setState({
+            mobile_dateEmptyPopoverOpen: true,
+            isSearchBarOpen: true
+          })
+        }
+        else {
+          this.setState({
+            dateEmptyPopoverOpen: true
+          })
+        }
       }
       else if (this.state.selectedTime === "") {
-        this.setState({
-          timeEmptyPopoverOpen: true
-        })
+        if (this.state.isMobile) {
+          this.setState({
+            mobile_timeEmptyPopoverOpen: true,
+            isSearchBarOpen: true
+          })
+        }
+        else {
+          this.setState({
+            timeEmptyPopoverOpen: true
+          })
+        }
       }
       this.refObj.current.scrollIntoView({behavior: 'smooth'});
     }
@@ -627,7 +648,8 @@ class SearchCaterer extends Component {
   handleTimeChange(e) {
     this.setState({ 
       selectedTime: e.target.value,
-      timeEmptyPopoverOpen: false
+      timeEmptyPopoverOpen: false,
+      mobile_timeEmptyPopoverOpen: false
     },() => {
       var selectedTime = Number(this.state.selectedTime.replace(":", ""))
       this.handleTimeSearch(selectedTime)
@@ -1508,7 +1530,7 @@ class SearchCaterer extends Component {
                     </DropdownMenu>
                   </UncontrolledDropdown>
 
-                  <Popover placement="bottom" isOpen={this.state.dateEmptyPopoverOpen} target="Popover2" >
+                  <Popover placement="bottom" isOpen={this.state.mobile_dateEmptyPopoverOpen} target="Popover2" >
                     <PopoverHeader style={{color: 'red'}}>Select Date</PopoverHeader>
                     <PopoverBody>Please select date of catering event</PopoverBody>
                   </Popover>
@@ -1525,7 +1547,7 @@ class SearchCaterer extends Component {
                     )}
                   </Input>
                 </FormGroup>
-                <Popover placement="bottom" isOpen={this.state.timeEmptyPopoverOpen} target="Popover1" >
+                <Popover placement="bottom" isOpen={this.state.mobile_timeEmptyPopoverOpen} target="Popover1" >
                   <PopoverHeader style={{color: 'red'}}>Select Time</PopoverHeader>
                   <PopoverBody>Please select the arrival time of caterings</PopoverBody>
                 </Popover>

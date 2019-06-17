@@ -9,6 +9,7 @@ import Shops from './Shops';
 import Testimonial from './Testimonial';
 import Router from 'next/router'
 import Layout from '../../components/Layout'
+import NextSeo from 'next-seo';
 
 class LandingPage extends Component {
 
@@ -41,7 +42,12 @@ class LandingPage extends Component {
 
   render() {
     return (
-      <Layout title={"Corporate Catering Service and Marketplace"}>
+      <Layout>
+        <NextSeo
+          config={{
+            title: 'FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          }}
+        />
         <div id="app">
           <div ref={this.refObj} > </div>
           <NavBar theme={'dark'} signIn={e=>this.signIn(e)}/>

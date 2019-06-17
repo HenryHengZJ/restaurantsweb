@@ -75,7 +75,7 @@ class Occasion extends Component {
         <Col key={i} xs="12" sm="6" md="6" lg="4">
           <Card onMouseEnter={() => this.toggle(i)} onMouseLeave={() => this.toggle(i)} style={{cursor: 'pointer', marginTop:0,  boxShadow: 'none', borderWidth: 0}}  onClick={() => this.handleSelectedCardClick(occasions[i].title)}>
             <CardBody style={{position:'relative', padding: 0}}>
-              <img style={ { objectFit:'cover', width: '100%', height: 220 }} src={occasions[i].src}  />
+              <img style={ { objectFit:'cover', width: '100%', height: 220 }} src={occasions[i].src} alt={occasions[i].descrip} />
               <div style={{ backgroundColor: 'black', opacity: occasions[i].hover ? 0.1 : 0.3, position: 'absolute', top: 0, left: 0, width: '100%', height: 220}}> </div> 
               <h5 style={{fontWeight: '600', fontSize: 20, color: 'white', top:95, left:0, right:0, position: 'absolute', width: '100%', textAlign: 'center'}} >{occasions[i].title} </h5>
               <p style={{marginTop: 10}} >{occasions[i].descrip}</p>

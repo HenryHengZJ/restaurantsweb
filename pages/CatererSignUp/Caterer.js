@@ -57,6 +57,7 @@ class Caterer extends React.Component {
               <img
                 style={{ objectFit: "cover", width: 300, height: 300 }}
                 src={img.caterer_ingredients}
+                alt="Food Ingredients"
               />
             </Col>
           </Row>

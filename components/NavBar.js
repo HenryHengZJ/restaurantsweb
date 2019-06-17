@@ -103,7 +103,7 @@ class NavBar extends Component {
       <div>
         <Navbar style={{padding: 0, margin: 0, backgroundColor: backgroundColorVal, boxShadow: boxShadowVal}} light={lightVal} dark={darkVal} expand="md">
           <NavbarBrand style={{padding: 0, margin: 0,}} href="/">
-            <img style={{objectFit: 'cover', height: 50, width: 160, marginLeft: 20, marginTop: 10}} src={imgsrc}/>
+            <img style={{objectFit: 'cover', height: 50, width: 160, marginLeft: 20, marginTop: 10}} src={imgsrc} alt="FoodieBee Logo"/>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>

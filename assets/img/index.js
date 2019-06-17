@@ -36,7 +36,7 @@ export default {
    	eat1: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/eat1.png",
 	english: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/english.jpg",
    	event: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/event.jpg",
-	feedback: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/feedback.jpg",
+	feedback: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/feedback.png",
 	fingerfood: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/fingerfood.jpg",
 	fire: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/fire.png",	
 	french: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/french.jpg",

@@ -85,9 +85,9 @@ class Hero extends React.Component {
           <Row style={{margin:0, marginTop: 150, display:'flex',}} >
             
             <Col style={{textAlign: 'center', color: 'white',}} xs="12">
-              <h2 style={{fontSize: 40}}>
+              <h1 style={{fontSize: 40}}>
                 All you need for corporates catering
-              </h2>
+              </h1>
             </Col>
 
             <Col style={{textAlign: 'center', color: 'white',}} xs="12">

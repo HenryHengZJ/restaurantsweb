@@ -223,7 +223,7 @@ class Banner extends React.Component {
         <ModalHeader toggle={() => this.toggleModal()}>Enquiry Sent</ModalHeader>
         <ModalBody>
           <div style={{ textAlign: 'center' }} >
-           <img style={{ objectFit:'cover', width: 50, height: 50 }} src={"https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/checked.png"}  />
+           <img style={{ objectFit:'cover', width: 50, height: 50 }} src={"https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/checked.png"} alt="" />
           </div>
           <div style={{ marginTop: 20 }}>
             <p>Thank you for your interest in FoodieBee. We are now processing your enquiry and will get back to you as soon as we can. </p>
@@ -239,7 +239,7 @@ class Banner extends React.Component {
         <ModalHeader toggle={() => this.toggleModal()}>Enquiry Failed to Send</ModalHeader>
         <ModalBody>
           <div style={{ textAlign: 'center' }} >
-            <img style={{objectFit:'cover', width: 50, height: 50 }} src={"https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/cancel.png"}  />
+            <img style={{objectFit:'cover', width: 50, height: 50 }} src={"https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/cancel.png"} alt="" />
           </div>
           <div style={{ marginTop: 20 }}>
             <p>Unfortunately, your enquiry has failed to send. Please try again.</p>
@@ -275,7 +275,7 @@ class Banner extends React.Component {
             }}
             xs={isMobile ? "12" : "6"}
           >
-            <h2 style={{ fontSize: 40 }}>Caterers, join us now!</h2>
+            <h1 style={{ fontSize: 40 }}>Caterers, join us now!</h1>
             <h6 style={{ lineHeight:2, fontSize: 18, letterSpacing: 2, marginTop: 20 }}>
               Orders management, marketting channels, reviews and feedback.
               There are much more benefits when you join us.

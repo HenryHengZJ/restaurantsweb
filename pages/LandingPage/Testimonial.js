@@ -69,7 +69,7 @@ class Testimonial extends Component {
                 <tr>
                   <td style={{width: '15%'}}>
                     <div style={{width: 70, height: 70, position: 'relative', overflow: 'hidden', borderRadius: '50%'}}>
-                      <img style={{ objectFit:'cover', width: 'auto', height: '100%', display: 'inline' }} src={testimonial[i].src}/>
+                      <img style={{ objectFit:'cover', width: 'auto', height: '100%', display: 'inline' }} src={testimonial[i].src} alt={testimonial[i].position}/>
                     </div>
                   </td>
                   <td style={{textAlign:'start', width: '85%'}}>

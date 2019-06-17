@@ -36,22 +36,22 @@ class Features extends React.Component {
             <Col style={{marginTop:50}}xs="12"></Col>
          
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
-              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.register1}  />
+              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.register1} alt="Register Account at FoodieBee" />
               <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}} >Register Account</h6>
               <p style={{marginTop: 10}} >Join our community to enjoy more benefits and rewards</p>
             </Col>
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
-              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.search1}  />
+              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.search1} alt="Find your favourite food caterers and perfect catering service at FoodieBee" />
               <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Search and Filter</h6>
               <p style={{marginTop: 10}} >Find your favourite food caterers and perfect catering service.</p>
             </Col>
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
-              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.bank1}  />
+              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.bank1} alt="Effortless online ordering and secure transactions at FoodieBee" />
               <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Order and Pay</h6>
               <p style={{marginTop: 10}} >Effortless online ordering and secure transactions.</p>
             </Col>
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
-              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.eat1}  />
+              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.eat1} alt="Wait for your food to be delivered or pickup at counter through FoodieBee" />
               <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Enjoy and Eat</h6>
               <p style={{marginTop: 10}} >Wait for your food to be delivered or pickup at counter. Bon Appetite!</p>
             </Col>

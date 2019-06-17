@@ -21,21 +21,16 @@ class Layout extends React.Component {
       title
     } = this.props;
 
-    const titleVal = title + ' | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers' || 'FoodieBee - Corporate Catering Services and Marketplace | Local Caterers';
-
     return (
       <div>
         <Head>
             <meta charSet="utf-8"/>
             <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"/>
-            <meta name="description" content="FoodieBee provides wide range of restaurants and local caterers suitable for corporate caterings such as breakfast, lunch, events, and meetings. Order online for free through FoodieBee."/>
             <meta name="author" content="FoodieBee"/>
-            <title>{titleVal}</title>
             <link rel="manifest" href="/manifest.json"/>
             <link rel="shortcut icon" href="/static/favicon.ico"/>
-            
-            <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+          
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFHrZBb72wmg5LTiMjUgI_CLhsoMLmlBk&libraries=places"></script>

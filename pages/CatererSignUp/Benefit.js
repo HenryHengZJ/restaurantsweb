@@ -63,6 +63,7 @@ class Benefit extends Component {
               <img
                 style={{ objectFit: "cover", width: 40, height: 40 }}
                 src={benefits[i].src}
+                alt={benefits[i].title}
               />
               <h6 style={{ marginTop: 20, fontWeight: "600", fontSize: 17 }}>
                 {benefits[i].title}

@@ -136,6 +136,16 @@ nextApp.prepare().then(() => {
     return handle(req,res) // for all the react stuff
   })  
 
+  const sitemapOptions = {
+    root: __dirname + '/static/',
+    headers: {
+      'Content-Type': 'text/xml;charset=UTF-8',
+    }
+  };
+  app.get('/sitemap.xml', (req, res) => (
+    res.status(200).sendFile('sitemap.xml', sitemapOptions)
+  ));
+  
   //start server
   app.listen(port, (req, res) => {
     console.log( `nextjs server listening on port: ${port}`);

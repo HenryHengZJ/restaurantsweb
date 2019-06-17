@@ -42,7 +42,7 @@ class Banner extends React.Component {
             }}
             xs="12"
           >
-            <h2 style={{ fontSize: 40 }}>Contact Us</h2>
+            <h1 style={{ fontSize: 40 }}>Contact Us</h1>
           </Col>
         </Row>
       </section>
