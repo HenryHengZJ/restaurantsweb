@@ -50,7 +50,7 @@ exports.callToCaterer = function (orderID, parentOrderSpeech, childOrderItemSpee
   
   console.log('start calling...', catererPhoneNumber)
   
-  var url = "https://foodiebee.eu/twilio/voice?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded
+  var url = "https://foodiebee.herokuapp.com/twilio/voice?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded
   
   client.calls
     .create({

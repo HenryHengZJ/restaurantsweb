@@ -61,7 +61,7 @@ router.post('/voice', (request, response) => {
 	
 	function gather2() {
      
-	  const gatherNode = twiml.gather({ numDigits: 1, action: "https://foodiebee.eu/twilio/voice2?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded });
+	  const gatherNode = twiml.gather({ numDigits: 1, action: "https://foodiebee.herokuapp.com/twilio/voice2?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded });
 
 	  gatherNode.say(childOrderItemSpeech);
   
