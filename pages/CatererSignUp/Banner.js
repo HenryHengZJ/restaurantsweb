@@ -56,6 +56,7 @@ class Banner extends React.Component {
       isModalOpen: false,
       enquiryStatus: null,
       getStarting: false,
+      isPhoneNumberFormatWrong: false,
     };
   }
 
@@ -95,7 +96,8 @@ class Banner extends React.Component {
       //Valid Number
       this.setState({
         restaurantPhoneNumber: e.target.value,
-        isPhoneNumberEmpty: e.target.value === "" ? true : false
+        isPhoneNumberEmpty: false,
+        isPhoneNumberFormatWrong: false
       });
     }
   }
@@ -156,11 +158,20 @@ class Banner extends React.Component {
       this.setState({
         isEmailEmpty: true
       });
-    } else if ((restaurantPhoneNumber === "") || !this.validatePhoneNumber(restaurantPhoneNumber)) {
+    } else if (restaurantPhoneNumber === "") {
       this.setState({
         isPhoneNumberEmpty: true
       });
-    } else {
+    } else if (restaurantPhoneNumber.substring(0,3) === '353' || restaurantPhoneNumber.substring(0,1) !== '0') {
+      this.setState({
+        isPhoneNumberFormatWrong: true
+      });
+    } else if (restaurantPhoneNumber.length > 10 || restaurantPhoneNumber.length < 9 ) {
+      this.setState({
+        isPhoneNumberFormatWrong: true
+      });
+    }
+    else {
 
       this.setState({
         getStarting: true,
@@ -332,6 +343,7 @@ class Banner extends React.Component {
                     invalid={this.state.isPhoneNumberEmpty ? true : false}
                   />
                   <FormFeedback>Please enter owner phone number. Phone numbers should be 10 digits</FormFeedback>
+                  {this.state.isPhoneNumberFormatWrong ? <Label style={{fontSize:11, color: 'red', marginTop: 10}} >Phone number should start with 0 without country code and total length must be within 9 to 10 digits.</Label> : null}
                 </FormGroup>
                 <Button
                   style={{ marginTop: 30, paddingTop: 10, paddingBottom: 10 }}

@@ -49,6 +49,7 @@ import "./styles.css"
 import PropTypes from 'prop-types';
 import ContentLoader, { Facebook } from "react-content-loader";
 import img from "../../assets/img"
+import 'react-toastify/dist/ReactToastify.css';
 
 const propTypes = {
     children: PropTypes.node,

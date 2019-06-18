@@ -23,10 +23,10 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
     // Render the response as XML
     res.set('Content-Type', 'text/xml');
     res.status(200).send(twiml.toString());
-});
+});*/
 
 router.get('/testcall', (req, res) => {
-    twiliocall.callToCaterer(req.query.orderID, req.query.catererName, function(err, call) {
+    twiliocall.callToCaterer("5cfd0e0ff7f31a378cdbc152", "parentOrderSpeech", "childOrderItemSpeech", "+353831861716", function(err, call) {
         if (err) {
             return res.status(500).send({ error: err })
         }
@@ -34,7 +34,7 @@ router.get('/testcall', (req, res) => {
             res.status(200).send(call);
         }
     });
-});*/
+});
 
 router.post('/voice', (request, response) => {
 

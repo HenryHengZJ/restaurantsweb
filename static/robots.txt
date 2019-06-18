@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://foodiebee.eu/sitemap.xml

@@ -14,6 +14,7 @@ var cors = require('cors');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 var mail = require('./nodeMailerWithTemp');
+var sm = require('sitemap')
 require('./middleware/passport')(passport);
 
 // DB configuration ===============================================================
@@ -30,6 +31,20 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 nextApp.prepare().then(() => {
   const app = express();
+  var sitemap = sm.createSitemap ({
+    hostname: 'https://foodiebee.eu',
+    cacheTime: 600000,        // 600 sec - cache purge period
+    urls: [
+      { url: '',  changefreq: 'daily', priority: 0.7 },
+      { url: '/aboutus',  changefreq: 'monthly', priority: 0.3 },
+      { url: '/contactus',  changefreq: 'monthly',  priority: 0.3 },
+      { url: '/login',  changefreq: 'monthly',  priority: 0.3 },
+      { url: '/register',  changefreq: 'monthly',  priority: 0.3 },
+      { url: '/termscondition',  changefreq: 'monthly',  priority: 0.3 },
+      { url: '/privacypolicy',  changefreq: 'monthly',  priority: 0.3 },
+      { url: '/caterersignup',  changefreq: 'monthly',  priority: 0.7 },
+    ]
+  });
   // express code here
   // (optional) only made for logging and
   // bodyParser, parses the request body to be a readable json format
@@ -67,6 +82,27 @@ nextApp.prepare().then(() => {
   app.use('/payment', paymentRoutes);
   app.use('/review', reviewRoutes);
   app.use('/twilio', twilioRoutes);
+
+  app.get('/sitemap.xml', function(req, res) {
+    sitemap.toXML( function (err, xml) {
+        if (err) {
+          return res.status(500).end();
+        }
+        res.header('Content-Type', 'application/xml');
+        res.send( xml );
+    });
+  });
+
+  const path = require('path');
+  const options = {
+    root: path.join(__dirname, '/static'),
+    headers: {
+      'Content-Type': 'text/plain;charset=UTF-8',
+    }
+  };
+  app.get('/robots.txt', (req, res) => (
+    res.status(200).sendFile('robots.txt', options)
+  ));
   
   app.post('/postmessage', (req,res) => {
     var bodymsg = req.body
@@ -136,16 +172,6 @@ nextApp.prepare().then(() => {
     return handle(req,res) // for all the react stuff
   })  
 
-  const sitemapOptions = {
-    root: __dirname + '/static/',
-    headers: {
-      'Content-Type': 'text/xml;charset=UTF-8',
-    }
-  };
-  app.get('/sitemap.xml', (req, res) => (
-    res.status(200).sendFile('sitemap.xml', sitemapOptions)
-  ));
-  
   //start server
   app.listen(port, (req, res) => {
     console.log( `nextjs server listening on port: ${port}`);

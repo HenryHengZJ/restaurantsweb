@@ -56,6 +56,7 @@ class Register extends Component {
       error: false,
       redirecting: false,
       errorRedirect: false,
+      isPhoneNumberFormatWrong: false,
     };
   }
 
@@ -117,7 +118,8 @@ class Register extends Component {
       //Valid Number
       this.setState({
         customerPhoneNumber: e.target.value,
-        isPhoneNumberEmpty: e.target.value === "" ? true : false,
+        isPhoneNumberEmpty: false,
+        isPhoneNumberFormatWrong: false,
         error: false,
       });
     }
@@ -129,12 +131,13 @@ class Register extends Component {
   }
 
   validatePhoneNumber (phone) {
-    var returnval;
-    if (phone.length === 10) {
-      returnval = true
-    }
-    else {
+    var returnval
+    if (phone.substring(0,3) === '353' || phone.substring(0,1) !== '0') {
       returnval = false
+    } else if (phone.length > 10 || phone.length < 9 ) {
+      returnval = false
+    } else {
+      returnval = true
     }
     return returnval
   }
@@ -160,9 +163,13 @@ class Register extends Component {
       this.setState({
         isEmailEmpty: true
       });
-    } else if ((customerPhoneNumber === "") || !this.validatePhoneNumber(customerPhoneNumber)) {
+    } else if (customerPhoneNumber === "") {
       this.setState({
         isPhoneNumberEmpty: true
+      });
+    } else if (!this.validatePhoneNumber(customerPhoneNumber)) {
+      this.setState({
+        isPhoneNumberFormatWrong: true
       });
     } else if (customerPassword === "") {
       this.setState({
@@ -198,7 +205,7 @@ class Register extends Component {
 
       var url = apis.POSTcustomersignup;
 
-      axios.post(url, body, {headers: headers})
+      /*axios.post(url, body, {headers: headers})
         .then((response) => {
           if (response.status === 200) {
             this.setState({
@@ -215,7 +222,7 @@ class Register extends Component {
               isCreating: false
             })
           } 
-        }); 
+        }); */
   
     }
   }
@@ -338,7 +345,8 @@ class Register extends Component {
                           placeholder="Phone number"
                           invalid={this.state.isPhoneNumberEmpty ? true : false}
                         />
-                        <FormFeedback>Please enter phone number. Phone numbers should be 10 digits</FormFeedback>
+                        <FormFeedback>Please enter phone number</FormFeedback>
+                        {this.state.isPhoneNumberFormatWrong ? <Label style={{fontSize:11, color: 'red', marginTop: 10}} >Phone number should start with 0 without country code and total length must be within 9 to 10 digits.</Label> : null}
                       </InputGroup>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
