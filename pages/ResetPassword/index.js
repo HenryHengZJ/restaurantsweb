@@ -65,7 +65,7 @@ class ResetPassword extends Component {
   sendClicked = () => {
     const { password, customerID, confirmpassword} = this.state;
 
-    if (!this.validatePassword(customerPassword)) {
+    if (!this.validatePassword(password)) {
       this.setState({
         isPasswordFormatWrong: true
       });

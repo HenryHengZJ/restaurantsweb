@@ -67,7 +67,7 @@ exports.sendRejectedEmail = function (path, sendtoemail) {
         var mailOptions = {
             from: 'FoodieBee <support@foodiebee.eu>',
             to : sendtoemail,
-            subject : 'Welcome to FoodieBee',
+            subject : 'Thank you for your interest in FoodieBee',
             html : htmlToSend
          };
         smtpTransport.sendMail(mailOptions, function (error, response) {
