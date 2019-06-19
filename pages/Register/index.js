@@ -57,6 +57,7 @@ class Register extends Component {
       redirecting: false,
       errorRedirect: false,
       isPhoneNumberFormatWrong: false,
+      isPasswordFormatWrong: false,
     };
   }
 
@@ -95,6 +96,7 @@ class Register extends Component {
     this.setState({
       customerPassword: e.target.value,
       isPasswordEmpty: e.target.value === "" ? true : false,
+      isPasswordFormatWrong: false,
       error: false,
     });
   }
@@ -171,6 +173,10 @@ class Register extends Component {
       this.setState({
         isPhoneNumberFormatWrong: true
       });
+    } else if (!this.validatePassword(customerPassword)) {
+      this.setState({
+        isPasswordFormatWrong: true
+      });
     } else if (customerPassword === "") {
       this.setState({
         isPasswordEmpty: true
@@ -205,7 +211,7 @@ class Register extends Component {
 
       var url = apis.POSTcustomersignup;
 
-      /*axios.post(url, body, {headers: headers})
+      axios.post(url, body, {headers: headers})
         .then((response) => {
           if (response.status === 200) {
             this.setState({
@@ -222,9 +228,14 @@ class Register extends Component {
               isCreating: false
             })
           } 
-        }); */
+        }); 
   
     }
+  }
+
+  validatePassword (password) {
+    const regexp = /^(?=.{7,13}$)(?=\w{7,13})(?=.*\d)/;
+    return regexp.test(String(password).toLowerCase());
   }
 
   loginRegisteredUser = () => {
@@ -365,6 +376,7 @@ class Register extends Component {
                           />
                         <FormFeedback>Please enter password</FormFeedback>
                       </InputGroup>
+                      {this.state.isPasswordFormatWrong ? <Label style={{fontSize:13, color: 'red', marginBottom: 10}} >* Password should be alphanumerical and within length of 7 to 13</Label> : null}
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>

@@ -49,12 +49,13 @@ class ResetPassword extends Component {
       customerID: null,
       passwordnotmatch: false,
       updatePassword: null,
+      isPasswordFormatWrong: false,
     };
   }
 
 
   handlePasswordChange(e) {
-    this.setState({ password: e.target.value });
+    this.setState({ password: e.target.value, isPasswordFormatWrong: false });
   }
 
   handleConfirmPasswordChange(e) {
@@ -64,48 +65,61 @@ class ResetPassword extends Component {
   sendClicked = () => {
     const { password, customerID, confirmpassword} = this.state;
 
-    if (confirmpassword === password) {
+    if (!this.validatePassword(customerPassword)) {
       this.setState({
-        emailsending: true
-      })
-  
-      var headers = {
-        'Content-Type': 'application/json',
-      }
-  
-      var body = {
-        catererPassword: password
-      }
-  
-      var url = apis.PUTupdatepassword + "?_id=" + customerID;
-  
-      axios.put(url, body, {headers: headers})
-        .then((response) => {
-          if (response.status === 201) {
+        isPasswordFormatWrong: true
+      });
+    }
+    else {
+      if (confirmpassword === password) {
+        this.setState({
+          emailsending: true
+        })
+    
+        var headers = {
+          'Content-Type': 'application/json',
+        }
+    
+        var body = {
+          catererPassword: password
+        }
+    
+        var url = apis.PUTupdatepassword + "?_id=" + customerID;
+    
+        axios.put(url, body, {headers: headers})
+          .then((response) => {
+            if (response.status === 201) {
+              this.setState({
+                password: "",
+                confirmpassword: "",
+                emailsending: false,
+                updatePassword: "Success"
+              })
+            } 
+          })
+          .catch((error) => {
             this.setState({
               password: "",
               confirmpassword: "",
+              error: true,
               emailsending: false,
-              updatePassword: "Success"
+              updatePassword: "Failed"
             })
-          } 
+          });
+      }
+      else {
+        this.setState({
+          passwordnotmatch: true
         })
-        .catch((error) => {
-          this.setState({
-            password: "",
-            confirmpassword: "",
-            error: true,
-            emailsending: false,
-            updatePassword: "Failed"
-          })
-        });
-    }
-    else {
-      this.setState({
-        passwordnotmatch: true
-      })
+      }
     }
   };
+
+  
+  validatePassword (password) {
+    const regexp = /^(?=.{7,13}$)(?=\w{7,13})(?=.*\d)/;
+    return regexp.test(String(password).toLowerCase());
+  }
 
   backClicked = () => {
     window.location.assign(`${server}`);
@@ -221,6 +235,7 @@ class ResetPassword extends Component {
                           />
                         </InputGroup>
                         {this.state.passwordnotmatch ? <Label style={{color: 'red', marginBottom: 20, fontSize: 13}}>* Passwords do not match</Label> : null }
+                        {this.state.isPasswordFormatWrong ? <Label style={{fontSize:13, color: 'red', marginBottom: 20}} >Password should be alphanumerical and within length of 7 to 13</Label> : null}
                         <Button
                           color="success"
                           block

@@ -14,11 +14,27 @@ const DEFAULT_SEO = {
     url: 'https://www.foodiebee.eu',
     title: 'FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
     description: 'FoodieBee provides wide range of restaurants and local caterers suitable for corporate caterings such as breakfast, lunch, events, and meetings. Order online for free through FoodieBee.',
-    image:'https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/brandlogo_light.png',
+    images: [
+      {
+        url: 'https://foodiebeegeneralphoto.s3-eu-west-1.amazonaws.com/FoodieBee_coverphoto.jpg',
+        width: 2896,
+        height: 1448,
+        alt: 'FoodieBee Catering',
+      },
+      {
+        url: 'https://foodiebeegeneralphoto.s3-eu-west-1.amazonaws.com/FoodieBee_logo.png',
+        width: 441,
+        height: 387,
+        alt: 'FoodieBee Logo',
+      },
+    ],
     site_name: 'FoodieBee.eu',
-    imageWidth: 1200,
-    imageHeight: 1200
-  }
+  },
+  twitter: {
+    handle: '@FoodiebeeIE',
+    site: '@FoodiebeeIE',
+    cardType: 'summary_large_image',
+  },
 };
 
 class MyMobxApp extends App {
