@@ -26,7 +26,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 });*/
 
 router.get('/testcall', (req, res) => {
-    twiliocall.callToCaterer("5cfd0e0ff7f31a378cdbc152", "parentOrderSpeech", "childOrderItemSpeech", "+353831861716", function(err, call) {
+    twiliocall.callToCaterer("5cfd0e0ff7f31a378cdbc152", "parentOrderSpeech", "childOrderItemSpeech", "+353831861716", 0, function(err, call) {
         if (err) {
             return res.status(500).send({ error: err })
         }
@@ -34,6 +34,53 @@ router.get('/testcall', (req, res) => {
             res.status(200).send(call);
         }
     });
+});
+
+router.post('/statuscallback', (request, response) => {
+	
+	var count = 0
+
+	//console.log("statuscallback QUERY = ", request.query)
+	//console.log("statuscallback BODY = ", request.body)
+	console.log("statuscallback CallStatus = ", request.body.CallStatus)
+	console.log("statuscallback count = ", request.query.count)
+	console.log("///////////////////////////////////////////////////////////////")
+	
+	if (typeof request.query.count !== 'undefined') {
+		count = parseInt(request.query.count)
+	}
+
+    if (request.body.CallStatus === "completed") {
+        Order.findOne({_id: new ObjectId(request.query.orderID)}, (err, doc) => {
+            if (err) {
+                callback (err)
+             }
+             else {
+                var orderStatus = doc.orderStatus
+    
+                if (orderStatus === "pending") {
+
+                    if (count < 3) {
+                        count = parseInt(count) + 1
+                        setTimeout(function() {
+                            twiliocall.callToCaterer(request.query.orderID, request.query.parentOrderSpeech, request.query.childOrderItemSpeech,  count, function(err, call) {
+                                if (err) {
+                                    return response.status(500).send({ error: err })
+                                }
+                                else {
+                                    response.status(200).send(call);
+                                }
+                            });
+                        }, 3000);
+                    }
+                    
+                }
+    
+             }
+        })
+        
+    }
+	
 });
 
 router.post('/voice', (request, response) => {

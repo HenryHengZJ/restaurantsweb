@@ -166,7 +166,7 @@ var callTwilio = function (orderID, callback) {
 
                     catererPhoneNumber = catererCountryCode + catererPhoneNumber
                 
-                    twiliocall.callToCaterer(orderID, parentOrderSpeech, childOrderItemSpeech, catererPhoneNumber, function(err, call) {
+                    twiliocall.callToCaterer(orderID, parentOrderSpeech, childOrderItemSpeech, catererPhoneNumber, 0, function(err, call) {
                         if (err) {
                             callback(err)
                         }

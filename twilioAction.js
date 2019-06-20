@@ -8,42 +8,7 @@ var twilioPhoneNumber = process.env.TWILIO_phoneNumber;
 var twilio = require('twilio');
 var client = new twilio(accountSid, authToken);
 
-/*exports.call = function () {
-    console.log('start calling')
-    client.calls
-      .create({
-         url: 'https://42e8d16f.ngrok.io/auth/voice-call',
-         method: 'GET',
-         to: '+353831861716',
-         from: '+14342150670'
-       })
-      .then(call => console.log(call.sid))
-      .catch((error)=>{console.log("error making call"+ error)});
-}*/
-
-/*exports.callToCaterer = function (orderID, catererName, callback) {
-  var catererNameEncoded = encodeURIComponent(catererName);
-  console.log('start calling...', catererNameEncoded)
-  var url = "https://263b1ee6.ngrok.io/twilio/voice?orderID=" + orderID + "&catererName=" + catererNameEncoded
-  client.calls
-    .create({
-       url: url,
-       to: '+353831861716',
-       from: '+14342150670'
-     })
-    .then(call => 
-      {
-        callback(null, call) 
-        console.log(call.sid)
-      }
-    )
-    .catch((error)=>{
-      callback(error) 
-      console.log("error making call"+ error)
-    });
-}*/
-
-exports.callToCaterer = function (orderID, parentOrderSpeech, childOrderItemSpeech, catererPhoneNumber, callback) {
+exports.callToCaterer = function (orderID, parentOrderSpeech, childOrderItemSpeech, catererPhoneNumber, count, callback) {
 
   var parentOrderSpeechEncoded = encodeURIComponent(parentOrderSpeech);
   var childOrderItemSpeechEncoded = encodeURIComponent(childOrderItemSpeech);
@@ -52,11 +17,22 @@ exports.callToCaterer = function (orderID, parentOrderSpeech, childOrderItemSpee
   
   var url = "https://foodiebee.herokuapp.com/twilio/voice?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded
   
+  var finalcount = 0
+  console.log("callCaterer count = ", count)
+  if (typeof count !== 'undefined') {
+	  finalcount = count
+  }
+  
+  var callbackurl = "https://foodiebee.herokuapp.com/twilio/statuscallback?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded + "&count=" + finalcount
+
   client.calls
     .create({
        url: url,
        to: catererPhoneNumber,
-       from: twilioPhoneNumber
+       from: twilioPhoneNumber,
+       statusCallback: callbackurl,
+       statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
+       statusCallbackMethod: 'POST',
      })
     .then(call => 
       {
