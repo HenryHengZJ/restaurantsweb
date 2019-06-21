@@ -26,7 +26,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 });*/
 
 router.get('/testcall', (req, res) => {
-    twiliocall.callToCaterer("5cfd0e0ff7f31a378cdbc152", "parentOrderSpeech", "childOrderItemSpeech", "+353831861716", 0, function(err, call) {
+    twiliocall.callToCaterer("5d0c138a7b7d210016a139c9", "parentOrderSpeech", "childOrderItemSpeech", "+353831861716", 0, function(err, call) {
         if (err) {
             return res.status(500).send({ error: err })
         }
@@ -38,7 +38,8 @@ router.get('/testcall', (req, res) => {
 
 router.post('/statuscallback', (request, response) => {
 	
-	var count = 0
+    var count = 0
+    var catererPhoneNumber = decodeURIComponent(request.query.catererPhoneNumber)
 
 	//console.log("statuscallback QUERY = ", request.query)
 	//console.log("statuscallback BODY = ", request.body)
@@ -53,27 +54,36 @@ router.post('/statuscallback', (request, response) => {
     if (request.body.CallStatus === "completed") {
         Order.findOne({_id: new ObjectId(request.query.orderID)}, (err, doc) => {
             if (err) {
-                callback (err)
+                return response.status(500).send({ error: err })
              }
              else {
                 var orderStatus = doc.orderStatus
+
+                console.log(" orderStatus = ", orderStatus)
     
                 if (orderStatus === "pending") {
 
                     if (count < 3) {
                         count = parseInt(count) + 1
-                        setTimeout(function() {
-                            twiliocall.callToCaterer(request.query.orderID, request.query.parentOrderSpeech, request.query.childOrderItemSpeech,  count, function(err, call) {
+                        
+                            twiliocall.callToCaterer(request.query.orderID, request.query.parentOrderSpeech, request.query.childOrderItemSpeech, catererPhoneNumber,  count, function(err, call) {
                                 if (err) {
                                     return response.status(500).send({ error: err })
                                 }
                                 else {
-                                    response.status(200).send(call);
+                                    console.log(" CALL AGAIN = ", count)
+                                    return response.status(200).send(call);
                                 }
                             });
-                        }, 3000);
+                        
+                    }
+                    else {
+                        return response.status(200).send("call loop finished");
                     }
                     
+                }
+                else {
+                    return response.status(200).send("phone picked up");
                 }
     
              }
@@ -108,7 +118,7 @@ router.post('/voice', (request, response) => {
 	
 	function gather2() {
      
-	  const gatherNode = twiml.gather({ numDigits: 1, action: "https://foodiebee.herokuapp.com/twilio/voice2?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded });
+	  const gatherNode = twiml.gather({ numDigits: 1, action: "https://8ce26448.ngrok.io/twilio/voice2?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded });
 
 	  gatherNode.say(childOrderItemSpeech);
   

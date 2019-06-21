@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Row, Col, InputGroup, InputGroupAddon, FormGroup, Form, Label, Input, Dropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
+import { Popover, PopoverBody, PopoverHeader ,Button, Row, Col, InputGroup, InputGroupAddon, FormGroup, Form, Label, Input, Dropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
 import './styles.css'
 import AutoCompleteAddress from '../../components/AutoCompleteAddress'
 import PropTypes from 'prop-types';
@@ -17,30 +17,39 @@ class Hero extends React.Component {
   constructor(props) {
     super(props);
 
+    this.toggle = this.toggle.bind(this);
+
     this.state = {
       address: "",
+      searchAddressInvalid: false,
     }
   }
+
+  toggle() {
+    this.setState({
+      searchAddressInvalid: false
+    });
+  }
+
 
   searchAddress = (e, address) => {
     e.preventDefault()
    // console.log(address)
    // alert(address.address_components[1].long_name)
-    if (address != "") {
+    if (address === "") {
+      this.setState({
+        searchAddressInvalid: true
+      })
+    }
+    else if (address != "") {
+       
       var city = address.address_components[1].long_name
       var formatted_address = address.formatted_address
       var longitude = address.geometry.location.lng()
-      console.log(longitude)
       var latitude = address.geometry.location.lat()
-      console.log(latitude)
       this.setState({
         address: ""
       }, () => {
-        //Router.push(`/searchcaterer?location=${city}&occasion=All`, `/searchcaterer?location=${city}&occasion=All`)
-        /*Router.push({
-          pathname: '/searchcaterer',
-          query: { location: city, occasion: 'All' }
-        })*/
         var selectedAddress = {
           formatted_address: formatted_address,
           longitude: address.geometry.location.lng(),
@@ -56,11 +65,6 @@ class Hero extends React.Component {
       this.setState({
         address: ""
       }, () => {
-       // Router.push(`/searchcaterer?location=Dublin&occasion=All`, `/searchcaterer?location=Dublin&occasion=All`)
-        /*Router.push({
-          pathname: '/searchcaterer',
-          query: { location: 'Dublin', occasion: 'All' }
-        })*/
         var selectedAddress = {
           formatted_address: "County%20Limerick",
           longitude:  "-8.630498",
@@ -70,10 +74,11 @@ class Hero extends React.Component {
         Router.push(`/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`, `/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`)
       })
     }
+    
   }
 
   showPlaceDetails(address) {
-    this.setState({ address });
+    this.setState({ address, searchAddressInvalid: false });
   }
 
   render() {
@@ -104,7 +109,7 @@ class Hero extends React.Component {
               <Row >
                 <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
                 <Col style={{padding: 0,}} xs="10" sm="10" md="6" lg="6">
-                  <InputGroup >
+                  <InputGroup id="Popover">
 
                       <AutoCompleteAddress 
                         borderTopRightRadius={0}
@@ -126,6 +131,11 @@ class Hero extends React.Component {
                   </InputGroup>
                   
                 </Col>
+
+                <Popover placement="bottom-start" isOpen={this.state.searchAddressInvalid} target="Popover" toggle={this.toggle}>
+                  <PopoverHeader style={{color: 'red'}}>Invalid Address</PopoverHeader>
+                  <PopoverBody>Please search for a valid address</PopoverBody>
+                </Popover>
               
                 <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
               </Row>

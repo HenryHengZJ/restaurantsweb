@@ -18,7 +18,7 @@ import Router from 'next/router'
 import { timeRanges } from  "../../utils"
 import NextSeo from 'next-seo';
 //import fetch from 'isomorphic-unfetch'
-
+import { withRouter } from 'next/router'
 import { server } from '../../config';
 //import 'react-date-range/dist/styles.css'; // main style file
 //import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -27,11 +27,7 @@ import { server } from '../../config';
 class SearchCaterer extends Component {
 
   static async getInitialProps({query: { occasion, location, cuisine, price_lte, price_gt, date, time, longitude, latitude, catererName }}) {
-    console.log('cuisine = ' +  cuisine )
-    console.log('occasion = ' +  Array.isArray(occasion) )
-    console.log('location = ' + location)
-    console.log('price_lte = ' +  price_lte )
-    console.log('price_gt = ' +  price_gt )
+
     var url = `${server}${apis.GETcaterer}`
     var locationquerystring = "";
     var longitudequerystring = "";
@@ -190,10 +186,10 @@ class SearchCaterer extends Component {
       }
     }
 
-    console.log(url)
+   // console.log(url)
     const res = await axios.get(url);
     const data = await res.data;
-    console.log(`Show data fetched. Count: ${data.length}`);
+   // console.log(`Show data fetched. Count: ${data.length}`);
     return {
       locationquerystring: locationquerystring,
       longitudequerystring: longitudequerystring,
@@ -259,6 +255,7 @@ class SearchCaterer extends Component {
   
     this.state = {
       baseurl: "/searchcaterer",
+      fullapiurl: "",
       locationquerystring: "",
       longitudequerystring: "",
       latitudequerystring: "",
@@ -309,53 +306,57 @@ class SearchCaterer extends Component {
           value: false,
         },
       ],
-      occasion: null,
-      caterer: [
-        /*{
-          name: "Flannery Restaurant & Pub",
-          descrip:
-            "Specialized in American Burger style mealset.",
-          rating: "4.5",
-          numofreview: "2",
-          src:
-            "https://www.cityworksrestaurant.com/minneapolis/wp-content/uploads/sites/2/2015/11/Smokehouse-Burger_600x400.jpg",
-          minimumspend: "50",
-          deliveryfee: "3"
+      occasion: [
+        {
+          name: "Breakfast",
+          value: false,
         },
         {
-          name: "Asian Wok",
-          descrip:
-            "Asian style wok dishes",
-          rating: "4.8",
-          numofreview: "17",
-          src:
-            "https://media.apnarm.net.au/media/images/2017/01/24/twb240117asian-7aj2fxtt8c9k5lphmn2_ct677x380.jpg",
-          minimumspend: "30",
-          deliveryfee: "2.50"
+          name: "Brunch",
+          value: false,
         },
         {
-          name: "Spade Burger",
-          descrip:
-            "Wide variety of burgers with flavourable toppings and addons",
-          rating: "4.1",
-          numofreview: "25",
-          src:
-            "https://du7ybees82p4m.cloudfront.net/578f9fac892d52.19976571.jpg?width=910&height=512",
-          minimumspend: "50",
-          deliveryfee: "3"
+          name: "Buffet",
+          value: false,
         },
         {
-          name: "Italiano Di Angelo",
-          descrip:
-            "Best Italian Sandwiches in town. We have a long history since 1964. We are speacialised in pasta",
-          rating: "4.7",
-          numofreview: "15",
-          src:
-            "https://www.sbs.com.au/food/sites/sbs.com.au.food/files/styles/full/public/Pasta-with-Cherry-Tomatoes.jpg?itok=mlbhhvu7&mtime=1401946169",
-          minimumspend: "50",
-          deliveryfee: "3"
-        }*/
+          name: "Christmas Party",
+          value: false,
+        },
+        {
+          name: "Dinner",
+          value: false,
+        },
+        {
+          name: "Event",
+          value: false,
+        },
+        {
+          name: "Finger Food",
+          value: false,
+        },
+        {
+          name: "Lunch",
+          value: false,
+        },
+        {
+          name: "Meeting",
+          value: false,
+        },
+        {
+          name: "Office Daily",
+          value: false,
+        },
+        {
+          name: "Wedding",
+          value: false,
+        },
+        {
+          name: "Snacks",
+          value: false,
+        },
       ],
+      caterer: [],
       cuisine: [
         "All Cuisines",
         "Sandwich",
@@ -402,6 +403,7 @@ class SearchCaterer extends Component {
     this.time  = timeRanges();
   }
 
+
   componentDidMount() {
   //  this.getDataFromDb();
   
@@ -426,7 +428,8 @@ class SearchCaterer extends Component {
       false
     );
 
-    Router.events.on("routeChangeComplete", () => {
+
+   /* Router.events.on("routeChangeComplete", () => {
       this.setState({
         loading: false,
         caterer: this.props.data,
@@ -443,12 +446,11 @@ class SearchCaterer extends Component {
         timequerystring: this.props.timequerystring,
         catererName_querystring: this.props.catererName_querystring,
       });
-    });
+    });*/
 
   }
 
-  getDataFromDb = () => {
-    var url = '/test/caterer';
+  getDataFromDb = (url) => {
 
     axios.get(url)
     .then((response) => {
@@ -462,13 +464,17 @@ class SearchCaterer extends Component {
       })
     })
     .catch(err => {
-       console.log(err)
+      // console.log(err)
+       this.setState({
+        loading: false,
+        empty: true
+      })
     });
   };
 
   findOccasionIndex = () => {
     var selectedOccasion = this.state.selectedOccasion
-    alert(selectedOccasion)
+
     var occasion = this.state.occasion.slice()
 
     if (Array.isArray(selectedOccasion)) {
@@ -548,8 +554,8 @@ class SearchCaterer extends Component {
 
   saveAddress = () => {
     var address = this.state.address
-   
-    if (address != "") {
+    
+    if (address !== null && address != "") {
       var city = address.address_components[1].long_name
       var formatted_address = address.formatted_address
       var url = this.state.baseurl;
@@ -565,9 +571,23 @@ class SearchCaterer extends Component {
       var catererName_querystring = this.state.catererName_querystring;
 
       url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_ltequerystring + price_gtquerystring + datequerystring + timequerystring + catererName_querystring;
+      var fullapiurl = `${server}${apis.GETcaterer}` + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
+      
       this.setState({
         dropDownAddress: ! this.state.dropDownAddress,
         loading: true,
+        location: formatted_address,
+        locationquerystring,
+        longitudequerystring,
+        latitudequerystring,
+        cuisinequerystring,
+        occasionquerystring,
+        price_ltequerystring,
+        price_gtquerystring,
+        datequerystring,
+        timequerystring,
+        catererName_querystring,
+        fullapiurl,
       },() => {
         var selectedAddress = {
           formatted_address: formatted_address,
@@ -575,29 +595,9 @@ class SearchCaterer extends Component {
           latitude: address.geometry.location.lat()
         }
         sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
-        Router.replace(url)
+        Router.replace(url, url, { shallow: true })
+        this.getDataFromDb(fullapiurl)
       })
-    }
-  };
-
-  searchMenu = () => {
-    
-    if (this.state.selectedDate === "") {
-      this.setState({
-        dateEmptyPopoverOpen: this.state.isMobile ? false : true,
-        mobile_dateEmptyPopoverOpen: this.state.isMobile ? true : false,
-      })
-    }
-    else if (this.state.selectedTime === "") {
-      this.setState({
-        timeEmptyPopoverOpen: this.state.isMobile ? false : true,
-        mobile_timeEmptyPopoverOpen: this.state.isMobile ? true : false,
-      })
-    }
-    else {
-      var selectedDate = this.state.selectedDate
-      var selectedTime = Number(this.state.selectedTime.replace(":", ""))
-      this.handleTopSearch(selectedDate, selectedTime)
     }
   };
 
@@ -700,7 +700,6 @@ class SearchCaterer extends Component {
   };
 
   searchNameClicked = () => {
-    console.log('gg')
     var url = this.state.baseurl;
     var searchName = this.state.searchName
     var locationquerystring = this.state.locationquerystring;
@@ -722,11 +721,24 @@ class SearchCaterer extends Component {
     }
  
     url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+    var fullapiurl = `${server}${apis.GETcaterer}` + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
       loading: true,
+      locationquerystring,
+      longitudequerystring,
+      latitudequerystring,
+      cuisinequerystring,
+      occasionquerystring,
+      price_ltequerystring,
+      price_gtquerystring,
+      datequerystring,
+      timequerystring,
+      catererName_querystring,
+      fullapiurl,
     },() => {
-      Router.replace(url)
+      this.getDataFromDb(fullapiurl)
+      Router.replace(url, url, { shallow: true })
     })
   }
 
@@ -751,11 +763,24 @@ class SearchCaterer extends Component {
     }
     
     url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+    var fullapiurl = `${server}${apis.GETcaterer}` + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
       loading: true,
+      locationquerystring,
+      longitudequerystring,
+      latitudequerystring,
+      cuisinequerystring,
+      occasionquerystring,
+      price_ltequerystring,
+      price_gtquerystring,
+      datequerystring,
+      timequerystring,
+      catererName_querystring,
+      fullapiurl,
     },() => {
-      Router.replace(url)
+      this.getDataFromDb(fullapiurl)
+      Router.replace(url, url, { shallow: true })
     })
   }
 
@@ -780,11 +805,24 @@ class SearchCaterer extends Component {
     }
     
     url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+    var fullapiurl = `${server}${apis.GETcaterer}` + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
       loading: true,
+      locationquerystring,
+      longitudequerystring,
+      latitudequerystring,
+      cuisinequerystring,
+      occasionquerystring,
+      price_ltequerystring,
+      price_gtquerystring,
+      datequerystring,
+      timequerystring,
+      catererName_querystring,
+      fullapiurl,
     },() => {
-      Router.replace(url)
+      Router.replace(url, url, { shallow: true })
+      this.getDataFromDb(fullapiurl)
     })
   }
 
@@ -844,13 +882,25 @@ class SearchCaterer extends Component {
     }
 
     url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
+    var fullapiurl = `${server}${apis.GETcaterer}` + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
       loading: true,
+      locationquerystring,
+      longitudequerystring,
+      latitudequerystring,
+      cuisinequerystring,
+      occasionquerystring,
+      price_ltequerystring,
+      price_gtquerystring,
+      datequerystring,
+      timequerystring,
+      catererName_querystring,
+      fullapiurl: fullapiurl,
     },() => {
-      Router.replace(url)
+      Router.replace(url, url, { shallow: true })
+      this.getDataFromDb(fullapiurl)
     })
-
   }
 
   handleSearchNameChange(e) {
@@ -1879,4 +1929,4 @@ class SearchCaterer extends Component {
   }
 }
 
-export default SearchCaterer;
+export default withRouter(SearchCaterer);

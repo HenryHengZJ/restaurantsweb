@@ -8,14 +8,17 @@ var twilioPhoneNumber = process.env.TWILIO_phoneNumber;
 var twilio = require('twilio');
 var client = new twilio(accountSid, authToken);
 
+
+
 exports.callToCaterer = function (orderID, parentOrderSpeech, childOrderItemSpeech, catererPhoneNumber, count, callback) {
 
   var parentOrderSpeechEncoded = encodeURIComponent(parentOrderSpeech);
   var childOrderItemSpeechEncoded = encodeURIComponent(childOrderItemSpeech);
+  var catererPhoneNumberEncoded = encodeURIComponent(catererPhoneNumber);
   
   console.log('start calling...', catererPhoneNumber)
   
-  var url = "https://foodiebee.herokuapp.com/twilio/voice?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded
+  var url = "https://8ce26448.ngrok.io/twilio/voice?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded
   
   var finalcount = 0
   console.log("callCaterer count = ", count)
@@ -23,7 +26,7 @@ exports.callToCaterer = function (orderID, parentOrderSpeech, childOrderItemSpee
 	  finalcount = count
   }
   
-  var callbackurl = "https://foodiebee.herokuapp.com/twilio/statuscallback?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded + "&count=" + finalcount
+  var callbackurl = "https://8ce26448.ngrok.io/twilio/statuscallback?orderID=" + orderID + "&parentOrderSpeech=" + parentOrderSpeechEncoded + "&childOrderItemSpeech=" + childOrderItemSpeechEncoded + "&catererPhoneNumber=" + catererPhoneNumberEncoded + "&count=" + finalcount
 
   client.calls
     .create({
