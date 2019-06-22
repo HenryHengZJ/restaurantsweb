@@ -12,6 +12,8 @@ class MyDocument extends Document {
       <Html>
         <html lang="en"></html>
         <Head>
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFHrZBb72wmg5LTiMjUgI_CLhsoMLmlBk&libraries=places"></script>
+          <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
         </Head>
         <body>
           <Main />

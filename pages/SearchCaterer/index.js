@@ -14,11 +14,10 @@ import ContentLoader, { Facebook } from "react-content-loader";
 import Dotdotdot from "react-dotdotdot";
 import axios from "axios";
 import apis from "../../apis";
-import Router from 'next/router'
+import Router, { withRouter } from 'next/router'
 import { timeRanges } from  "../../utils"
 import NextSeo from 'next-seo';
 //import fetch from 'isomorphic-unfetch'
-import { withRouter } from 'next/router'
 import { server } from '../../config';
 //import 'react-date-range/dist/styles.css'; // main style file
 //import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -189,7 +188,7 @@ class SearchCaterer extends Component {
    // console.log(url)
     const res = await axios.get(url);
     const data = await res.data;
-   // console.log(`Show data fetched. Count: ${data.length}`);
+    console.log(`Show data fetched. Count: ${data.length}`);
     return {
       locationquerystring: locationquerystring,
       longitudequerystring: longitudequerystring,
@@ -406,6 +405,8 @@ class SearchCaterer extends Component {
 
   componentDidMount() {
   //  this.getDataFromDb();
+
+    console.log("mount did mount")
   
     var currentDate = moment().toDate();
     this.setState({
@@ -779,7 +780,7 @@ class SearchCaterer extends Component {
       catererName_querystring,
       fullapiurl,
     },() => {
-      this.getDataFromDb(fullapiurl)
+    //  this.getDataFromDb(fullapiurl)
       Router.replace(url, url, { shallow: true })
     })
   }
@@ -821,7 +822,7 @@ class SearchCaterer extends Component {
       catererName_querystring,
       fullapiurl,
     },() => {
-      Router.replace(url, url, { shallow: true })
+      Router.push(url, url, { shallow: true })
       this.getDataFromDb(fullapiurl)
     })
   }

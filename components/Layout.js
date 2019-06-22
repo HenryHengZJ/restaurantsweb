@@ -33,8 +33,7 @@ class Layout extends React.Component {
           
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFHrZBb72wmg5LTiMjUgI_CLhsoMLmlBk&libraries=places"></script>
-            <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
+          
             <link href="/static/css/9.099cafef.chunk.css" rel="stylesheet"/>
             <link href="/static/css/main.4ac54e74.chunk.css" rel="stylesheet"/>
         </Head>
