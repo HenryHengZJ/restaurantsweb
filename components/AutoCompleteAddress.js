@@ -3,7 +3,7 @@
 import React from "react";
 import { Input} from "reactstrap"
 import PropTypes from 'prop-types';
-
+import Script from 'react-load-script';
 
 class AutoCompleteAddress extends React.Component {
   constructor(props) {
@@ -19,6 +19,15 @@ class AutoCompleteAddress extends React.Component {
       { types: ["geocode"] }
     );
     this.autocomplete.addListener("place_changed", this.handlePlaceChanged);
+
+    setTimeout(() => {
+      this.autocomplete = new google.maps.places.Autocomplete(
+        this.autocompleteInput.current,
+        { types: ["geocode"] }
+      );
+      this.autocomplete.addListener("place_changed", this.handlePlaceChanged);
+    }, 100);
+
   }
 
   handlePlaceChanged() {
@@ -61,7 +70,6 @@ class AutoCompleteAddress extends React.Component {
     return (
       <input
         ref={this.autocompleteInput}
-        id="autocomplete"
         placeholder="Enter delivery address"
         type="text"
         style={{ borderTopRightRadius: borderTopRightRadiusVal, borderBottomRightRadius: borderBottomRightRadiusVal, borderTopLeftRadius: borderTopLeftRadiusVal, borderBottomLeftRadius: borderBottomLeftRadiusVal, height: heightVal, borderWidth: 1, borderColor: borderColorVal, paddingLeft: paddingLeftVal, paddingRight: paddingRightVal, paddingTop: paddingTopVal, paddingBottom: paddingBottomVal, width: '100%', flex:1, display:'flex', fontSize: fontSizeVal, color: colorVal}} 

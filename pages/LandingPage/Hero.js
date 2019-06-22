@@ -132,14 +132,15 @@ class Hero extends React.Component {
                   
                 </Col>
 
-                <Popover placement="bottom-start" isOpen={this.state.searchAddressInvalid} target="Popover" toggle={this.toggle}>
-                  <PopoverHeader style={{color: 'red'}}>Invalid Address</PopoverHeader>
-                  <PopoverBody>Please search for a valid address</PopoverBody>
-                </Popover>
-              
                 <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
               </Row>
             </Col>
+
+            <Popover placement="bottom-start" isOpen={this.state.searchAddressInvalid} target="Popover" toggle={this.toggle}>
+              <PopoverHeader style={{color: 'red'}}>Invalid Address</PopoverHeader>
+              <PopoverBody>Please search for a valid address</PopoverBody>
+            </Popover>
+            
           </Row>
       </section>
     );

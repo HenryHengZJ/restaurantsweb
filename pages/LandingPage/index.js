@@ -39,6 +39,9 @@ class LandingPage extends Component {
     })
   }
 
+  showPlaceDetails(address) {
+    this.setState({ address, searchAddressInvalid: false });
+  }
 
   render() {
     return (
