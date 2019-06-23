@@ -79,10 +79,6 @@ class Payment extends Component {
   }
 
   componentDidMount() {
-
-    toast(<SuccessInfo/>, {
-      position: toast.POSITION.BOTTOM_RIGHT
-    });
   
     var headers = {
       'Content-Type': 'application/json',

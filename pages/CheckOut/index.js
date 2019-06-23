@@ -53,7 +53,12 @@ import Cookies from 'js-cookie';
 import "./styles.css"
 import 'react-toastify/dist/ReactToastify.css';
 import Lottie from 'react-lottie';
+import getConfig from 'next/config'
 import NextSeo from 'next-seo';
+
+const {publicRuntimeConfig} = getConfig()
+const {STIRPE_CLIENT_KEY} = publicRuntimeConfig
+
 
 class CheckOut extends Component {
 
@@ -127,11 +132,11 @@ class CheckOut extends Component {
     this.getCatererDetail()
 
     if (window.Stripe) {
-      this.setState({stripe: window.Stripe('pk_test_MQ87thwBK9MIVEqLB3jXQfHB00HFSE8cVS')});
+      this.setState({stripe: window.Stripe(STIRPE_CLIENT_KEY)});
     } else {
       document.querySelector('#stripe-js').addEventListener('load', () => {
         // Create Stripe instance once Stripe.js loads
-        this.setState({stripe: window.Stripe('pk_test_MQ87thwBK9MIVEqLB3jXQfHB00HFSE8cVS')});
+        this.setState({stripe: window.Stripe(STIRPE_CLIENT_KEY)});
       });
     }
   }
