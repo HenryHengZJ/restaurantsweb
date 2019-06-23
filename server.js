@@ -17,6 +17,7 @@ var mail = require('./nodeMailerWithTemp');
 var sm = require('sitemap')
 require('./middleware/passport')(passport);
 
+console.log( process.env.NODE_DEV)
 // DB configuration ===============================================================
 const dbRoute = process.env.DB_URI;
 mongoose.connect(
@@ -111,6 +112,7 @@ nextApp.prepare().then(() => {
   }) 
  
   app.get('/searchcaterer', (req,res) => {
+    console.log("searchcaterer")
     return nextApp.render(req, res, '/SearchCaterer',  req.query )
   })  
 

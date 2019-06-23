@@ -8,9 +8,11 @@
   },
   "scripts": {
     "dev": "node server.js",
-    "build": "./node_modules/next/dist/bin/next build",
-    "heroku-postbuild": "./node_modules/next/dist/bin/next build",
-    "start": "node server.js"
+    "build": "next build",
+    "heroku-postbuild": "next build",
+    "start": "node server.js",
+    "prod_start": "SET NODE_ENV=production & node server.js",
+    "export": "next export"
   },
   "author": "Henry Heng",
   "license": "ISC",
