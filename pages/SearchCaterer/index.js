@@ -721,7 +721,7 @@ class SearchCaterer extends Component {
       catererName_querystring = "&catererName=" + searchName;
     }
  
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true"; 
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
@@ -763,7 +763,7 @@ class SearchCaterer extends Component {
       catererName_querystring = ""
     }
     
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true"; 
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
@@ -781,29 +781,7 @@ class SearchCaterer extends Component {
       fullapiurl,
     },() => {
       this.getDataFromDb(fullapiurl)
-      if (locationquerystring !== "") {
-        locationquerystring = "/" + locationquerystring.replace("?location=","")
-      }
-      if (longitudequerystring !== "") {
-        longitudequerystring = "/" + longitudequerystring.replace("&longitude=","")
-      }
-      if (latitudequerystring !== "") {
-        latitudequerystring = "/" + latitudequerystring.replace("&latitude=","")
-      }
-      if (cuisinequerystring !== "") {
-        cuisinequerystring = "/" + cuisinequerystring.replace("&cuisine=","")
-      }
-      if (datequerystring !== "") {
-        datequerystring = "/" + datequerystring.replace("&date=","")
-      }
-      if (timequerystring !== "") {
-        timequerystring = "/" + timequerystring.replace("&time=","")
-      }
-      if (catererName_querystring !== "") {
-        catererName_querystring = "/" + catererName_querystring.replace("&catererName=","")
-      }
-      var asurl = this.state.baseurl + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + datequerystring + timequerystring + catererName_querystring; 
-      Router.replace(url, asurl, { shallow: true })
+      Router.replace(url, url, { shallow: true })
     })
   }
 
@@ -827,7 +805,7 @@ class SearchCaterer extends Component {
       catererName_querystring = ""
     }
     
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true"; 
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
@@ -844,7 +822,7 @@ class SearchCaterer extends Component {
       catererName_querystring,
       fullapiurl,
     },() => {
-      Router.push(url, { shallow: true })
+      Router.replace(url, url, { shallow: true })
       this.getDataFromDb(fullapiurl)
     })
   }
@@ -904,7 +882,7 @@ class SearchCaterer extends Component {
       }
     }
 
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true";
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({

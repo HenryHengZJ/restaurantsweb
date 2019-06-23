@@ -113,7 +113,13 @@ nextApp.prepare().then(() => {
  
   app.get('/searchcaterer', (req,res) => {
     console.log("searchcaterer")
-    return nextApp.render(req, res, '/SearchCaterer',  req.query )
+    if (req.query.filter !== 'undefined' && req.query.filter === 'true') {
+      //ignore
+      console.log("searchcaterer FILTER")
+    }
+    else {
+      return nextApp.render(req, res, '/SearchCaterer',  req.query )
+    }
   })  
 
   app.get('/catererdetail/:id', (req,res) => {
