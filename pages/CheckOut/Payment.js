@@ -79,6 +79,10 @@ class Payment extends Component {
   }
 
   componentDidMount() {
+
+    toast(<SuccessInfo/>, {
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
   
     var headers = {
       'Content-Type': 'application/json',
@@ -266,6 +270,7 @@ class Payment extends Component {
           loadingModal: false,
           paymentCardModalOpen: false
         }, () => {
+          console.log("error 1 = ", error)
           toast(<ErrorInfo/>, {
             position: toast.POSITION.BOTTOM_RIGHT
           });
@@ -302,6 +307,7 @@ class Payment extends Component {
           loadingModal: false,
           paymentCardModalOpen: false
         }, () => {
+          console.log("error 2 = ", error)
           toast(<ErrorInfo/>, {
             position: toast.POSITION.BOTTOM_RIGHT
           });
@@ -340,6 +346,7 @@ class Payment extends Component {
             loadingModal: false,
             paymentCardModalOpen: false
           }, () => {
+            console.log("error 3 = ", error)
             toast(<ErrorInfo/>, {
               position: toast.POSITION.BOTTOM_RIGHT
             });

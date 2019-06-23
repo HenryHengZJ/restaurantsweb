@@ -36,7 +36,7 @@ class Hero extends React.Component {
     e.preventDefault()
    // console.log(address)
    // alert(address.address_components[1].long_name)
-    if (address === "") {
+    if (address === "" || typeof address === 'undefined' || address === null)  {
       this.setState({
         searchAddressInvalid: true
       })

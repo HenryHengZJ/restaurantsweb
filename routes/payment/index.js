@@ -125,21 +125,33 @@ router.post('/create_customer_paymentaccount', (req, res) => {
 		name: req.body.name,
 		email: req.body.email,
 	}, function(err, customer) {
-		if (err) return res.status(500).send({ error: err });
-		//res.status(200).json(customer);
-		
-		stripe.paymentMethods.attach(req.body.paymentID, {customer: customer.id}, function(err, paymentMethod) {
-			if (err) return res.status(500).send({ error: err });
-			
-			stripe.customers.update(
-			  customer.id,
-			  {invoice_settings: {default_payment_method: req.body.paymentID}},
-				function(err, updatedcustomer) {
-					if (err) return res.status(500).send({ error: err });
-					return res.status(200).send(updatedcustomer);
-			  }
-			);
-		});
+    if (err) {
+      console.log(err)
+      return res.status(500).send({ error: err });
+    }
+    else {
+      stripe.paymentMethods.attach(req.body.paymentID, {customer: customer.id}, function(err, paymentMethod) {
+        if (err) {
+          console.log(err)
+          return res.status(500).send({ error: err });
+        }
+        else {
+          stripe.customers.update(
+            customer.id,
+            {invoice_settings: {default_payment_method: req.body.paymentID}},
+            function(err, updatedcustomer) {
+              if (err) {
+                console.log(err)
+                return res.status(500).send({ error: err });
+              }
+              else {
+                return res.status(200).send(updatedcustomer);
+              }
+            }
+          );
+        }
+      });
+    }
 	});
 	
 });

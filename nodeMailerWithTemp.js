@@ -87,7 +87,7 @@ exports.sendNewCatererRegisterEmail = function (path, sendtoemail) {
         var mailOptions = {
             from: 'FoodieBee <support@foodiebee.eu>',
             to : sendtoemail,
-            subject : 'Welcome to FoodieBee',
+            subject : 'Thanks for your interest',
             html : htmlToSend
          };
         smtpTransport.sendMail(mailOptions, function (error, response) {
