@@ -596,7 +596,8 @@ class SearchCaterer extends Component {
           latitude: address.geometry.location.lat()
         }
         sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
-        Router.replace(url, url, { shallow: true })
+       // Router.replace(url, url, { shallow: true })
+        window.history.pushState(null, '', url);    
         this.getDataFromDb(fullapiurl)
       })
     }
@@ -739,8 +740,9 @@ class SearchCaterer extends Component {
       catererName_querystring,
       fullapiurl,
     },() => {
+      window.history.pushState(null, '', url);    
       this.getDataFromDb(fullapiurl)
-      Router.replace(url, url, { shallow: true })
+     // Router.replace(url, url, { shallow: true })
     })
   }
 
@@ -781,8 +783,9 @@ class SearchCaterer extends Component {
       catererName_querystring,
       fullapiurl,
     },() => {
+      window.history.pushState(null, '', url);    
       this.getDataFromDb(fullapiurl)
-      Router.replace(url, url)
+     // Router.replace(url, url)
     })
   }
 
@@ -823,7 +826,8 @@ class SearchCaterer extends Component {
       catererName_querystring,
       fullapiurl,
     },() => {
-      Router.replace(url, url, { shallow: true })
+     // Router.replace(url, url, { shallow: true })
+      window.history.pushState(null, '', url);    
       this.getDataFromDb(fullapiurl)
     })
   }
