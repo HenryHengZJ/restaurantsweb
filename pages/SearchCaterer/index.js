@@ -612,6 +612,7 @@ class SearchCaterer extends Component {
   };
 
   catererClicked = (_id) => {
+    console.log('catererClicked = ', _id)
     if (this.state.selectedDate !== "" && this.state.selectedTime !== "") {
       Router.push(`/catererdetail/${_id}`, `/catererdetail/${_id}`)
     }
@@ -721,7 +722,7 @@ class SearchCaterer extends Component {
       catererName_querystring = "&catererName=" + searchName;
     }
  
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true"; 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
@@ -763,7 +764,7 @@ class SearchCaterer extends Component {
       catererName_querystring = ""
     }
     
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true"; 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
@@ -781,7 +782,7 @@ class SearchCaterer extends Component {
       fullapiurl,
     },() => {
       this.getDataFromDb(fullapiurl)
-      Router.replace(url, url, { shallow: true })
+      Router.replace(url, url)
     })
   }
 
@@ -805,7 +806,7 @@ class SearchCaterer extends Component {
       catererName_querystring = ""
     }
     
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true"; 
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring; 
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
@@ -882,7 +883,7 @@ class SearchCaterer extends Component {
       }
     }
 
-    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring + "&filter=true";
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
     var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
 
     this.setState({
@@ -899,7 +900,8 @@ class SearchCaterer extends Component {
       catererName_querystring,
       fullapiurl: fullapiurl,
     },() => {
-      Router.replace(url, url, { shallow: true })
+    //  Router.replace(url, url, { shallow: true })
+      window.history.pushState(null, '', url);    
       this.getDataFromDb(fullapiurl)
     })
   }
