@@ -27,7 +27,7 @@ class SearchCaterer extends Component {
 
   static async getInitialProps({query: { occasion, location, cuisine, price_lte, price_gt, date, time, longitude, latitude, catererName }}) {
 
-    var url = apis.GETcaterer
+    var url = `${server}${apis.GETcaterer}`
     var locationquerystring = "";
     var longitudequerystring = "";
     var latitudequerystring = "";
