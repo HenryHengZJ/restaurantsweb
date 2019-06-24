@@ -236,7 +236,6 @@ class SearchCaterer extends Component {
       selectedTime: this.props.selectedTime !== "" ? this.reformatInput(this.props.selectedTime) : "",
       selectedDate: this.props.selectedDate,
       searchName: this.props.searchName,
-      isMobile: parseInt(sessionStorage.getItem("deviceWidth")) < 900 ? true : false,
     })
   }
 
