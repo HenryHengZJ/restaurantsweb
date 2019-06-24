@@ -56,6 +56,7 @@ class Hero extends React.Component {
           latitude: address.geometry.location.lat()
         }
         sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+        sessionStorage.setItem('deviceWidth', window.innerWidth);
         Router.push(`/searchcaterer?location=${formatted_address}&longitude=${longitude}&latitude=${latitude}`, `/searchcaterer?location=${formatted_address}&longitude=${longitude}&latitude=${latitude}`)
       })
     }
@@ -71,6 +72,7 @@ class Hero extends React.Component {
           latitude: "52.6638"
         }
         sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+        sessionStorage.setItem('deviceWidth', window.innerWidth);
         Router.push(`/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`, `/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`)
       })
     }

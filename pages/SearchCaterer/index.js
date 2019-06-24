@@ -212,8 +212,11 @@ class SearchCaterer extends Component {
   }
 
   componentWillMount() {
+    console.log("componentWillMount")
+  
     this.setState({
       caterer: this.props.data,
+      numofcaterers: this.props.data.length,
       loading: false,
       empty: this.props.data.length > 0 ? false : true,
       location: this.props.location,
@@ -233,6 +236,7 @@ class SearchCaterer extends Component {
       selectedTime: this.props.selectedTime !== "" ? this.reformatInput(this.props.selectedTime) : "",
       selectedDate: this.props.selectedDate,
       searchName: this.props.searchName,
+      isMobile: parseInt(sessionStorage.getItem("deviceWidth")) < 900 ? true : false,
     })
   }
 
@@ -253,6 +257,7 @@ class SearchCaterer extends Component {
     this.refObj = React.createRef();
   
     this.state = {
+      numofcaterers: null,
       baseurl: "/searchcaterer",
       fullapiurl: "",
       locationquerystring: "",
@@ -266,7 +271,7 @@ class SearchCaterer extends Component {
       catererName_querystring: "",
       location: "",
       selectedOccasion: null,
-      isMobile: false,
+      isMobile: null,
       loading: true,
       empty: false,
       address: "",
@@ -406,7 +411,7 @@ class SearchCaterer extends Component {
   componentDidMount() {
   //  this.getDataFromDb();
 
-    console.log("mount did mount")
+    console.log("componentDidMount")
   
     var currentDate = moment().toDate();
     this.setState({
@@ -460,6 +465,7 @@ class SearchCaterer extends Component {
      // console.log(data)
       this.setState({
         caterer: data,
+        numofcaterers: data.length,
         loading: false,
         empty: data.length > 0 ? false : true
       })
@@ -468,7 +474,8 @@ class SearchCaterer extends Component {
       // console.log(err)
        this.setState({
         loading: false,
-        empty: true
+        empty: true,
+        numofcaterers: 0,
       })
     });
   };
@@ -666,7 +673,7 @@ class SearchCaterer extends Component {
       {
         selectedPrice: event.target.value 
       }, () => {
-        this.handleUrlChange('pricerange')
+        this.state.filterModalOpen? null : this.handleUrlChange('pricerange')
       }
     );
   };
@@ -676,7 +683,7 @@ class SearchCaterer extends Component {
       { 
         selectedCuisine: event.target.value 
       }, () => {
-        this.handleUrlChange('cuisine');
+        this.state.filterModalOpen? null : this.handleUrlChange('cuisine');
       }
     )
   };
@@ -697,7 +704,7 @@ class SearchCaterer extends Component {
         [statename]: newArray 
       }, () => {
         if (statename === "occasion") {
-          this.handleUrlChange('occasion')
+          this.state.filterModalOpen? null : this.handleUrlChange('occasion')
         }
       }
     )
@@ -915,6 +922,85 @@ class SearchCaterer extends Component {
     })
   }
 
+  handleUrlChangeMobile = () => {
+    var url = this.state.baseurl;
+    var locationquerystring = this.state.locationquerystring;
+    var longitudequerystring = this.state.longitudequerystring;
+    var latitudequerystring = this.state.latitudequerystring;
+    var cuisinequerystring = this.state.cuisinequerystring;
+    var occasionquerystring = this.state.occasionquerystring;
+    var price_ltequerystring = this.state.price_ltequerystring;
+    var price_gtquerystring = this.state.price_gtquerystring;
+    var datequerystring = this.state.datequerystring;
+    var timequerystring = this.state.timequerystring;
+    var catererName_querystring = this.state.catererName_querystring;
+    var selectedArray;
+
+    
+    occasionquerystring = "";
+    selectedArray = this.state.occasion;
+    for(var i = 0; i < selectedArray.length; i++)
+    {
+      if(selectedArray[i].value == true)
+      {
+        var fixedstr = "&occasion="
+        occasionquerystring = occasionquerystring + fixedstr + selectedArray[i].name 
+      }
+    }
+  
+
+  
+    cuisinequerystring = "";
+    if (this.state.selectedCuisine !== "All Cuisines") {
+      cuisinequerystring = "&cuisine=" + this.state.selectedCuisine;
+    }
+  
+
+    var selectedPrice = this.state.selectedPrice
+    if (selectedPrice !== "All") {
+      if (selectedPrice === "More than 500") {
+        price_gtquerystring = "";
+        var pricenumber = selectedPrice.split("than ")[1];
+        price_gtquerystring = "&price_gt=" + pricenumber;
+        price_ltequerystring = "";
+      }
+      else {
+        var pricenumber = selectedPrice.split(" (")[0];
+        price_ltequerystring = "&price_lte=" + pricenumber;
+        price_gtquerystring = "";
+      }
+    }
+    else {
+      price_gtquerystring = "";
+      price_ltequerystring = "";
+    }
+    
+    url = url + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
+    var fullapiurl = apis.GETcaterer + locationquerystring + longitudequerystring + latitudequerystring + cuisinequerystring + occasionquerystring + price_gtquerystring + price_ltequerystring + datequerystring + timequerystring + catererName_querystring;
+
+    this.setState({
+      loading: true,
+      locationquerystring,
+      longitudequerystring,
+      latitudequerystring,
+      cuisinequerystring,
+      occasionquerystring,
+      price_ltequerystring,
+      price_gtquerystring,
+      datequerystring,
+      timequerystring,
+      catererName_querystring,
+      fullapiurl: fullapiurl,
+
+    },() => {
+    //  Router.replace(url, url, { shallow: true })
+      this.toggleFilterModal()
+      this.refObj.current.scrollIntoView();
+      window.history.pushState(null, '', url);    
+      this.getDataFromDb(fullapiurl)
+    })
+  }
+
   handleSearchNameChange(e) {
     this.setState({
       searchName: e.target.value,
@@ -985,7 +1071,7 @@ class SearchCaterer extends Component {
     this.setState({
       filterArray: newfilterArray
     },() => {
-      this.toggleFilterModal()
+      this.handleUrlChangeMobile()
     })
 
   };
@@ -1203,7 +1289,7 @@ class SearchCaterer extends Component {
       <ModalHeader toggle={() => this.toggleFilterModal()} style={{backgroundColor: 'rgba(211,211,211,0.5)', paddingLeft:30, paddingBottom: 0, paddingTop:10 }}>
         <Label>Select Filter</Label>
       </ModalHeader>
-      <ModalBody style={{marginBottom: 20}}>
+      <ModalBody style={{maxHeight: 'calc(100vh - 210px)', overflowY: 'auto', marginBottom: 20}}>
         <Col>
           <h6
             style={{
@@ -1363,7 +1449,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < caterer.length; i++) {
       itemsarray.push(
-        <Col key={i} xs="12" sm="6" md="4" lg="4">
+        <Col key={i} xs="12" sm="6" md="6" lg="4">
           <Card
             style={{
               cursor: "pointer",
@@ -1757,7 +1843,7 @@ class SearchCaterer extends Component {
             null}
 
             <Col style={{marginTop: 20}} xs="12">
-              <h2 style={{ textAlign: 'center', fonWeight:'700', fontSize: 30, paddingLeft:10, paddingRight: 10}}>6 Caterers Available</h2>
+              <h2 style={{ textAlign: 'center', fonWeight:'700', fontSize: 30, paddingLeft:10, paddingRight: 10}}>{this.state.numofcaterers} Caterers Available</h2>
             </Col>
 
             {!this.state.isMobile ? 
