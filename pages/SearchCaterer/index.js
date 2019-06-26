@@ -417,7 +417,7 @@ class SearchCaterer extends Component {
       maxDate: currentDate,
     });
 
-    if (window.innerWidth < 900) {
+    if (window.innerWidth < 800) {
       this.setState({
         isMobile: true
       });
@@ -427,7 +427,7 @@ class SearchCaterer extends Component {
       "resize",
       () => {
         this.setState({
-          isMobile: window.innerWidth < 900
+          isMobile: window.innerWidth < 800
         });
       },
       false
@@ -1379,7 +1379,7 @@ class SearchCaterer extends Component {
 
     for (let i = 0; i < 6; i++) {
       itemsarray.push(
-        <Col key={i} xs="12" sm="6" md="4" lg="4">
+        <Col key={i} xs="12" sm="6" md="6" lg="4">
           <ContentLoader height="400">
             <rect x="0" y="0" rx="6" ry="6" width="100%" height="200" />
             <rect x="0" y="240" rx="4" ry="4" width="300" height="13" />
@@ -1973,15 +1973,21 @@ class SearchCaterer extends Component {
               :
               null}
 
-              {this.state.isMobile ? 
+              {this.state.isMobile === null ? null 
+
+               :
+
+              this.state.isMobile === true ? 
+
               <Col style={{ marginTop: 20 }} xs="12">
                 {this.state.filterArray.length === 0 ? null : this.renderFilterItems()}
               </Col>
-              :
-              null}
 
-              {!this.state.isMobile ? 
-              <Col xs="0" md="2">
+               :
+
+              this.state.isMobile === false ? 
+
+              <Col xs="0" md="3">
                 <h6
                   style={{
                     fontWeight: "700",
@@ -2008,10 +2014,12 @@ class SearchCaterer extends Component {
                 </h6>
                 {this.renderPrice()}
               </Col>
-              :
+
+               :
+
               null}
 
-              <Col style={{ marginTop: 20 }} xs="12" md="10">
+              <Col style={{ marginTop: 20 }} xs="12" md="9">
                 {this.state.loading ? this.renderLoadingItems() : this.state.empty ?  this.renderEmptyItems() : this.renderItems()}
               </Col>
 
