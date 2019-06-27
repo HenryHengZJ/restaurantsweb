@@ -18,36 +18,42 @@ class Occasion extends Component {
           title: 'Breakfast',
           src: img.landingpage_breakfast,
           descrip: 'Select wide variety of breakfast to kickstart your fresh new day.',
+          alt: 'Select wide variety of breakfast to kickstart your fresh new day from FoodieBee Ireland -  Corporate Catering Services and Marketplace',
           hover: false,
         },
         {
           title: 'Event',
           src: img.landingpage_events,
           descrip: 'Choose your ideal food catering service for different types of occasions.',
+          alt: 'Choose your ideal food catering service for different types of occasions from FoodieBee Ireland -  Corporate Catering Services and Marketplace',
           hover: false,
         },
         {
           title: 'Lunch',
           src: img.landingpage_lunch,
           descrip: 'Check out our wide variety of meals from different cuisines and categories. ',
+          alt: 'Check out our wide variety of meals from different cuisines and categories from FoodieBee Ireland -  Corporate Catering Services and Marketplace',
           hover: false,
         },
         {
           title: 'Finger Food',
           src: img.landingpage_fingerfood,
           descrip: 'Finger lickin good snacks to temporarily satisfy your cravings.',
+          alt: 'Finger lickin good snacks to temporarily satisfy your cravings from FoodieBee Ireland -  Corporate Catering Services and Marketplace',
           hover: false,
         },
         {
           title: 'Buffet',
           src: img.landingpage_buffet,
           descrip: 'Order your perfect buffets choice according to your budgets, headcounts, etc.',
+          alt: 'Order your perfect buffets choice according to your budgets, headcounts and etc from FoodieBee Ireland -  Corporate Catering Services and Marketplace',
           hover: false,
         },
         {
           title: 'Office Daily',
           src: img.landingpage_officedaily,
           descrip: 'Check out our food catering package and platters for your daily office lunch and breakfast.',
+          alt: 'Check out our food catering package and platters for your daily office lunch and breakfast from FoodieBee Ireland -  Corporate Catering Services and Marketplace',
           hover: false,
         },
       ]
@@ -75,7 +81,7 @@ class Occasion extends Component {
         <Col key={i} xs="12" sm="6" md="6" lg="4">
           <Card onMouseEnter={() => this.toggle(i)} onMouseLeave={() => this.toggle(i)} style={{cursor: 'pointer', marginTop:0,  boxShadow: 'none', borderWidth: 0}}  onClick={() => this.handleSelectedCardClick(occasions[i].title)}>
             <CardBody style={{position:'relative', padding: 0}}>
-              <img style={ { objectFit:'cover', width: '100%', height: 220 }} src={occasions[i].src} alt={occasions[i].descrip} />
+              <img style={ { objectFit:'cover', width: '100%', height: 220 }} src={occasions[i].src} alt={occasions[i].alt} />
               <div style={{ backgroundColor: 'black', opacity: occasions[i].hover ? 0.1 : 0.3, position: 'absolute', top: 0, left: 0, width: '100%', height: 220}}> </div> 
               <h5 style={{fontWeight: '600', fontSize: 20, color: 'white', top:95, left:0, right:0, position: 'absolute', width: '100%', textAlign: 'center'}} >{occasions[i].title} </h5>
               <p style={{marginTop: 10}} >{occasions[i].descrip}</p>

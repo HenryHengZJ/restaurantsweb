@@ -1366,7 +1366,7 @@ class SearchCaterer extends Component {
             style={{ fontSize: 15, opacity: 0.8, marginTop: 10, paddingLeft:20, paddingRight: 20 }}
             className="big"
           >
-            We recommend you to make special request to our team by contacting us at foodiebeeie@gmail.com. We will make response to you as soon as possible.
+            We recommend you to make special request to our team by contacting us at support@foodiebee.eu. We will make response to you as soon as possible.
           </p>
         </Col>
       

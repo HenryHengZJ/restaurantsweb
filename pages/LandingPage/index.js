@@ -6,6 +6,7 @@ import Features from './Features';
 import Caterer from './Caterer';
 import Footer from '../../components/Footer'
 import Shops from './Shops';
+import AboutUs from './AboutUs';
 import Testimonial from './Testimonial';
 import Router from 'next/router'
 import Layout from '../../components/Layout'
@@ -59,6 +60,7 @@ class LandingPage extends Component {
           <Features findFoodNow={e=>this.findFoodNow(e)}/>
           <Occasion />
           <Caterer registerCatererClicked={e=>this.registerCatererClicked(e)}/>
+          <AboutUs/>
           <Testimonial/>
           <Footer />
         </div>

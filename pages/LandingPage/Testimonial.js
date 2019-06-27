@@ -12,7 +12,7 @@ class Testimonial extends Component {
       testimonial:
       [
         {
-          name: 'John',
+          name: 'Victoria',
           position: 'Corporate Admin',
           comment: 'An order in a few clicks, a great customer service, delighted guests.',
           src: img.testimonial_1
@@ -31,7 +31,7 @@ class Testimonial extends Component {
         },
         {
           name: 'Cian',
-          position: 'Engineer',
+          position: 'Software Engineer',
           comment: 'Our team loves it!',
           src: img.testimonial_4
         },
