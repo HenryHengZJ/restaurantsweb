@@ -422,12 +422,17 @@ class SearchCaterer extends Component {
         isMobile: true
       });
     }
+    else {
+      this.setState({
+        isMobile: false
+      });
+    }
 
     window.addEventListener(
       "resize",
       () => {
         this.setState({
-          isMobile: window.innerWidth < 800
+          isMobile: window.innerWidth < 800 ? true : false
         });
       },
       false
