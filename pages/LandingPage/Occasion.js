@@ -61,7 +61,18 @@ class Occasion extends Component {
   }
 
   handleSelectedCardClick = (title) => {
-    Router.push(`/searchcaterer?location=County%20Limerick&occasion=${title}`)
+
+    var longitude = "-8.630498"
+    var latitude = "52.6638"
+
+    var selectedAddress = {
+      formatted_address: "Limerick,%20Ireland",
+      longitude:  "-8.630498",
+      latitude: "52.6638"
+    }
+    sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
+    Router.push(`/searchcaterer?location=Limerick,%20Ireland&longitude=${longitude}&latitude=${latitude}&occasion=${title}`, `/searchcaterer?location=Limerick,%20Ireland&longitude=${longitude}&latitude=${latitude}&occasion=${title}`)
+
   }
 
   toggle(index) {
