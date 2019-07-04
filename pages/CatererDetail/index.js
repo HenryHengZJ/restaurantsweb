@@ -1177,7 +1177,7 @@ class CatererDetail extends Component {
     var selectionitemarray = [];
     for (let i = 0; i < selectionitem.length; i++) {
       selectionitemarray.push(
-        <Col key={i} xs="12" sm="6" md="6">
+        <Col key={i} xs="12" sm="12" md="12">
           {selectionitem[i].selectionitemprice === 0 ? 
           (
             <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="radio">
@@ -1218,8 +1218,8 @@ class CatererDetail extends Component {
               </div>
 
               <Label check className="form-check-label">
-                {selectionitem[i].selectionitemtitle} (+€
-                {Number(selectionitem[i].selectionitemprice).toFixed(2)})
+                {selectionitem[i].selectionitemtitle}
+                <span style={{fontStyle: 'italic', fontWeight: 500, opacity: 0.5}} > (+€{Number(selectionitem[i].selectionitemprice).toFixed(2)})</span>
               </Label>
             </FormGroup>
           )}
@@ -1233,7 +1233,7 @@ class CatererDetail extends Component {
     var selectionitemarray = [];
     for (let i = 0; i < selectionitem.length; i++) {
       selectionitemarray.push(
-        <Col key={i} xs="12" sm="6" md="6">
+        <Col key={i} xs="12" sm="12" md="12">
           {selectionitem[i].selectionitemprice === 0 ? 
           (
             <FormGroup style={{ paddingLeft: 0, marginTop: 10 }}check className="checkbox">
@@ -1276,8 +1276,8 @@ class CatererDetail extends Component {
               </div>
              
               <Label check className="form-check-label">
-                {selectionitem[i].selectionitemtitle} (+€
-                {Number(selectionitem[i].selectionitemprice).toFixed(2)})
+                {selectionitem[i].selectionitemtitle}
+                <span style={{fontStyle: 'italic', fontWeight: 500, opacity: 0.5}} > (+€{Number(selectionitem[i].selectionitemprice).toFixed(2)})</span>
               </Label>
             </FormGroup>
           )}
