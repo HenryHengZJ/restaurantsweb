@@ -199,7 +199,7 @@ class Hero extends React.Component {
                         style={{
                           height: "100%",
                           fontWeight: "600",
-                          fontSize: 16,
+                          fontSize: 14,
                           borderTopLeftRadius: 0,
                           borderBottomLeftRadius: 0,
                           borderTopRightRadius: 5,

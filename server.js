@@ -70,7 +70,7 @@ nextApp.prepare().then(() => {
   var reviewRoutes   = require('./routes/review');
   var twilioRoutes   = require('./routes/twilio');
   var dailyMenuRoutes = require('./routes/dailyMenu');
-
+  var lunchMenuPublishedRoutes = require('./routes/lunchMenuPublished');
 
 	// routes ======================================================================
 	app.use('/test', testRoutes);
@@ -85,6 +85,8 @@ nextApp.prepare().then(() => {
   app.use('/review', reviewRoutes);
   app.use('/twilio', twilioRoutes);
   app.use('/dailyMenu', dailyMenuRoutes);
+  app.use('/lunchMenuPublished', lunchMenuPublishedRoutes);
+
 
   app.get('/sitemap.xml', function(req, res) {
     sitemap.toXML( function (err, xml) {
