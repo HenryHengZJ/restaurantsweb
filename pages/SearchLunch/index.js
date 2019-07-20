@@ -138,7 +138,7 @@ class SearchLunch extends Component {
     console.log("componentWillMount")
     this.setState({
       dailyMenu: this.props.dailyMenu,
-      loading: false,
+      loading: this.props.dailyMenu.length > 0 ? true : false,
       empty: this.props.dailyMenu.length > 0 ? false : true,
       location: this.props.location,
       locationquerystring: this.props.locationquerystring,
@@ -164,7 +164,6 @@ class SearchLunch extends Component {
     this.state = {
       dailyMenu: [],
       baseurl: "/searchlunch",
-      fullapiurl: "",
       locationquerystring: "",
       datequerystring: "",
       location: "",
@@ -293,7 +292,6 @@ class SearchLunch extends Component {
     
       this.setState({
         dailyMenu: data,
-        loading: false,
         empty: data.length > 0 ? false : true
       }, () => {
         if (!this.state.empty) {
@@ -367,7 +365,8 @@ class SearchLunch extends Component {
 
     console.log(finaldataAry)
     this.setState({
-      dailyMenu: finaldataAry
+      dailyMenu: finaldataAry,
+      loading: false
     })
   }
 
@@ -414,10 +413,15 @@ class SearchLunch extends Component {
       url = url + locationquerystring + datequerystring; 
       var fullapiurl = apis.GETdailyMenu + locationquerystring + datequerystring;
 
-      this.refObj.current.scrollIntoView();   
-      window.history.pushState(null, '', url);    
-      this.getDataFromDb(fullapiurl)
-     
+      this.setState({
+        loading: true,
+        locationquerystring,
+        datequerystring,
+      },() => {
+        this.refObj.current.scrollIntoView();
+        window.history.pushState(null, '', url);    
+        this.getDataFromDb(fullapiurl)
+      })    
     })
   };
   
@@ -435,10 +439,9 @@ class SearchLunch extends Component {
       loading: true,
       locationquerystring,
       datequerystring,
-      fullapiurl,
     },() => {
       this.refObj.current.scrollIntoView();
-     // window.history.pushState(null, '', url);    
+      window.history.pushState(null, '', url);    
       this.getDataFromDb(fullapiurl)
     })
   }
