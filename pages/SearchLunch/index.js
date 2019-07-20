@@ -904,17 +904,16 @@ class SearchLunch extends Component {
     for (let i = 0; i < dailyMenu.length; i++) {
       itemsarray.push(
         <div >
-          <Row className="justify-content-center">
-           
-            <div style={{ width: 80, height: 80,  borderRadius: '50%', overflow: 'hidden',}}>
+          <Row style={{marginLeft: 20, marginRight: 20}}>
+          
+             <div className="float-left" style={{ marginLeft: 30, width: 80, height: 80,  borderRadius: '50%', overflow: 'hidden'}}>
               <img style={{ objectFit:'cover', width: 'auto', height: '100%', display: 'inline'}} src={dailyMenu[i].catererDetails.profilesrc}/>
-            </div>
-
-            <div class="row" style={{ marginTop:10, marginLeft: 20 }} >
-              <Label style={{width: '100%', }} className="h4">{dailyMenu[i].catererDetails.catererName}</Label>
+             </div>
+            
+            <div class="row" style={{ marginTop:10, marginLeft: 40, marginRight: 20 }} >
+              <Label style={{width: '100%', }} className="h4">{dailyMenu[i].catererDetails.catererName} lalalalallalalalala</Label>
               <Label style={{ opacity: 0.6, width: '100%'}} className="h6">Order Before 11:30 A.M</Label>
             </div>
-
 
           </Row>
 
@@ -941,7 +940,7 @@ class SearchLunch extends Component {
 
     for (let i = 0; i < dayList.length; i++) {
       itemsarray.push(
-        <Col style={{ paddingRight: 0, paddingLeft: 0 }} key={i} xs="2">
+        <Col style={{ paddingRight: 0, paddingLeft: 0 }} key={i} xs="2.4">
           <Card
             onMouseEnter={() => this.hoverDate(i)}
             onMouseLeave={() => this.unhoverDate(i)}
@@ -950,7 +949,7 @@ class SearchLunch extends Component {
               marginTop: 0,
               boxShadow: "none",
               borderWidth: 0,
-              marginBottom: 0
+              marginBottom: 0,
             }}
             onClick={() => this.selectDateClicked(i)}
           >
@@ -959,7 +958,7 @@ class SearchLunch extends Component {
                 <span
                   style={{
                     color: dayList[i].hovered ? "#FF5722" : "#696969",
-                    fontWeight: "600"
+                    fontWeight: "600",
                   }}
                 >
                   {dayList[i].day}
@@ -993,7 +992,7 @@ class SearchLunch extends Component {
       );
     }
 
-    return <Row className="justify-content-center">{itemsarray}</Row>;
+    return <Row style={{backgroundColor: 'transparent'}} className="justify-content-center">{itemsarray}</Row>;
   }
 
 
@@ -1113,16 +1112,20 @@ class SearchLunch extends Component {
       <div className="app align-items-center">
        
         <Container>
-          <Row style={{marginTop: 20, marginBottom: 50}} className="justify-content-center">
+          <Row style={{marginTop: 20, marginBottom: 50, }} >
 
             <Col style={{ marginTop: 20 }} xs="12">
               {this.state.loading ? this.renderLoadingItems() : null}
             </Col>
 
-            {this.renderRestaurants()}
+            <Col xs="12">
+              {this.renderRestaurants()}
+            </Col>
 
-            {this.state.empty ? this.renderEmptyItems() : null}
-
+            <Col xs="12">
+              {this.state.empty ? this.renderEmptyItems() : null}
+            </Col>
+ 
           </Row>
         </Container>
 
