@@ -31,7 +31,6 @@ import {
   ModalBody,
   ModalFooter,
   Collapse,
-  Badge,
 } from "reactstrap";
 import './CatererDetail.css'
 import NavBar from '../../components/NavBar';
@@ -1770,26 +1769,73 @@ class CatererDetail extends Component {
             <CardBody
               style={{
                 cursor: "pointer",
-                paddingTop: 0,
-                paddingBottom: 0,
-                paddingRight: 15,
+                marginTop: 15,
+                marginBottom: 10,
+                padding: 0,
                 height: "100%"
               }}
             >
-            <Row>
-              <Col style={{ marginTop: 15, marginBottom: 10,}} xs={items[i].src ? "8" : "12"}>
-                <div style={{paddingRight: 10}} class="row">
-                  <Dotdotdot clamp={1}>
-                    <p className="h5" style={{ cursor: "pointer", marginLeft: 15, color: "#20a8d8", overflow: "hidden" }}>
-                      {items[i].title}
-                    </p>
-                  </Dotdotdot>
-                </div>
-             
+              <Col>
                 <div class="row">
+                  <Col style={{padding: 0,}}>
+                    <Label
+                      style={{
+                        display: "inline-block",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        maxWidth: 160,
+                        width: "100%",
+                        textAlign: "start",
+                        cursor: "pointer",
+                        marginLeft: 15,
+                        color: "#20a8d8"
+                      }}
+                      className="h5"
+                    >
+                      {items[i].title}
+                    </Label>
+                  </Col>
+                  <Col style={{paddingRight: 20,}}>
+                    <Label
+                      style={{
+                        cursor: "pointer",
+                        textAlign: "end",
+                        marginLeft: 15
+                      }}
+                      className="h5 float-right"
+                    >
+                      €{Number(items[i].priceperunit).toFixed(2)}
+                    </Label>
+                  </Col>
+                </div>
+                <div class="row">
+                  <Label
+                    style={{
+                      opacity: 0.7,
+                      cursor: "pointer",
+                      marginLeft: 15,
+                      fontfStyle: "italic"
+                    }}
+                  >
+                    Serves {items[i].serveperunit}
+                  </Label>
+                  {items[i].minimumquantity > 1 ? 
+                    <Label
+                      style={{
+                        opacity: 0.7,
+                        cursor: "pointer",
+                        marginLeft: 5,
+                        fontfStyle: "italic"
+                      }}
+                    >
+                    | Minimum {items[i].minimumquantity}
+                    </Label>
+                    :
+                    null
+                  }
                   {typeof items[i].markitem === 'undefined' ? null : this.renderMarkAsIcon(items[i].markitem)}
                 </div>
-                
                 <div style={{ marginTop: 10 }}>
                   <Dotdotdot clamp={2}>
                     <p style={{ cursor: "pointer", overflow: "hidden" }}>
@@ -1797,32 +1843,7 @@ class CatererDetail extends Component {
                     </p>
                   </Dotdotdot>
                 </div>
-
-                <div class="row" style={{ marginTop: 10, }}>
-                  <Label
-                    style={{
-                      cursor: "pointer",
-                      marginLeft: 15, 
-                    }}
-                    className="h5 float-left"
-                  >
-                    €{Number(items[i].priceperunit).toFixed(2)}
-                  </Label>
-                </div>
-
               </Col>
-
-              {items[i].src ?
-                <Col xs="4" style={{padding: 0,}}>
-                  <div style={{ objectFit:'cover', width: 'auto', height: '100%', }}>
-                    <img style={{ objectFit:'cover', width: '100%', height: '100%', }} src={items[i].src}/>
-                  </div>
-                </Col>
-                :
-                null}
-
-              </Row>
-              
             </CardBody>
           </Card>
         </Col>

@@ -27,37 +27,37 @@ class Features extends React.Component {
     return (
       <section style={{backgroundColor: 'white',}} id="features" className="white">
         <Container>
-          <Row style={{marginTop: 20, flex: 1, display: 'flex', marginBottom: 20}} className="justify-content-center">
+          <Row style={{marginTop: 20, flex: 1, display: 'flex'}} className="justify-content-center">
 
             <Col xs="12" style={{textAlign: 'center'}}>
-              <h2 style={{textAlign: 'center', fontSize: 34, paddingLeft:10, paddingRight: 10}}>How It Works</h2>
+              <h2 style={{textAlign: 'center', fontSize: 34, paddingLeft:10, paddingRight: 10}}>Order catering service with FoodieBee</h2>
             </Col>
 
             <Col style={{marginTop:50}}xs="12"></Col>
          
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
-              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.menu} alt="Register Account at FoodieBee Ireland -  Corporate Catering Services and Marketplace" />
-              <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}} >Fresh Menu</h6>
-              <p style={{marginTop: 10}} >Fresh lunch menu curated everyday from different restaurants.</p>
+              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.register1} alt="Register Account at FoodieBee Ireland -  Corporate Catering Services and Marketplace" />
+              <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}} >Register Account</h6>
+              <p style={{marginTop: 10}} >Join our community to enjoy more benefits and rewards</p>
             </Col>
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
-              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.placeorder} alt="Find your favourite food caterers and perfect catering service at FoodieBee Ireland -  Corporate Catering Services and Marketplace" />
-              <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Place Order</h6>
-              <p style={{marginTop: 10}} >Pre-order for a week in advance or before 11:30 A.M everyday.</p>
+              <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.search1} alt="Find your favourite food caterers and perfect catering service at FoodieBee Ireland -  Corporate Catering Services and Marketplace" />
+              <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Search and Filter</h6>
+              <p style={{marginTop: 10}} >Find your favourite food caterers and perfect catering service.</p>
             </Col>
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
               <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.bank1} alt="Effortless online ordering and secure transactions at FoodieBee Ireland -  Corporate Catering Services and Marketplace" />
-              <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Pay Online</h6>
-              <p style={{marginTop: 10}} >Effortless and secure online transactions.</p>
+              <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Order and Pay</h6>
+              <p style={{marginTop: 10}} >Effortless online ordering and secure transactions.</p>
             </Col>
             <Col xs="6" md="3" style={{marginTop: 10, textAlign: 'center'}}>
               <img style={{ objectFit:'cover', width: 80, height: 80 }} src={img.eat1} alt="Wait for your food to be delivered or pickup at counter through FoodieBee Ireland -  Corporate Catering Services and Marketplace" />
               <h6 style={{fontWeight: '600', fontSize: 18, marginTop: 20}}>Enjoy and Eat</h6>
-              <p style={{marginTop: 10}} >We will notify you once it's delivered. Bon Appetite!</p>
+              <p style={{marginTop: 10}} >Wait for your food to be delivered or pickup at counter. Bon Appetite!</p>
             </Col>
          
             <div style={{textAlign: 'center', marginTop: 20 }} className="center-align">
-              <Button onClick={e => this.props.findFoodNow(e)} style={{ fontSize: 20, marginTop: 30, paddingTop: 10, paddingBottom: 10, paddingLeft: 20, paddingRight: 20}} className="bg-primary" size="lg" color="primary">Get Lunch Now</Button>
+              <Button onClick={e => this.props.findFoodNow(e)} style={{ fontSize: 20, marginTop: 30, paddingTop: 10, paddingBottom: 10, paddingLeft: 20, paddingRight: 20}} className="bg-primary" size="lg" color="primary">Find Food Now</Button>
             </div>
               
           </Row>

@@ -1,0 +1,190 @@
+nav .nav-wrapper {
+  max-width: 1000px;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+section {
+  padding: 48px 0;
+}
+
+.grayscaleimg {
+  filter: gray; /* IE6-9 */
+  -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+  filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+  opacity: 0.3;
+}
+
+/* Disable grayscale on hover */
+.grayscaleimg:hover {
+  -webkit-filter: grayscale(0);
+  filter: none;
+  opacity: 0.7;
+}
+
+.darkoverlay {
+  color: black;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-top: -50px;
+  margin-bottom: -50px
+}
+
+section#footer {
+  padding: 24px 0;
+}
+
+h1 {
+  font-weight: 300;
+}
+
+p {
+  font-size: 16px;
+}
+
+.stat p {
+  text-transform: uppercase;
+}
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+}
+.stat {
+  border: 1px solid grey;
+  border-left: 1px solid grey;
+  width: calc(100% * (1/2));
+  padding: 32px;
+  text-align: center;
+}
+.counter {
+  font-size: 32px;
+}
+
+.blogpost {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.blogpost .image-wrapper {
+  flex: 4;
+  margin: 0px auto;
+}
+
+.blogpost .content {
+  flex: 4;
+}
+
+.blogpost .footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.blogpost .footer .row {
+  flex: 2;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.blogpost .footer .material-icons {
+  max-width: 24px;
+  margin: 0 8px;
+}
+.blogpost .footer-content {
+  display: flex;
+}
+
+.blogpost .read-more {
+  display: flex;
+  justify-content: center;
+}
+
+
+#hero {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#hero .container {
+  height: 90vh;
+}
+
+#features .material-icons {
+  font-size: 50px;
+}
+
+
+.flex-dir-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.jc-center {
+  justify-content: center;
+}
+.jc-space-between {
+  justify-content: space-between;
+}
+
+.m-r-16 {
+  margin-right: 16px;
+}
+
+.imgoverlay:hover {
+  opacity: 0.1;
+}
+
+i.icon-green {
+  color: rgb(5, 206, 5);
+  font-weight: 1000;
+  font-size: 25px
+}
+
+.socialfa {
+  font-size: 20px;
+  width: 50px;
+  height: 50px;
+  padding-top: 15px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50%;
+}
+
+.socialfa:hover {
+  opacity: 0.7;
+}
+
+/* Set a specific color for each brand */
+
+/* Facebook */
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+
+/* Twitter */
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+/* Instagram */
+.fa-instagram {
+  background: #e1306c;
+  color: white;
+}
+
+/* Twitter */
+.fa-linkedin {
+  background: #0077b5;
+  color: white;
+}
+
+.brandlogo:hover{
+  border-bottom-color: #424242;
+  text-decoration: none;
+}
+
+/* ===============================================================================================*/
+
+

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink, NavDropdown, NavbarToggler, 
+import { Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink, NavDropdown, NavbarToggler, Button,
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, Label} from 'reactstrap';
 import './styles/navbar.css'
 import PropTypes from 'prop-types';
@@ -20,6 +20,13 @@ class NavBar extends Component {
       dropDown: false,
       userName: "",
       signInHide: false,
+      goCateringHover: this.props.catering === true ? true : false,
+      goLunchHover: this.props.catering === false ? true : false,
+      aboutUsHover: false,
+      contactUsHover: false,
+      signInHover: false,
+      catererSignInHover: false,
+      userNameHover: false,
     };
   }
 
@@ -50,12 +57,24 @@ class NavBar extends Component {
     });
   }
 
+  goLunchClicked = () => {
+    Router.push(`/`)
+  }
+
+  goCateringClicked = () => {
+    Router.push(`/catering`)
+  }
+
   aboutUsClicked = () => {
     Router.push(`/aboutus`)
   }
 
   contactUsClicked = () => {
     Router.push(`/contactus`)
+  }
+
+  toggleHover = (navitem) => {
+    this.setState({[navitem]: !this.state[navitem]})
   }
 
 
@@ -89,6 +108,8 @@ class NavBar extends Component {
     const {
       theme,
       catererSignInVisible,
+      catering,
+      landingpage,
     } = this.props;
 
     const backgroundColorVal = theme === 'dark' ? this.state.isOpen ? '#696969' : 'transparent' : 'rgba(211,211,211,0.3)' ;
@@ -98,6 +119,8 @@ class NavBar extends Component {
     const imgsrc = theme === 'dark' ? '/static/brandlogo_dark.png' : '/static/brandlogo_light.png';
     const colorVal = theme === 'dark' ? 'white' : null;
     const userLoggedInVal = this.state.userName === "" ? false : true
+    const cateringVal = catering ? catering : false
+    const landingpageVal = landingpage ? landingpage : false
 
     return (
       <div>
@@ -108,20 +131,35 @@ class NavBar extends Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
+
+             
+              <NavItem >
+                
+                <NavLink onClick={e => this.goLunchClicked(e)} style={{ marginLeft: 10, cursor: 'pointer', color: theme === "dark" ? "white" : null, fontWeight: '600', fontSize: 15, paddingLeft: 10, paddingRight: 10, backgroundColor: this.state.isOpen ? "transparent" : this.state.goLunchHover ? "#20a8d8" : "transparent", borderRadius: 5}} target="_blank">Go Lunch</NavLink>
+                
+              </NavItem>
+              
               <NavItem>
-                <NavLink onClick={e => this.aboutUsClicked(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">About Us</NavLink>
+             
+                <NavLink onClick={e => this.goCateringClicked(e)} style={{ marginLeft: 10,cursor: 'pointer', color: theme === "dark" ? "white" : null, fontWeight: '600', fontSize: 15, paddingLeft: 10, paddingRight: 10, backgroundColor: this.state.isOpen ? "transparent" : this.state.goCateringHover ? "#20a8d8" : "transparent", borderRadius: 5}} target="_blank">Go Catering</NavLink>
+                
+              </NavItem>
+              
+
+              <NavItem>
+                <NavLink onClick={e => this.aboutUsClicked(e)} style={{ cursor: 'pointer', color: this.state.aboutUsHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">About Us</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink onClick={e => this.contactUsClicked(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Contact</NavLink>
+                <NavLink onClick={e => this.contactUsClicked(e)} style={{ cursor: 'pointer', color: this.state.contactUsHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Contact</NavLink>
               </NavItem>
               {!this.state.signInHide ?
               <NavItem>
-                <NavLink onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
+                <NavLink onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', color: this.state.signInHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
               </NavItem>
               : null}
               {catererSignInVisible ?
               <NavItem>
-                <NavLink onClick={e => this.props.caterersignIn(e)} style={{ cursor: 'pointer', color: colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Caterer Sign In</NavLink>
+                <NavLink onClick={e => this.props.caterersignIn(e)} style={{ cursor: 'pointer', color: this.state.catererSignInHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Caterer Sign In</NavLink>
               </NavItem>
               : null }
             
@@ -137,7 +175,7 @@ class NavBar extends Component {
                     }}
                     caret
                   >
-                  <Label style={{ paddingLeft: this.state.isOpen ? 8 : 0, fontWeight: '500', cursor: 'pointer', paddingRight: 5, paddingTop:2, fontSize: 15, color: colorVal, margin : 0, }}>{this.state.userName}</Label> 
+                  <Label style={{ paddingLeft: this.state.isOpen ? 8 : 0, fontWeight: '500', cursor: 'pointer', paddingRight: 5, paddingTop:2, fontSize: 15, color: this.state.userNameHover ? "#20a8d8" : colorVal, margin : 0, }}>{this.state.userName}</Label> 
                   </DropdownToggle>
                   <DropdownMenu right style={{ right: 0, left: 'auto' }}>
                     <DropdownItem onClick={() => this.navItemClicked("Account Info")}>Account Info</DropdownItem>
@@ -163,6 +201,8 @@ NavBar.propTypes = {
   theme: PropTypes.string,
   signInHide: PropTypes.bool,
   catererSignInVisible: PropTypes.bool,
+  catering: PropTypes.bool,
+  landingpage: PropTypes.bool,
 };
 
 export default NavBar;

@@ -5,6 +5,87 @@ import AutoCompleteAddress from '../../components/AutoCompleteAddress'
 import PropTypes from 'prop-types';
 import Router from 'next/router'
 import img from "../../assets/img"
+import Select from "react-select";
+import moment from "moment";
+
+const companyList = [
+  {
+    _id: "Google_123",
+    companyName: "Google",
+    companyAddress:
+      "Google Building Gordon House, 4 Barrow St, Dublin, D04 E5W5, Ireland"
+  },
+  {
+    _id: "Facebook_123",
+    companyName: "Facebook",
+    companyAddress: "Hanover Reach 5/7 Hanover Quay Dublin 2 Co. Dublin"
+  },
+  {
+    _id: "LinkedIn_123",
+    companyName: "LinkedIn",
+    companyAddress:
+      "Gardner House, 2 Wilton Pl, Grand Canal Dock, Dublin, Ireland"
+  },
+  {
+    _id: "Indeed_123",
+    companyName: "Indeed",
+    companyAddress:
+      "Bank of Scotland House, 124 St Stephen's Green, Dublin 2, D02 C628, Ireland"
+  }
+];
+
+const customStyles = {
+  control: (base, state) => ({
+    ...base,
+    fontSize: 16,
+    border: state.isFocused ? 0 : 0,
+    boxShadow: state.isFocused ? 0 : 0,
+    cursor: "text",
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderWidth: 1,
+    borderColor: "transparent",
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    width: "100%",
+    color: "black"
+  }),
+
+  option: (styles, { isFocused }) => {
+    return {
+      ...styles,
+      cursor: "pointer",
+      backgroundColor: isFocused ? "#20a8d8" : "white",
+      color: isFocused ? "white" : "black",
+      lineHeight: 2,
+      fontSize: 16,
+    };
+  },
+
+  input: styles => ({
+    ...styles,
+    color: "black",
+    boxShadow: "none",
+    borderRadius: 0,
+    borderWidth: 0
+  }),
+
+  menu: styles => ({
+    ...styles,
+    marginTop: 0,
+    boxShadow: "none",
+    borderRadius: 0
+  }),
+
+  singleValue: styles => ({
+    ...styles,
+    color: "black"
+  })
+};
 
 const propTypes = {
   children: PropTypes.node,
@@ -22,6 +103,7 @@ class Hero extends React.Component {
     this.state = {
       address: "",
       searchAddressInvalid: false,
+      selectedCompany: null,
     }
   }
 
@@ -31,115 +113,111 @@ class Hero extends React.Component {
     });
   }
 
+  getMonday = d => {
+    d = new Date(d);
+    var day = d.getDay(),
+      diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
+  };
 
-  searchAddress = (e, address) => {
-    e.preventDefault()
-   // console.log(address)
-   // alert(address.address_components[1].long_name)
-    if (address === "" || typeof address === 'undefined' || address === null)  {
-      this.setState({
-        searchAddressInvalid: true
-      })
+  getStarted = () => {
+    var todayDate = moment(new Date()).format("YYYY-MM-DD")
+    var mondayOfTheWeek = this.getMonday(new Date());
+
+    if (new Date().getDay() === 0 || new Date().getDay() === 6) {
+      //detect if weekends, if yes, get next monday
+      mondayOfTheWeek = new Date( mondayOfTheWeek.setDate(mondayOfTheWeek.getDate() + 7));
+      todayDate = moment(mondayOfTheWeek).format("YYYY-MM-DD")
     }
-    else if (address != "") {
-       
-      var city = address.address_components[1].long_name
-      var formatted_address = address.formatted_address
-      var longitude = address.geometry.location.lng()
-      var latitude = address.geometry.location.lat()
-      this.setState({
-        address: ""
-      }, () => {
-        var selectedAddress = {
-          formatted_address: formatted_address,
-          longitude: address.geometry.location.lng(),
-          latitude: address.geometry.location.lat()
-        }
-        sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
-        Router.push(`/searchcaterer?location=${formatted_address}&longitude=${longitude}&latitude=${latitude}`, `/searchcaterer?location=${formatted_address}&longitude=${longitude}&latitude=${latitude}`)
-      })
-    }
-    else {
-      var longitude = "-8.630498"
-      var latitude = "52.6638"
-      this.setState({
-        address: ""
-      }, () => {
-        var selectedAddress = {
-          formatted_address: "County%20Limerick",
-          longitude:  "-8.630498",
-          latitude: "52.6638"
-        }
-        sessionStorage.setItem('selectedAddress', JSON.stringify(selectedAddress));
-        Router.push(`/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`, `/searchcaterer?location=County%20Limerick&longitude=${longitude}&latitude=${latitude}`)
-      })
-    }
-    
+
+    sessionStorage.setItem('selectedCompany', JSON.stringify(this.state.selectedCompany));
+    Router.push(`/searchlunch?location=${this.state.selectedCompany.value}&date=${todayDate}`, `/searchlunch?location=${this.state.selectedCompany.value}&date=${todayDate}`)
   }
 
-  showPlaceDetails(address) {
-    this.setState({ address, searchAddressInvalid: false });
-  }
+  handleChange = (selectedCompany) => {
+    this.setState({ 
+      selectedCompany 
+    })
+  };
 
   render() {
+
+    const searchList = companyList.map(({ _id, companyName, companyAddress }) => {
+      return {
+        value: _id,
+        label: companyName + " | " + companyAddress
+      };
+    });
+
+    const DropdownIndicator = () => {
+      return <div />;
+    };
+
     return (
       <section
         id="hero"
-        style={{ height: 600, marginTop: -70, backgroundImage: 'url(' + img.corporate_lunch2 + ')', backgroundSize: 'cover'}}
+        style={{ height: 600, marginTop: -70, backgroundImage: 'url(' + img.golunch_wallpaper_dimmed + ')', backgroundSize: 'cover'}}
       >
           <Row style={{margin:0, marginTop: 150, display:'flex',}} >
             
             <Col style={{textAlign: 'center', color: 'white',}} xs="12">
               <h1 style={{fontSize: 40}}>
-                All you need for corporates catering
+                Lunch for 10 EUR
               </h1>
             </Col>
 
             <Col style={{textAlign: 'center', color: 'white',}} xs="12">
               <p style={{fontSize: 18, letterSpacing: 2, marginTop: 20}} className="big">
-                Order catering from wide variety of restaurants and pubs nationwide.
+                Lunch delivered to your workplace on-time, with no delivery charges.
               </p>
             </Col>
 
             <Col style={{textAlign: 'center', }} xs="12">
-              <Label className="h6" style={{ letterSpacing: 2, color: 'white', fontSize: 15, marginTop: 40}} >Delivery Address</Label>
+              <Label className="h6" style={{ letterSpacing: 2, color: 'white', fontSize: 15, marginTop: 40}} >Your Workplace</Label>
             </Col>
 
-            <Col style={{textAlign: 'center'}} xs="12">
+            <Col  xs="12">
               <Row >
                 <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
                 <Col style={{padding: 0,}} xs="10" sm="10" md="6" lg="6">
-                  <InputGroup id="Popover">
-
-                      <AutoCompleteAddress 
-                        borderTopRightRadius={0}
-                        borderBottomRightRadius = {0}
-                        borderTopLeftRadius={5}
-                        borderBottomLeftRadius={5}
-                        borderColor = 'transparent'
-                        paddingLeft = {20}
-                        paddingRight = {20}
-                        paddingTop = {10}
-                        paddingBottom = {10}
-                        fontSize = {16}
-                        color = 'black'
-                        onPlaceChanged={this.showPlaceDetails.bind(this)} />     
-
-                      <InputGroupAddon addonType="prepend">
-                        <Button onClick={e => this.searchAddress(e, this.state.address)} block style={{height: '100%', fontWeight: '600', borderTopRightRadius: 5, borderBottomRightRadius: 5,}} className="bg-primary" color="primary">SEARCH</Button>
-                      </InputGroupAddon>
-                  </InputGroup>
+                  <Row>
+                    <Col style={{paddingRight: 0,}} xs="9" md="9">
+                      <Select
+                        value={this.state.selectedCompany}
+                        options={searchList}
+                        onChange={this.handleChange}
+                        placeholder="ex: Google"
+                        openMenuOnClick={false}
+                        styles={customStyles}
+                        components={{ DropdownIndicator }}
+                      />
+                    </Col>
+                    <Col style={{ paddingLeft: 0 }} xs="3" md="3">
+                      <Button
+                        onClick={e => this.getStarted()}
+                        block
+                        style={{
+                          height: "100%",
+                          fontWeight: "600",
+                          fontSize: 16,
+                          borderTopLeftRadius: 0,
+                          borderBottomLeftRadius: 0,
+                          borderTopRightRadius: 5,
+                          borderBottomRightRadius: 5,
+                        }}
+                        className="bg-primary"
+                        color="primary"
+                      >
+                        SEARCH
+                      </Button>
+                    </Col>
+                  </Row>
                   
                 </Col>
 
                 <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
               </Row>
             </Col>
-
-            <Popover placement="bottom-start" isOpen={this.state.searchAddressInvalid} target="Popover" toggle={this.toggle}>
-              <PopoverHeader style={{color: 'red'}}>Invalid Address</PopoverHeader>
-              <PopoverBody>Please search for a valid address</PopoverBody>
-            </Popover>
             
           </Row>
       </section>

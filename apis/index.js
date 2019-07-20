@@ -1,6 +1,9 @@
 
 export default {
 
+    /*Daily Menu API*/
+    GETdailyMenu: "/dailyMenu/getDailyMenu",
+
     /*Published Caterer API*/
     GETcatererprofile: "/catererPublished/getcatererprofile",
     GETcaterer: "/catererPublished/getcaterer",

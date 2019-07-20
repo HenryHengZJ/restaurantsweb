@@ -19,20 +19,23 @@ class AboutUs extends React.Component {
             style={{
                 paddingTop: 30,
                 paddingBottom: 50,
-                backgroundSize: 'cover',
-                backgroundImage: 'url(' + img.golunch_wallpaper2 + ')'
+                backgroundColor: 'white'
             }}
             id="Caterer"
             className="white"
             >
             <Container>
                 <Row>
-                <Col style={{ color:"white", textAlign: "center", marginTop: 50}} xs="12" md="12">
-                    <h2 style={{ marginTop: 20, fontSize: 34 }}>About FoodieBee</h2>
-                    <p style={{ fontSize: 18, letterSpacing: 2, marginTop: 30, }}>
-                    FoodieBee is the first corporate catering marketplace platform in Ireland
+                <Col style={{ textAlign: "start", marginTop: 50}} xs="12" md="6">
+                    <h2 style={{ fontSize: 34 }}>About FoodieBee</h2>
+                    <p style={{ marginTop: 30, fontSize: 16, paddingRight:20 }}>
+                    FoodieBee is the first catering marketplace platform in Ireland
                     that specialize in connecting corporate clients with restaurant
-                    catering services. We are revolutionizing the traditional catering market with virtual catering.
+                    catering services. Caterings are suitable for multiple occasions
+                    such as daily meals, meetings, celebrations, events and etc. We
+                    believe, great food fosters better rapport between co-workers,
+                    which in turns help creating a more vibrant and energetic work
+                    culture.
                     </p>
 
                     <div className="text-center">
@@ -53,9 +56,15 @@ class AboutUs extends React.Component {
                     </div>
                 </Col>
                 <Col style={{ marginTop: 20, textAlign: "center" }} xs="12" md="6">
-                   
+                    <img
+                        style={{ objectFit: "cover", width: 370, height: 370 }}
+                        src={img.caterer_ingredients}
+                        alt="Food Ingredients"
+                    />
                 </Col>
-              
+                
+                <div style={{height: 1, marginTop:70, opacity: 0.2, backgroundColor: 'gray', borderWidth: 1}} className="col l1"></div>
+
                 </Row>
             </Container>
             </section>

@@ -69,6 +69,7 @@ nextApp.prepare().then(() => {
   var paymentRoutes   = require('./routes/payment');
   var reviewRoutes   = require('./routes/review');
   var twilioRoutes   = require('./routes/twilio');
+  var dailyMenuRoutes = require('./routes/dailyMenu');
 
 
 	// routes ======================================================================
@@ -83,6 +84,7 @@ nextApp.prepare().then(() => {
   app.use('/payment', paymentRoutes);
   app.use('/review', reviewRoutes);
   app.use('/twilio', twilioRoutes);
+  app.use('/dailyMenu', dailyMenuRoutes);
 
   app.get('/sitemap.xml', function(req, res) {
     sitemap.toXML( function (err, xml) {
@@ -110,10 +112,18 @@ nextApp.prepare().then(() => {
     mail.sendCustomerMessageEmail('/templates/customer_message_admin/email.html', bodymsg);
     res.status(200).json({});
   }) 
+
+  app.get('/catering', (req,res) => {
+    return nextApp.render(req, res, '/CateringLandingPage',  req.query )
+  })  
  
   app.get('/searchcaterer', (req,res) => {
     console.log("searchcaterer")
     return nextApp.render(req, res, '/SearchCaterer',  req.query )
+  })  
+
+  app.get('/searchlunch', (req,res) => {
+    return nextApp.render(req, res, '/SearchLunch',  req.query )
   })  
 
   app.get('/catererdetail/:id', (req,res) => {

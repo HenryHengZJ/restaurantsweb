@@ -19,26 +19,26 @@ class Testimonial extends Component {
         },
         {
           name: 'Stefan',
-          position: 'Tax Assistant',
-          comment: 'Thank you for existing! You have made lunch at work an absolute pleasure.',
+          position: 'Caterer',
+          comment: 'The perfect solution to manage my orders and sales.',
           src: img.testimonial_2
         },
         {
           name: 'Shureen',
           position: 'Sales Manager',
-          comment: 'With FoodieBee, I get to plan ahead of what to eat for the rest of the week.',
+          comment: 'Simply love it! Easy and efficient.',
           src: img.testimonial_3
         },
         {
           name: 'Cian',
           position: 'Software Engineer',
-          comment: 'Wide choice of cuisines and great service for working professionals.',
+          comment: 'Our team loves it!',
           src: img.testimonial_4
         },
         {
           name: 'Kieran',
           position: 'Tax Manager',
-          comment: 'I really appreciated the quality of the food and on-time delivery.',
+          comment: 'I really appreciated the quality of the products and on-time delivery',
           src: img.testimonial_5
         },
       ]
@@ -97,7 +97,7 @@ class Testimonial extends Component {
 
   render() {
     return (
-      <section style={{ backgroundColor: 'white', padding: 0, paddingTop:70, paddingBottom: 50}} id="Testimonial" className="white">
+      <section style={{ backgroundColor: 'white', padding: 0, paddingBottom: 20}} id="Testimonial" className="white">
 
         <Container>
           <Row style={{paddingTop: 20, flex: 1, display: 'flex'}} className="justify-content-center">

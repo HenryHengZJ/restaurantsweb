@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../../components/NavBar';
 import Hero from './Hero';
-import Restaurants from './Restaurants';
 import Occasion from './Occasion';
 import Features from './Features';
 import Caterer from './Caterer';
@@ -34,11 +33,6 @@ class LandingPage extends Component {
     this.refObj.current.scrollIntoView({behavior: 'smooth'});
   }
 
-  restaurantClicked(e) {
-    e.preventDefault()
-    this.refObj.current.scrollIntoView({behavior: 'smooth'});
-  }
-
   registerCatererClicked(e) {
     e.preventDefault()
     Router.push({
@@ -60,12 +54,12 @@ class LandingPage extends Component {
         />
         <div id="app">
           <div ref={this.refObj} > </div>
-          <NavBar theme={'dark'} catering={false} landingpage={true} signIn={e=>this.signIn(e)}/>
+          <NavBar theme={'dark'} catering={true} landingpage={true} signIn={e=>this.signIn(e)}/>
           <Hero/>
+          <Shops/>
           <Features findFoodNow={e=>this.findFoodNow(e)}/>
-          <Restaurants restaurantClicked={e=>this.restaurantClicked(e)}/>
-          <Testimonial/>
-          <AboutUs/>
+          <Occasion />
+          <Caterer registerCatererClicked={e=>this.registerCatererClicked(e)}/>
           <Footer />
         </div>
       </Layout>
