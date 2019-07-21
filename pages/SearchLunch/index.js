@@ -911,7 +911,7 @@ class SearchLunch extends Component {
              </div>
             
             <div class="row" style={{ marginTop:10, marginLeft: 40, marginRight: 20 }} >
-              <Label style={{width: '100%', }} className="h4">{dailyMenu[i].catererDetails.catererName} lalalalallalalalala</Label>
+              <Label style={{width: '100%', }} className="h4">{dailyMenu[i].catererDetails.catererName}</Label>
               <Label style={{ opacity: 0.6, width: '100%'}} className="h6">Order Before 11:30 A.M</Label>
             </div>
 
