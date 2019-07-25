@@ -125,6 +125,7 @@ class SearchLunch extends Component {
     const res = await axios.get(url);
     const data = await res.data;
     console.log(`Show data fetched. Count: ${data.length}`);
+    console.log(`Show data fetched: ${data}`);
     return {
       locationquerystring: locationquerystring, 
       datequerystring: datequerystring,
@@ -807,7 +808,7 @@ class SearchLunch extends Component {
       var item = menuitems[i][0]
 
       itemsarray.push(
-        <Col key={i} xs="12" sm="6" md="4" lg="4">
+        <Col key={i} xs="12" sm="6" md="4" lg="4" style={{}}>
           <Card className="card-1" onClick={() => this.menuItemClicked( i, parentIndex)} style={{ cursor: "pointer" }}>
             <CardBody
               style={{

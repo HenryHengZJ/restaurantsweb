@@ -34,7 +34,7 @@ router.get('/getDailyMenu', (req, res) => {
 	   }},
 	   {$unwind: "$menuitems"},
 	   {$lookup: {
-           from: "menuPublished", 
+           from: "lunchMenuPublished", 
            localField: "menuitems", 
            foreignField: "_id", 
            as: "menuDetails" }
