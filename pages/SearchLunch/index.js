@@ -530,13 +530,6 @@ class SearchLunch extends Component {
     return iconPath
   }
 
-
-  findQuantityRange = (minimumquantity) => {
-    var index = this.state.quantity.findIndex(x => x==minimumquantity);
-    var quantityrange = this.state.quantity.slice(index, this.state.quantity.length)
-    return quantityrange
-  }
-
   renderMarkAsIcon(markitem) {
     var iconarray = [];
     for (let i = 0; i < markitem.length; i++) {
@@ -700,7 +693,7 @@ class SearchLunch extends Component {
             <FormGroup>
               <Label style={{fontWeight: '600'}}>Select Quantity</Label>
               <Input value={this.state.selectedQuantity} onChange={(e) => this.handleQuantityChange(e, activeMenu.priceperunit)} style={{color:'black'}} type="select">
-              {this.findQuantityRange(activeMenu.minimumquantity).map(quantity =>
+              {this.state.quantity.map(quantity =>
                 <option style={{color:'black'}} key={quantity} value={quantity}>{quantity}</option>
               )}
               </Input>
@@ -808,7 +801,7 @@ class SearchLunch extends Component {
       var item = menuitems[i][0]
 
       itemsarray.push(
-        <Col key={i} xs="12" sm="6" md="4" lg="4" style={{}}>
+        <Col key={i} xs="12" sm="6" md="6" lg="4" style={{}}>
           <Card className="card-1" onClick={() => this.menuItemClicked( i, parentIndex)} style={{ cursor: "pointer" }}>
             <CardBody
               style={{
@@ -905,7 +898,7 @@ class SearchLunch extends Component {
     for (let i = 0; i < dailyMenu.length; i++) {
       itemsarray.push(
         <div >
-          <Row style={{marginLeft: 20, marginRight: 20}}>
+          <Row style={{marginLeft: 10, marginRight: 10}}>
           
              <div className="float-left" style={{ marginLeft: 30, width: 80, height: 80,  borderRadius: '50%', overflow: 'hidden'}}>
               <img style={{ objectFit:'cover', width: 'auto', height: '100%', display: 'inline'}} src={dailyMenu[i].catererDetails.profilesrc}/>
@@ -918,7 +911,7 @@ class SearchLunch extends Component {
 
           </Row>
 
-          <Col style={{ marginTop: 20, marginBottom: 20 }} xs="12">
+          <Col style={{ marginTop: 20, marginBottom: 20, paddingLeft: 0, paddingRight: 0, }} xs="12">
             {this.renderItems(dailyMenu[i].menuitems, i)}
           </Col>
           
@@ -981,7 +974,8 @@ class SearchLunch extends Component {
                     display: "inline-block",
                     fontWeight: "500",
                     color: dayList[i].hovered ? "white" : "#696969",
-                    verticalAlign: "middle"
+                    verticalAlign: "middle",
+                    marginTop: 5
                   }}
                 >
                   {dayList[i].date}
