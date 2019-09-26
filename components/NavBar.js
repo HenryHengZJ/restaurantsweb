@@ -57,11 +57,13 @@ class NavBar extends Component {
     });
   }
 
-  goLunchClicked = () => {
+  goLunchClicked = (event) => {
+    event.preventDefault();
     Router.push(`/`)
   }
 
-  goCateringClicked = () => {
+  goCateringClicked = (event) => {
+    event.preventDefault();
     Router.push(`/catering`)
   }
 
@@ -135,31 +137,31 @@ class NavBar extends Component {
              
               <NavItem >
                 
-                <NavLink onClick={e => this.goLunchClicked(e)} style={{ marginLeft: 10, cursor: 'pointer', color: theme === "dark" ? "white" : null, fontWeight: '600', fontSize: 15, paddingLeft: 10, paddingRight: 10, backgroundColor: this.state.isOpen ? "transparent" : this.state.goLunchHover ? "#20a8d8" : "transparent", borderRadius: 5}} target="_blank">Go Lunch</NavLink>
+                <NavLink href="/" onClick={e => this.goLunchClicked(e)} style={{ marginLeft: 10, cursor: 'pointer', color: theme === "dark" ? "white" : null, fontWeight: '600', fontSize: 15, paddingLeft: 10, paddingRight: 10, backgroundColor: this.state.isOpen ? "transparent" : this.state.goLunchHover ? "#20a8d8" : "transparent", borderRadius: 5}} target="_blank">Go Lunch</NavLink>
                 
               </NavItem>
               
               <NavItem>
              
-                <NavLink onClick={e => this.goCateringClicked(e)} style={{ marginLeft: 10,cursor: 'pointer', color: theme === "dark" ? "white" : null, fontWeight: '600', fontSize: 15, paddingLeft: 10, paddingRight: 10, backgroundColor: this.state.isOpen ? "transparent" : this.state.goCateringHover ? "#20a8d8" : "transparent", borderRadius: 5}} target="_blank">Go Catering</NavLink>
+                <NavLink href="/catering" onClick={e => this.goCateringClicked(e)} style={{ marginLeft: 10,cursor: 'pointer', color: theme === "dark" ? "white" : null, fontWeight: '600', fontSize: 15, paddingLeft: 10, paddingRight: 10, backgroundColor: this.state.isOpen ? "transparent" : this.state.goCateringHover ? "#20a8d8" : "transparent", borderRadius: 5}} target="_blank">Go Catering</NavLink>
                 
               </NavItem>
               
 
               <NavItem>
-                <NavLink onClick={e => this.aboutUsClicked(e)} style={{ cursor: 'pointer', color: this.state.aboutUsHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">About Us</NavLink>
+                <NavLink href="/aboutus" onClick={e => this.aboutUsClicked(e)} style={{ cursor: 'pointer', color: this.state.aboutUsHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">About Us</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink onClick={e => this.contactUsClicked(e)} style={{ cursor: 'pointer', color: this.state.contactUsHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Contact</NavLink>
+                <NavLink href="/contactus" onClick={e => this.contactUsClicked(e)} style={{ cursor: 'pointer', color: this.state.contactUsHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Contact</NavLink>
               </NavItem>
               {!this.state.signInHide ?
               <NavItem>
-                <NavLink onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', color: this.state.signInHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
+                <NavLink href="/login" onClick={e => this.props.signIn(e)} style={{ cursor: 'pointer', color: this.state.signInHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Sign In</NavLink>
               </NavItem>
               : null}
               {catererSignInVisible ?
               <NavItem>
-                <NavLink onClick={e => this.props.caterersignIn(e)} style={{ cursor: 'pointer', color: this.state.catererSignInHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Caterer Sign In</NavLink>
+                <NavLink href="https://caterer.foodiebee.eu" onClick={e => this.props.caterersignIn(e)} style={{ cursor: 'pointer', color: this.state.catererSignInHover ? "#20a8d8" : colorVal, fontWeight: '600', fontSize: 15, paddingLeft: 20, paddingRight: 20}} target="_blank">Caterer Sign In</NavLink>
               </NavItem>
               : null }
             
@@ -178,7 +180,7 @@ class NavBar extends Component {
                   <Label style={{ paddingLeft: this.state.isOpen ? 8 : 0, fontWeight: '500', cursor: 'pointer', paddingRight: 5, paddingTop:2, fontSize: 15, color: this.state.userNameHover ? "#20a8d8" : colorVal, margin : 0, }}>{this.state.userName}</Label> 
                   </DropdownToggle>
                   <DropdownMenu right style={{ right: 0, left: 'auto' }}>
-                    <DropdownItem onClick={() => this.navItemClicked("Account Info")}>Account Info</DropdownItem>
+                    <DropdownItem href="/userprofile/Account Info" onClick={() => this.navItemClicked("Account Info")}>Account Info</DropdownItem>
                     <DropdownItem onClick={() => this.navItemClicked("Orders")}>Orders</DropdownItem>
                     <DropdownItem onClick={() => this.navItemClicked("Payment Methods")}>Payment Methods</DropdownItem>
                     <DropdownItem onClick={() => this.navItemClicked("Delivery Addresses")}>Delivery Addresses</DropdownItem>

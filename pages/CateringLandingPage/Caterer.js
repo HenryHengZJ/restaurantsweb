@@ -42,11 +42,11 @@ class Caterer extends React.Component {
                 </tbody>
               </Table>
 
-              <Link href="/caterersignup">
+            
               <div className="text-center"> 
-                <Button  style={{fontSize: 18, height: 50, marginTop: 10, marginBottom: 30,}} className="bg-primary" size="lg" color="primary">Register As Caterer</Button>
+                <Button href="/caterersignup" style={{fontSize: 18, height: 50, marginTop: 10, marginBottom: 30,}} className="bg-primary" size="lg" color="primary">Register As Caterer</Button>
               </div>
-              </Link>
+             
     
             </Col>
             <Col xs="12" md="6" >

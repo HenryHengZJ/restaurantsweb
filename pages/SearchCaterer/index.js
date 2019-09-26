@@ -1464,7 +1464,7 @@ class SearchCaterer extends Component {
             }}
             onClick={() => this.catererClicked(caterer[i]._id)}
           >
-            <CardBody style={{ padding: 0 }}>
+            <CardBody  style={{ padding: 0 }}>
               <img
                 style={{
                   objectFit: "cover",
@@ -1512,7 +1512,7 @@ class SearchCaterer extends Component {
                   No Ratings Yet
                 </Label>
                 :
-                <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange" }}>
+                <Label style={{ fontWeight: '500', marginLeft: 5, color: "darkorange",  cursor: "pointer", }}>
                   ({caterer[i].numofreview})
                 </Label>}
               </Row>

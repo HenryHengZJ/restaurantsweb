@@ -29,27 +29,36 @@ const closeIcon = '/static/close.png';
 
 const companyList = [
   {
-    _id: "Google_123",
+    _id: "5d8ca11c88211f271c35ba32",
     companyName: "Google",
-    companyAddress:
-      "Google Building Gordon House, 4 Barrow St, Dublin, D04 E5W5, Ireland"
+    companyAddress:"Google Building Gordon House, 4 Barrow St, Dublin, D04 E5W5, Ireland",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin4",
+    numberOfEmployee: 2
   },
   {
-    _id: "Facebook_123",
+    _id: "5d8ca3523facc3271c4b5ade",
     companyName: "Facebook",
-    companyAddress: "Hanover Reach 5/7 Hanover Quay Dublin 2 Co. Dublin"
+    companyAddress: "Hanover Reach 5/7 Hanover Quay Dublin 2 Co. Dublin",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin2",
+    numberOfEmployee: 2
   },
   {
-    _id: "LinkedIn_123",
+    _id: "5d8ca3673facc3271c4b5adf",
     companyName: "LinkedIn",
-    companyAddress:
-      "Gardner House, 2 Wilton Pl, Grand Canal Dock, Dublin, Ireland"
+    companyAddress: "Gardner House, 2 Wilton Pl, Grand Canal Dock, Dublin, Ireland",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin4",
+    numberOfEmployee: 2
   },
   {
-    _id: "Indeed_123",
+    _id: "5d8ca3783facc3271c4b5ae0",
     companyName: "Indeed",
-    companyAddress:
-      "Bank of Scotland House, 124 St Stephen's Green, Dublin 2, D02 C628, Ireland"
+    companyAddress: "Bank of Scotland House, 124 St Stephen's Green, Dublin 2, D02 C628, Ireland",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin2",
+    numberOfEmployee: 2
   }
 ];
 
@@ -103,7 +112,7 @@ const customStyles = {
 
 class SearchLunch extends Component {
 
-  static async getInitialProps({query: { location, date }}) {
+  static async getInitialProps({query: { companyID, date }}) {
 
     var url = `${server}${apis.GETdailyMenu}`
     var locationquerystring = "";
@@ -111,8 +120,8 @@ class SearchLunch extends Component {
   
     var selectedDate = "";
     
-    if (typeof location !== 'undefined') {
-      locationquerystring = "?location=" + location
+    if (typeof companyID !== 'undefined') {
+      locationquerystring = "?companyID=" + companyID
       url = url + locationquerystring
     }
    
@@ -121,7 +130,7 @@ class SearchLunch extends Component {
       url = url + datequerystring
       selectedDate = date
     }
-
+    console.log(url)
     const res = await axios.get(url);
     const data = await res.data;
     console.log(`Show data fetched. Count: ${data.length}`);
@@ -130,7 +139,7 @@ class SearchLunch extends Component {
       locationquerystring: locationquerystring, 
       datequerystring: datequerystring,
       dailyMenu: data,
-      location: location,
+      companyID: companyID,
       selectedDate,
     };
   }
@@ -141,12 +150,12 @@ class SearchLunch extends Component {
       dailyMenu: this.props.dailyMenu,
       loading: this.props.dailyMenu.length > 0 ? true : false,
       empty: this.props.dailyMenu.length > 0 ? false : true,
-      location: this.props.location,
+      companyID: this.props.companyID,
       locationquerystring: this.props.locationquerystring,
       datequerystring: this.props.datequerystring,
       selectedDate: this.props.selectedDate,
     }, () => {
-      this.getCompanyAddress(this.state.location)
+      this.getCompanyAddress(this.state.companyID)
       if (!this.state.empty) {
         this.resturctureData(this.state.dailyMenu)
       }
@@ -167,7 +176,7 @@ class SearchLunch extends Component {
       baseurl: "/searchlunch",
       locationquerystring: "",
       datequerystring: "",
-      location: "",
+      companyID: "",
       isMobile: null,
       loading: true,
       empty: false,
@@ -298,7 +307,7 @@ class SearchLunch extends Component {
         if (!this.state.empty) {
           this.resturctureData()
         }
-        this.getCompanyAddress(this.state.location)
+        this.getCompanyAddress(this.state.companyID)
       })
     })
     .catch(err => {
@@ -321,8 +330,6 @@ class SearchLunch extends Component {
         label: companyList[index].companyName + " | " + companyList[index].companyAddress
       }
 
-      console.log(selectedCompany)
-
       this.setState({
         selectedCompany
       })
@@ -344,27 +351,19 @@ class SearchLunch extends Component {
   }
 
   resturctureData() {
-    var result = this.state.dailyMenu[0].menuDetails.reduce(function(r, a) {
-      r[a[0].catererID] = r[a[0].catererID] || [];
-      r[a[0].catererID].push(a);
+    var result = this.state.dailyMenu[0].menuitems.reduce(function(r, a) {
+      r[a.category] = r[a.category] || [];
+      r[a.category].push(a);
       return r;
     }, Object.create(null));
 
-   
     var finaldataAry = []
-
-    for (var key in result) {
-
-      var catererIndex = this.state.dailyMenu[0].catererDetails.findIndex(x => x[0]._id === key)
-
-      var updateData = {
-        catererDetails: this.state.dailyMenu[0].catererDetails[catererIndex][0],
-        menuitems: result[key] 
-      }
-      finaldataAry.push(updateData)
+    var updateData = {
+      catererDetails: this.state.dailyMenu[0].catererDetails,
+      menuitems: result
     }
+    finaldataAry.push(updateData)
 
-    console.log(finaldataAry)
     this.setState({
       dailyMenu: finaldataAry,
       loading: false
@@ -389,8 +388,7 @@ class SearchLunch extends Component {
     })
   }
 
-  menuItemClicked = ( childIndex, parentIndex) => {
-    var item = this.state.dailyMenu[parentIndex].menuitems[childIndex][0]
+  menuItemClicked = (item) => {
     this.setState({
       menuModalOpen: !this.state.menuModalOpen,
       activeMenu: item,
@@ -400,7 +398,7 @@ class SearchLunch extends Component {
   handleCompanyChange = (selectedCompany) => {
     this.setState({ 
       selectedCompany,
-      location:  selectedCompany._id
+      companyID:  selectedCompany._id
     } , () => {
 
       sessionStorage.setItem('selectedCompany', JSON.stringify(this.state.selectedCompany));
@@ -409,7 +407,7 @@ class SearchLunch extends Component {
       var locationquerystring = this.state.locationquerystring;
       var datequerystring = this.state.datequerystring;
 
-      locationquerystring = "?location=" + this.state.selectedCompany.value
+      locationquerystring = "?companyID=" + this.state.selectedCompany.value
 
       url = url + locationquerystring + datequerystring; 
       var fullapiurl = apis.GETdailyMenu + locationquerystring + datequerystring;
@@ -493,8 +491,10 @@ class SearchLunch extends Component {
       dayList,
       selectedDate: moment(selectedDay.fullDate).format("YYYY-MM-DD") 
     }, () => {
-      this.handleDateSearch(this.state.selectedDate)
-      sessionStorage.setItem('selectedDate', this.state.selectedDate);
+      /*Just to set date to 01, 02, 03, 04, 05*/
+      var day = moment(selectedDay.fullDate).format("YYYY-MM")  + "-0" + moment(selectedDay.fullDate).day()
+      this.handleDateSearch(day)
+      sessionStorage.setItem('selectedDate', day);
     })
   };
 
@@ -651,7 +651,7 @@ class SearchLunch extends Component {
           </div>
 
           <div style={{textAlign: 'center',marginBottom: 20}}>
-            <b style={{fontSize: 17,}}>€15 / month after free trial. Cancel anytime. </b>
+            <b style={{fontSize: 17,}}>€9.99 / month after free trial. Cancel anytime. </b>
           </div>
 
         </ModalBody>
@@ -704,7 +704,7 @@ class SearchLunch extends Component {
 
             <Col style={{marginTop: 10, }} xs="12">
               <Button style={{borderColor: "#FF5722", borderWidth: 1, backgroundColor: "white"}} onClick={this.togglePrimeModal}>
-                <b style={{fontSize: 16, fontWeight: '700', color: "#FF5722",marginTop: 12,}}>Get it for €10 with 
+                <b style={{fontSize: 16, fontWeight: '700', color: "#FF5722",marginTop: 12,}}>Get it for €{activeMenu.category === "lite" ? "6" : "10"} with 
                   <Button style={{cursor: "pointer", marginLeft: 10, opacity: 1.0, padding: 5, fontWeight: '600', fontSize: 12,borderWidth: 0, backgroundColor: "#FF5722", color: "white" }} disabled>PRIME</Button>          
                 </b>
               </Button>
@@ -793,27 +793,39 @@ class SearchLunch extends Component {
     );
   }
 
-  renderItems(menuitems, parentIndex) {
+  renderItems(menuitems) {
     var itemsarray = [];
 
     for (let i = 0; i < menuitems.length; i++) {
 
-      var item = menuitems[i][0]
+      var item = menuitems[i]
 
       itemsarray.push(
         <Col key={i} xs="12" sm="6" md="6" lg="4" style={{}}>
-          <Card className="card-1" onClick={() => this.menuItemClicked( i, parentIndex)} style={{ cursor: "pointer" }}>
+          <Card className="card-1" onClick={() => this.menuItemClicked(item)} style={{ cursor: "pointer" }}>
             <CardBody
               style={{
                 cursor: "pointer",
                 paddingTop: 0,
                 paddingBottom: 0,
                 paddingRight: 15,
+                paddingLeft: 15,
                 height: "100%"
               }}
             >
             <Row>
-              <Col style={{ marginTop: 15, marginBottom: 10,}} xs={item.src ? "8" : "12"}>
+             
+              {item.src ?
+                <Col style={{padding:0}} xs="12">
+                  <div style={{ objectFit:'cover', width: 'auto', height: 150, }}>
+                    <img style={{ objectFit:'cover', width: '100%', height: '100%', }} src={item.src}/>
+                  </div>
+                </Col>
+                :
+                null
+              }
+            
+              <Col style={{ marginTop: 15, marginBottom: 10,}} xs="12">
                 <div style={{paddingRight: 10}} class="row">
                   <Dotdotdot clamp={1}>
                     <p className="h5" style={{ cursor: "pointer", marginLeft: 15, color: "#20a8d8", overflow: "hidden" }}>
@@ -827,29 +839,27 @@ class SearchLunch extends Component {
                 </div>
                 
                 <div style={{ marginTop: 10 }}>
-                  <Dotdotdot clamp={2}>
+                  <Dotdotdot clamp={1}>
                     <p style={{ cursor: "pointer", overflow: "hidden" }}>
                       {item.descrip}
                     </p>
                   </Dotdotdot>
                 </div>
 
-                <div class="row" style={{ marginTop: 10, }}>
-                  <Label
-                    style={{
-                      cursor: "pointer",
-                      opacity: 0.5,
-                      marginLeft: 15, 
-                      textDecorationLine: 'line-through',
-                    }}
-                    className="h5 float-left"
-                  >
-                    €{Number(item.priceperunit).toFixed(2)}
-                  </Label>
-                </div>
-
-                <div style={{ marginTop: 10, marginBottom: 10 }}>
+                <div style={{ marginTop: 0, marginBottom: 10 }}>
                   <Row>
+                    <Label
+                      style={{
+                        cursor: "pointer",
+                        opacity: 0.5,
+                        marginLeft: 15, 
+                        marginTop: 5,
+                        textDecorationLine: 'line-through',
+                      }}
+                      className="h5 float-left"
+                    >
+                      €{Number(item.priceperunit).toFixed(2)}
+                    </Label>
                     <Button style={{cursor: "pointer", marginLeft: 10, opacity: 1.0, padding: 5, fontWeight: '600', fontSize: 12,borderWidth: 0, backgroundColor: "#FF5722", color: "white" }} disabled>PRIME</Button>          
                     <Label
                       style={{
@@ -860,20 +870,12 @@ class SearchLunch extends Component {
                       }}
                       className="h5 float-left"
                     >
-                      €{Number(10).toFixed(2)}
+                      €{item.category === "lite" ? Number(6).toFixed(2) : Number(10).toFixed(2)}
                     </Label>
                   </Row>
                 </div>
               </Col>
 
-              {item.src ?
-                <Col xs="4" style={{padding: 0,}}>
-                  <div style={{ objectFit:'cover', width: 'auto', height: '100%', }}>
-                    <img style={{ objectFit:'cover', width: '100%', height: '100%', }} src={item.src}/>
-                  </div>
-                </Col>
-                :
-                null}
 
               </Row>
               
@@ -911,8 +913,28 @@ class SearchLunch extends Component {
 
           </Row>
 
+          {typeof dailyMenu[i].menuitems.main !== 'undefined' ?
+            <Col style={{ marginTop: 20, paddingLeft: 40, paddingRight: 20, }} xs="12">
+              <Button style={{opacity: 1.0, padding: 10, fontWeight: '600', fontSize: 17, letterSpacing: 2, borderWidth: 0, backgroundColor: "rgba(220,220,220,0.5)", color: "black" }} disabled>LITE</Button>          
+            </Col>
+            :
+            null
+          }
+
           <Col style={{ marginTop: 20, marginBottom: 20, paddingLeft: 0, paddingRight: 0, }} xs="12">
-            {this.renderItems(dailyMenu[i].menuitems, i)}
+            {typeof dailyMenu[i].menuitems.lite !== 'undefined' ? this.renderItems(dailyMenu[i].menuitems.lite) : null}
+          </Col>
+
+          {typeof dailyMenu[i].menuitems.main !== 'undefined' ?
+            <Col style={{ marginTop: 40, paddingLeft: 40, paddingRight: 20, }} xs="12">
+             <Button style={{opacity: 1.0, padding: 10, fontWeight: '600', fontSize: 17, letterSpacing: 2, borderWidth: 0, backgroundColor: "rgba(220,220,220,0.5)", color: "black" }} disabled>MAIN</Button>          
+            </Col>
+            :
+            null
+          }
+
+          <Col style={{ marginTop: 20, marginBottom: 20, paddingLeft: 0, paddingRight: 0, }} xs="12">
+            {typeof dailyMenu[i].menuitems.main !== 'undefined' ? this.renderItems(dailyMenu[i].menuitems.main) : null}
           </Col>
           
         </div>
@@ -1092,12 +1114,8 @@ class SearchLunch extends Component {
   render() {
 
     return (
-      <Layout title={this.state.location === "" || typeof this.state.location === "undefined" ? 'Caterers Nearby' : this.state.location + " Caterers Nearby"}>
-      <NextSeo
-        config={{
-          title: this.state.location === "" || typeof this.state.location === "undefined" ? 'Caterers Nearby' : this.state.location + " Caterers Nearby",
-        }}
-      />
+      <Layout title={'FoodieBee - Go Lunch'}>
+      <NextSeo config={{ title: "FoodieBee - Go Lunch" }}/>
       
       <div ref={this.refObj} style={{backgroundColor: 'white'}}>
          <NavBar signIn={e=>this.signIn(e)}/>

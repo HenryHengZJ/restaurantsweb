@@ -32,7 +32,7 @@ class CatererLogin extends Component {
 
   login = (e) => {
     e.preventDefault()
-    window.location.assign('https://foodiebeecaterer.herokuapp.com');
+    window.location.assign('https://caterer.foodiebee.eu');
   }
 
   render() {

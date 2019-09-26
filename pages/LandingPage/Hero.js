@@ -10,27 +10,36 @@ import moment from "moment";
 
 const companyList = [
   {
-    _id: "Google_123",
+    _id: "5d8ca11c88211f271c35ba32",
     companyName: "Google",
-    companyAddress:
-      "Google Building Gordon House, 4 Barrow St, Dublin, D04 E5W5, Ireland"
+    companyAddress:"Google Building Gordon House, 4 Barrow St, Dublin, D04 E5W5, Ireland",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin4",
+    numberOfEmployee: 2
   },
   {
-    _id: "Facebook_123",
+    _id: "5d8ca3523facc3271c4b5ade",
     companyName: "Facebook",
-    companyAddress: "Hanover Reach 5/7 Hanover Quay Dublin 2 Co. Dublin"
+    companyAddress: "Hanover Reach 5/7 Hanover Quay Dublin 2 Co. Dublin",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin2",
+    numberOfEmployee: 2
   },
   {
-    _id: "LinkedIn_123",
+    _id: "5d8ca3673facc3271c4b5adf",
     companyName: "LinkedIn",
-    companyAddress:
-      "Gardner House, 2 Wilton Pl, Grand Canal Dock, Dublin, Ireland"
+    companyAddress: "Gardner House, 2 Wilton Pl, Grand Canal Dock, Dublin, Ireland",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin4",
+    numberOfEmployee: 2
   },
   {
-    _id: "Indeed_123",
+    _id: "5d8ca3783facc3271c4b5ae0",
     companyName: "Indeed",
-    companyAddress:
-      "Bank of Scotland House, 124 St Stephen's Green, Dublin 2, D02 C628, Ireland"
+    companyAddress: "Bank of Scotland House, 124 St Stephen's Green, Dublin 2, D02 C628, Ireland",
+    companyCity: "Dublin",
+    companyDistrict: "Dublin2",
+    numberOfEmployee: 2
   }
 ];
 
@@ -121,22 +130,33 @@ class Hero extends React.Component {
   };
 
   getStarted = () => {
-    var todayDate = moment(new Date()).format("YYYY-MM-DD")
-    var mondayOfTheWeek = this.getMonday(new Date());
 
-    if (new Date().getDay() === 0 || new Date().getDay() === 6) {
-      //detect if weekends, if yes, get next monday
-      mondayOfTheWeek = new Date( mondayOfTheWeek.setDate(mondayOfTheWeek.getDate() + 7));
-      todayDate = moment(mondayOfTheWeek).format("YYYY-MM-DD")
+    if (this.state.selectedCompany === null)  {
+      this.setState({
+        searchAddressInvalid: true
+      })
     }
+    else {
+      //var todayDate = moment(new Date()).format("YYYY-MM-DD")
+      var todayDate = moment(new Date()).format("YYYY-MM")  + "-0" + moment(new Date()).day()
+      var mondayOfTheWeek = this.getMonday(new Date());
 
-    sessionStorage.setItem('selectedCompany', JSON.stringify(this.state.selectedCompany));
-    Router.push(`/searchlunch?location=${this.state.selectedCompany.value}&date=${todayDate}`, `/searchlunch?location=${this.state.selectedCompany.value}&date=${todayDate}`)
+      if (new Date().getDay() === 0 || new Date().getDay() === 6) {
+        //detect if weekends, if yes, get next monday
+        mondayOfTheWeek = new Date( mondayOfTheWeek.setDate(mondayOfTheWeek.getDate() + 7));
+        //todayDate = moment(mondayOfTheWeek).format("YYYY-MM-DD")
+        todayDate = moment(mondayOfTheWeek).format("YYYY-MM")  + "-0" + moment(mondayOfTheWeek).day()
+      }
+
+      sessionStorage.setItem('selectedCompany', JSON.stringify(this.state.selectedCompany));
+      Router.push(`/searchlunch?companyID=${this.state.selectedCompany.value}&date=${todayDate}`, `/searchlunch?companyID=${this.state.selectedCompany.value}&date=${todayDate}`)
+    }
   }
 
   handleChange = (selectedCompany) => {
     this.setState({ 
-      selectedCompany 
+      selectedCompany,
+      searchAddressInvalid: false,
     })
   };
 
@@ -162,7 +182,7 @@ class Hero extends React.Component {
             
             <Col style={{textAlign: 'center', color: 'white',}} xs="12">
               <h1 style={{fontSize: 40}}>
-                Lunch for 10 EUR
+                Office Lunch from just €6
               </h1>
             </Col>
 
@@ -176,10 +196,10 @@ class Hero extends React.Component {
               <Label className="h6" style={{ letterSpacing: 2, color: 'white', fontSize: 15, marginTop: 40}} >Your Workplace</Label>
             </Col>
 
-            <Col  xs="12">
+            <Col xs="12">
               <Row >
                 <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
-                <Col style={{padding: 0,}} xs="10" sm="10" md="6" lg="6">
+                <Col id="Popover" style={{padding: 0,}} xs="10" sm="10" md="6" lg="6">
                   <Row>
                     <Col style={{paddingRight: 0,}} xs="9" md="9">
                       <Select
@@ -218,6 +238,11 @@ class Hero extends React.Component {
                 <Col style={{padding: 0,}} xs="1" sm="1" md="3" lg="3"/>
               </Row>
             </Col>
+
+            <Popover placement="bottom-start" isOpen={this.state.searchAddressInvalid} target="Popover" toggle={this.toggle}>
+              <PopoverHeader style={{color: 'red'}}>Invalid Workplace</PopoverHeader>
+              <PopoverBody>Please search for a valid workplace</PopoverBody>
+            </Popover>
             
           </Row>
       </section>

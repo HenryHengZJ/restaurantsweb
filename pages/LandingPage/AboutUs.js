@@ -46,6 +46,7 @@ class AboutUs extends React.Component {
                         className="bg-primary"
                         size="lg"
                         color="primary"
+                        href="/aboutus"
                         onClick={() => this.buttonClicked()}
                     >
                         Learn More
