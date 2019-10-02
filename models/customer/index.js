@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const Schema = mongoose.Schema
+const ObjectId = Schema.Types.ObjectId
 
 var deliveryAddressSchema = mongoose.Schema({
 	default: {
@@ -28,6 +30,7 @@ var customerSchema = mongoose.Schema({
     customerCounty: String,
     customerCountry: String,
     customerCountryCode: String,
+    customerCompanyID: ObjectId,
     customerOrderCount: {
         type: Number,
         default: 0

@@ -16,6 +16,10 @@ export default {
     UPDATEcustomerpassword: "/customer/updatecustomerpassword",
     UPDATEcustomerprofile: "/customer/updatecustomerprofile",
 
+    /*Company API*/
+    GETcompany: "/company/getcompany",
+    POSTcompany: "/company/postcompany",
+
     /*Menu API*/
     GETmenu: "/menuPublished/getmenu",
 

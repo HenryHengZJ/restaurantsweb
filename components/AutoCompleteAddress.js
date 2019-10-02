@@ -35,7 +35,6 @@ class AutoCompleteAddress extends React.Component {
     this.props.onPlaceChanged(place);
   }
 
-
   render() {
     const {
       borderRadius,
@@ -70,7 +69,7 @@ class AutoCompleteAddress extends React.Component {
     return (
       <input
         ref={this.autocompleteInput}
-        placeholder="Enter delivery address"
+        placeholder="Search address"
         type="text"
         style={{ borderTopRightRadius: borderTopRightRadiusVal, borderBottomRightRadius: borderBottomRightRadiusVal, borderTopLeftRadius: borderTopLeftRadiusVal, borderBottomLeftRadius: borderBottomLeftRadiusVal, height: heightVal, borderWidth: 1, borderColor: borderColorVal, paddingLeft: paddingLeftVal, paddingRight: paddingRightVal, paddingTop: paddingTopVal, paddingBottom: paddingBottomVal, width: '100%', flex:1, display:'flex', fontSize: fontSizeVal, color: colorVal}} 
       />

@@ -9,7 +9,7 @@ var companySchema = mongoose.Schema({
 	companyAddress: String,
 	companyCity: String,
 	companyDistrict: String,
-	numOfEmployee: Number,
+	location: { type: {type:String}, coordinates: [Number]},
 }, {
     timestamps: true
 });

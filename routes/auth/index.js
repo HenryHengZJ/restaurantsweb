@@ -31,15 +31,17 @@ router.post('/customersignup', (req, res) => {
 		else {
 			// create the customer
 			var newCustomer = new Customer(req.body);
-			newCustomer.customerPassword = newCustomer.generateHash(req.body.customerPassword);
-            newCustomer.save().then(() => 
-                {
-                    res.json(newCustomer)
-
-                   
+            newCustomer.customerPassword = newCustomer.generateHash(req.body.customerPassword);
+            console.log(newCustomer)
+            newCustomer.save(function(err, doc, numAffected) {
+                if (err) {
+                    return res.status(500).send({ error: err });
+                }
+                else {
+                    res.status(200).json(newCustomer)
                 }
                 
-            );
+            });
 		}
 	});
 });

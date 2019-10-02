@@ -58,7 +58,24 @@ class Register extends Component {
       errorRedirect: false,
       isPhoneNumberFormatWrong: false,
       isPasswordFormatWrong: false,
+      customerCompanyDetails: null,
+      customerCompanyID: "",
     };
+  }
+
+  componentDidMount() {
+    if (sessionStorage.getItem("customerCompany") !== null) {
+      var customerCompanyDetails = JSON.parse(sessionStorage.getItem("customerCompany"));
+      this.setState({
+        customerCompanyDetails
+      })
+    }
+    if (sessionStorage.getItem("customerCompanyID") !== null) {
+      var customerCompanyID = sessionStorage.getItem("customerCompanyID");
+      this.setState({
+        customerCompanyID
+      })
+    }
   }
 
   signIn(e) {
@@ -209,27 +226,65 @@ class Register extends Component {
         customerCountryCode: "+353"
       }
 
-      var url = apis.POSTcustomersignup;
-
-      axios.post(url, body, {headers: headers})
-        .then((response) => {
-          if (response.status === 200) {
-            this.setState({
-              redirecting: true
-            }, () => {
-              this.loginRegisteredUser();
-            })
-          } 
-        })
-        .catch((error) => {
-          if (error) {
-            this.setState({
-              error: true,
-              isCreating: false
-            })
-          } 
-        }); 
+      if (this.state.customerCompanyDetails) {
+        
+        var post_company_url = apis.POSTcompany;
   
+        axios.post(post_company_url, this.state.customerCompanyDetails, {headers: headers})
+          .then((response) => {
+            if (response.status === 200) {
+  
+              var customerCompanyID = response.data._id
+              body.customerCompanyID = customerCompanyID
+  
+              var customer_url = apis.POSTcustomersignup;
+              axios.post(customer_url, body, {headers: headers})
+                .then((response) => {
+                  if (response.status === 200) {
+                    this.setState({
+                      redirecting: true
+                    }, () => {
+                      this.loginRegisteredUser();
+                    })
+                  } 
+                })
+                .catch((error) => {
+                  if (error) {
+                    this.setState({
+                      error: true,
+                      isCreating: false
+                    })
+                  } 
+                }); 
+            } 
+          })
+          .catch((error) => {
+          });
+      }
+      else if (!this.state.customerCompanyDetails && this.state.customerCompanyID !== "") {
+
+        body.customerCompanyID = this.state.customerCompanyID
+        var customer_url = apis.POSTcustomersignup;
+
+        axios.post(customer_url, body, {headers: headers})
+          .then((response) => {
+            if (response.status === 200) {
+              this.setState({
+                redirecting: true
+              }, () => {
+                this.loginRegisteredUser();
+              })
+            } 
+          })
+          .catch((error) => {
+            if (error) {
+              this.setState({
+                error: true,
+                isCreating: false
+              })
+            } 
+          }); 
+      }
     }
   }
 

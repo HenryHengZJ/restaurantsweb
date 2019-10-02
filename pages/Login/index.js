@@ -108,7 +108,7 @@ class Login extends Component {
   signupmember = (e) => {
     e.preventDefault()
     Router.push({
-      pathname: '/register'
+      pathname: '/findcompany'
     })
   }
 

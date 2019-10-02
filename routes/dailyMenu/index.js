@@ -29,6 +29,9 @@ router.get('/getDailyMenu', (req, res) => {
 					if (err) {
 						return res.status(500).send({ error: err });
 					}
+					else if (doc === null) {
+						return res.status(500).send({ error: "doc null" });
+					}
 					else {
 						for(var i = 0; i < doc.caterers.length;i++){
 							if (doc.caterers[i].district == companyDistrict) {

@@ -27,41 +27,6 @@ const healthyIcon = '/static/fruit.png';
 const halalicon = '/static/halalsign.png';
 const closeIcon = '/static/close.png';
 
-const companyList = [
-  {
-    _id: "5d8ca11c88211f271c35ba32",
-    companyName: "Google",
-    companyAddress:"Google Building Gordon House, 4 Barrow St, Dublin, D04 E5W5, Ireland",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin4",
-    numberOfEmployee: 2
-  },
-  {
-    _id: "5d8ca3523facc3271c4b5ade",
-    companyName: "Facebook",
-    companyAddress: "Hanover Reach 5/7 Hanover Quay Dublin 2 Co. Dublin",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin2",
-    numberOfEmployee: 2
-  },
-  {
-    _id: "5d8ca3673facc3271c4b5adf",
-    companyName: "LinkedIn",
-    companyAddress: "Gardner House, 2 Wilton Pl, Grand Canal Dock, Dublin, Ireland",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin4",
-    numberOfEmployee: 2
-  },
-  {
-    _id: "5d8ca3783facc3271c4b5ae0",
-    companyName: "Indeed",
-    companyAddress: "Bank of Scotland House, 124 St Stephen's Green, Dublin 2, D02 C628, Ireland",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin2",
-    numberOfEmployee: 2
-  }
-];
-
 const customStyles = {
   control: (base, state) => ({
     ...base,
@@ -173,6 +138,7 @@ class SearchLunch extends Component {
   
     this.state = {
       dailyMenu: [],
+      companyList: [],
       baseurl: "/searchlunch",
       locationquerystring: "",
       datequerystring: "",
@@ -319,21 +285,30 @@ class SearchLunch extends Component {
     });
   };
 
-  getCompanyAddress = (locationID) => {
+  getCompanyAddress = (companyID) => {
 
-    var index = companyList.findIndex(x => x._id === locationID);
-    
-    if (index >= 0) {
+    var url = apis.GETcompany + "?companyID=" + companyID 
 
-      var selectedCompany =  {
-        value: companyList[index]._id,
-        label: companyList[index].companyName + " | " + companyList[index].companyAddress
+    axios.get(url)
+    .then((response) => {
+
+      var data = response.data;
+
+      if (data.length> 0) {
+        var selectedCompany =  {
+          value: data[0]._id,
+          label: data[0].companyName + " | " + data[0].companyAddress
+        }
+
+        this.setState({
+          selectedCompany
+        })
       }
+    })
+    .catch(err => {
+     
+    });
 
-      this.setState({
-        selectedCompany
-      })
-    }
   };
 
   toggleMenuModal() {
@@ -388,41 +363,93 @@ class SearchLunch extends Component {
     })
   }
 
-  menuItemClicked = (item) => {
+  menuItemClicked = (parentIndex, category, childIndex) => {
     this.setState({
       menuModalOpen: !this.state.menuModalOpen,
-      activeMenu: item,
+      activeMenu: this.state.dailyMenu[parentIndex].menuitems[category][childIndex],
     });
   };
 
   handleCompanyChange = (selectedCompany) => {
-    this.setState({ 
-      selectedCompany,
-      companyID:  selectedCompany._id
-    } , () => {
-
-      sessionStorage.setItem('selectedCompany', JSON.stringify(this.state.selectedCompany));
+    if (selectedCompany.value === 0) {
 
       var url = this.state.baseurl;
       var locationquerystring = this.state.locationquerystring;
       var datequerystring = this.state.datequerystring;
 
-      locationquerystring = "?companyID=" + this.state.selectedCompany.value
+      url = url + locationquerystring + datequerystring ; 
 
-      url = url + locationquerystring + datequerystring; 
-      var fullapiurl = apis.GETdailyMenu + locationquerystring + datequerystring;
+      Router.push({
+        pathname: '/addcompany',
+        query: {'returnurl': url}
+      })
+    }
+    else {
+      this.setState({ 
+        selectedCompany,
+        companyID:  selectedCompany.value
+      } , () => {
 
-      this.setState({
-        loading: true,
-        locationquerystring,
-        datequerystring,
-      },() => {
-        this.refObj.current.scrollIntoView();
-        window.history.pushState(null, '', url);    
-        this.getDataFromDb(fullapiurl)
-      })    
-    })
+        sessionStorage.setItem('selectedCompany', JSON.stringify(this.state.selectedCompany));
+
+        var url = this.state.baseurl;
+        var locationquerystring = this.state.locationquerystring;
+        var datequerystring = this.state.datequerystring;
+
+        locationquerystring = "?companyID=" + this.state.selectedCompany.value
+
+        url = url + locationquerystring + datequerystring; 
+        var fullapiurl = apis.GETdailyMenu + locationquerystring + datequerystring;
+
+        this.setState({
+          loading: true,
+          locationquerystring,
+          datequerystring,
+        },() => {
+          this.refObj.current.scrollIntoView();
+          window.history.pushState(null, '', url);    
+          this.getDataFromDb(fullapiurl)
+        })    
+      })
+    }
   };
+
+  
+  doSearch = (searchword) => {
+    if(this.timeout) clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      if (searchword !== "") {
+        this.getCompany(searchword)
+      }
+    }, 500);
+  };
+
+  getCompany = (searchCompany) => {
+
+    var addNewCompany = {
+      _id: 0,
+      companyName: "Add new company: ",
+      companyAddress: searchCompany
+    }
+
+    var url = apis.GETcompany + "?companyName=" + searchCompany
+
+    axios.get(url)
+    .then((response) => {
+      var data = response.data;
+      data.push(addNewCompany)
+      this.setState({
+        companyList: data
+      })
+    })
+    .catch(err => {
+      var data = this.state.companyList
+      data.push(addNewCompany)
+      this.setState({
+        companyList: data
+      })
+    });
+  }
   
   handleDateSearch = (selectedDate) => {
     var url = this.state.baseurl;
@@ -793,7 +820,7 @@ class SearchLunch extends Component {
     );
   }
 
-  renderItems(menuitems) {
+  renderItems(menuitems, parentIndex, category) {
     var itemsarray = [];
 
     for (let i = 0; i < menuitems.length; i++) {
@@ -802,7 +829,7 @@ class SearchLunch extends Component {
 
       itemsarray.push(
         <Col key={i} xs="12" sm="6" md="6" lg="4" style={{}}>
-          <Card className="card-1" onClick={() => this.menuItemClicked(item)} style={{ cursor: "pointer" }}>
+          <Card className="card-1" onClick={() => this.menuItemClicked(parentIndex, category, i)} style={{ cursor: "pointer" }}>
             <CardBody
               style={{
                 cursor: "pointer",
@@ -922,7 +949,7 @@ class SearchLunch extends Component {
           }
 
           <Col style={{ marginTop: 20, marginBottom: 20, paddingLeft: 0, paddingRight: 0, }} xs="12">
-            {typeof dailyMenu[i].menuitems.lite !== 'undefined' ? this.renderItems(dailyMenu[i].menuitems.lite) : null}
+            {typeof dailyMenu[i].menuitems.lite !== 'undefined' ? this.renderItems(dailyMenu[i].menuitems.lite, i, "lite") : null}
           </Col>
 
           {typeof dailyMenu[i].menuitems.main !== 'undefined' ?
@@ -934,7 +961,7 @@ class SearchLunch extends Component {
           }
 
           <Col style={{ marginTop: 20, marginBottom: 20, paddingLeft: 0, paddingRight: 0, }} xs="12">
-            {typeof dailyMenu[i].menuitems.main !== 'undefined' ? this.renderItems(dailyMenu[i].menuitems.main) : null}
+            {typeof dailyMenu[i].menuitems.main !== 'undefined' ? this.renderItems(dailyMenu[i].menuitems.main, i, "main") : null}
           </Col>
           
         </div>
@@ -1015,10 +1042,10 @@ class SearchLunch extends Component {
 
   renderTopSearchBar() {
     
-    const searchList = companyList.map(({ _id, companyName, companyAddress }) => {
+    const searchList = this.state.companyList.map(({ _id, companyName, companyAddress }) => {
       return {
         value: _id,
-        label: companyName + " | " + companyAddress
+        label: _id === 0 ? companyName + companyAddress : companyName + " | " + companyAddress
       };
     });
 
@@ -1055,6 +1082,7 @@ class SearchLunch extends Component {
                     value={this.state.selectedCompany}
                     options={searchList}
                     onChange={this.handleCompanyChange}
+                    onInputChange={this.doSearch}
                     placeholder="ex: Google"
                     openMenuOnClick={false}
                     styles={customStyles}

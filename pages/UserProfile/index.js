@@ -93,7 +93,7 @@ class UserProfile extends Component {
         "Account Info",
         "Orders",
         "Payment Methods",
-        "Delivery Addresses",
+        "Company Address",
         "Reviews",
       ], 
       orderdata: null,
@@ -214,7 +214,7 @@ class UserProfile extends Component {
     )
   }
 
-  renderDeliveryAddresses() {
+  renderWorkAddress() {
     return (
       <Address/>
     )
@@ -311,7 +311,7 @@ class UserProfile extends Component {
                 {this.state.selectedMenu === "Account Info" ? this.renderAccountInfo() :
                 this.state.selectedMenu === "Orders" ? this.renderOrderTable() :
                 this.state.selectedMenu === "Payment Methods" ? this.renderPaymentMethods() :
-                this.state.selectedMenu === "Delivery Addresses" ? this.renderDeliveryAddresses() :
+                this.state.selectedMenu === "Company Address" ? this.renderWorkAddress() :
                 this.state.selectedMenu === "Reviews" ? this.renderReviewTable() : null}
               </Col>
 

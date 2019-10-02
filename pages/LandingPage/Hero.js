@@ -7,41 +7,9 @@ import Router from 'next/router'
 import img from "../../assets/img"
 import Select from "react-select";
 import moment from "moment";
-
-const companyList = [
-  {
-    _id: "5d8ca11c88211f271c35ba32",
-    companyName: "Google",
-    companyAddress:"Google Building Gordon House, 4 Barrow St, Dublin, D04 E5W5, Ireland",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin4",
-    numberOfEmployee: 2
-  },
-  {
-    _id: "5d8ca3523facc3271c4b5ade",
-    companyName: "Facebook",
-    companyAddress: "Hanover Reach 5/7 Hanover Quay Dublin 2 Co. Dublin",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin2",
-    numberOfEmployee: 2
-  },
-  {
-    _id: "5d8ca3673facc3271c4b5adf",
-    companyName: "LinkedIn",
-    companyAddress: "Gardner House, 2 Wilton Pl, Grand Canal Dock, Dublin, Ireland",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin4",
-    numberOfEmployee: 2
-  },
-  {
-    _id: "5d8ca3783facc3271c4b5ae0",
-    companyName: "Indeed",
-    companyAddress: "Bank of Scotland House, 124 St Stephen's Green, Dublin 2, D02 C628, Ireland",
-    companyCity: "Dublin",
-    companyDistrict: "Dublin2",
-    numberOfEmployee: 2
-  }
-];
+import axios from "axios";
+import apis from "../../apis";
+import Cookies from 'js-cookie';
 
 const customStyles = {
   control: (base, state) => ({
@@ -113,7 +81,10 @@ class Hero extends React.Component {
       address: "",
       searchAddressInvalid: false,
       selectedCompany: null,
+      companyList: [],
     }
+
+    this.timeout =  0;
   }
 
   toggle() {
@@ -130,11 +101,13 @@ class Hero extends React.Component {
   };
 
   getStarted = () => {
-
     if (this.state.selectedCompany === null)  {
       this.setState({
         searchAddressInvalid: true
       })
+    }
+    else if (this.state.selectedCompany.value === 0) {
+      //Disable Button Function
     }
     else {
       //var todayDate = moment(new Date()).format("YYYY-MM-DD")
@@ -158,14 +131,53 @@ class Hero extends React.Component {
       selectedCompany,
       searchAddressInvalid: false,
     })
+    if (selectedCompany.value === 0) {
+      Router.push("/addcompany")
+    }
   };
+
+  doSearch = (searchword) => {
+    if(this.timeout) clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      if (searchword !== "") {
+        this.getCompany(searchword)
+      }
+    }, 500);
+  };
+
+  getCompany = (searchCompany) => {
+
+    var addNewCompany = {
+      _id: 0,
+      companyName: "Add new company: ",
+      companyAddress: searchCompany
+    }
+
+    var url = apis.GETcompany + "?companyName=" + searchCompany
+
+    axios.get(url)
+    .then((response) => {
+      var data = response.data;
+      data.push(addNewCompany)
+      this.setState({
+        companyList: data
+      })
+    })
+    .catch(err => {
+      var data = this.state.companyList
+      data.push(addNewCompany)
+      this.setState({
+        companyList: data
+      })
+    });
+  }
 
   render() {
 
-    const searchList = companyList.map(({ _id, companyName, companyAddress }) => {
+    const searchList = this.state.companyList.map(({ _id, companyName, companyAddress }) => {
       return {
         value: _id,
-        label: companyName + " | " + companyAddress
+        label: _id === 0 ? companyName + companyAddress : companyName + " | " + companyAddress
       };
     });
 
@@ -206,6 +218,7 @@ class Hero extends React.Component {
                         value={this.state.selectedCompany}
                         options={searchList}
                         onChange={this.handleChange}
+                        onInputChange={this.doSearch}
                         placeholder="ex: Google"
                         openMenuOnClick={false}
                         styles={customStyles}

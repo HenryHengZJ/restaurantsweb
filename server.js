@@ -71,6 +71,7 @@ nextApp.prepare().then(() => {
   var twilioRoutes   = require('./routes/twilio');
   var dailyMenuRoutes = require('./routes/dailyMenu');
   var lunchMenuPublishedRoutes = require('./routes/lunchMenuPublished');
+  var companyRoutes = require('./routes/company');
 
 	// routes ======================================================================
 	app.use('/test', testRoutes);
@@ -86,8 +87,8 @@ nextApp.prepare().then(() => {
   app.use('/twilio', twilioRoutes);
   app.use('/dailyMenu', dailyMenuRoutes);
   app.use('/lunchMenuPublished', lunchMenuPublishedRoutes);
-
-
+  app.use('/company', companyRoutes);
+  
   app.get('/sitemap.xml', function(req, res) {
     sitemap.toXML( function (err, xml) {
         if (err) {
@@ -138,6 +139,14 @@ nextApp.prepare().then(() => {
 
   app.get('/register', (req,res) => {
     return nextApp.render(req, res, '/Register', req.query)
+  }) 
+
+  app.get('/findcompany', (req,res) => {
+    return nextApp.render(req, res, '/FindCompany', req.query)
+  }) 
+
+  app.get('/addcompany', (req,res) => {
+    return nextApp.render(req, res, '/AddCompany', req.query)
   }) 
 
   app.get('/caterersignup', (req,res) => {

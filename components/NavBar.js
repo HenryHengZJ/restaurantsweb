@@ -183,7 +183,7 @@ class NavBar extends Component {
                     <DropdownItem href="/userprofile/Account Info" onClick={() => this.navItemClicked("Account Info")}>Account Info</DropdownItem>
                     <DropdownItem onClick={() => this.navItemClicked("Orders")}>Orders</DropdownItem>
                     <DropdownItem onClick={() => this.navItemClicked("Payment Methods")}>Payment Methods</DropdownItem>
-                    <DropdownItem onClick={() => this.navItemClicked("Delivery Addresses")}>Delivery Addresses</DropdownItem>
+                    <DropdownItem onClick={() => this.navItemClicked("Company Address")}>Company Address</DropdownItem>
                     <DropdownItem onClick={() => this.navItemClicked("Reviews")}>Reviews</DropdownItem>
                     <DropdownItem onClick={() => this.navItemClicked("Log Out")}>Log Out</DropdownItem>
                   </DropdownMenu>
