@@ -5,7 +5,7 @@ var ObjectId = require('mongodb').ObjectID;
 var passport = require('passport');
 var moment = require('moment');
 
-router.put('/updateLunchMenuPublished', (req, res) => {
+router.put('/update_lunchmenu_published', (req, res) => {
 
     var matchquery;
     if (typeof req.query._id === 'undefined') {

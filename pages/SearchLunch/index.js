@@ -656,19 +656,19 @@ class SearchLunch extends Component {
             <tbody>
               <tr>
                 <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} alt=""/></td>
-                <td style={{fontSize: 16}}><b style={{opacity: 0.8}}>€10 meals daily</b></td>
+                <td style={{fontSize: 16}}><p style={{fontWeight: '500', opacity: 0.8}}>Free trial for 1 month. Cancel anytime</p></td>
               </tr>
               <tr>
                 <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} alt=""/></td>
-                <td style={{fontSize: 16}}><b style={{opacity: 0.8}}>Free delivery</b></td>
+                <td style={{fontSize: 16}}><p style={{fontWeight: '500', opacity: 0.8}}>€6 lite meals and €10 main meals daily</p></td>
               </tr>
               <tr>
                 <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} alt=""/></td>
-                <td style={{fontSize: 16}}><b style={{opacity: 0.8}}>No commitment. Order when you like</b></td>
+                <td style={{fontSize: 16}}><p style={{fontWeight: '500', opacity: 0.8}}>Free delivery</p></td>
               </tr>
               <tr>
                 <td><img style={ { objectFit:'cover', marginTop:5, width: 25, height: 25 }} src={'/static/checked.png'} alt=""/></td>
-                <td style={{fontSize: 16}}><b style={{opacity: 0.8}}>Special offers & treats</b></td>
+                <td style={{fontSize: 16}}><p style={{fontWeight: '500', opacity: 0.8}}>No commitment. Order when you like</p></td>
               </tr>
             </tbody>
           </Table>
@@ -678,7 +678,7 @@ class SearchLunch extends Component {
           </div>
 
           <div style={{textAlign: 'center',marginBottom: 20}}>
-            <b style={{fontSize: 17,}}>€9.99 / month after free trial. Cancel anytime. </b>
+            <p style={{fontSize: 16, fontWeight: '600'}}>€9.99 / month after free trial. Cancel anytime. </p>
           </div>
 
         </ModalBody>

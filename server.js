@@ -66,6 +66,7 @@ nextApp.prepare().then(() => {
 	var menuPublishedRoutes   = require('./routes/menuPublished');
 	var cartRoutes   = require('./routes/cart');
   var orderRoutes   = require('./routes/order');
+  var lunchorderRoutes   = require('./routes/lunchorder');
   var paymentRoutes   = require('./routes/payment');
   var reviewRoutes   = require('./routes/review');
   var twilioRoutes   = require('./routes/twilio');
@@ -82,6 +83,7 @@ nextApp.prepare().then(() => {
 	app.use('/menuPublished', menuPublishedRoutes);
   app.use('/cart', cartRoutes);
   app.use('/order', orderRoutes);
+  app.use('/lunchorder', lunchorderRoutes);
   app.use('/payment', paymentRoutes);
   app.use('/review', reviewRoutes);
   app.use('/twilio', twilioRoutes);

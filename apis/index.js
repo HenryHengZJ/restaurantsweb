@@ -27,6 +27,11 @@ export default {
     GETreview: "/review/getreview",
     GETcaterer_review: "/review/get_caterer_review",
 
+    /*Lunch Order API*/
+    GETlunchorder: "/lunchorder/getlunchorder",
+    POSTlunchaddorder: "/lunchorder/addlunchorder",
+    PUTupdatelunchorder: "/lunchorder/updatelunchorder",
+
     /*Order API*/
     GETorder: "/order/getorder",
     POSTaddorder: "/order/addorder",
