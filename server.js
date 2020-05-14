@@ -66,8 +66,7 @@ nextApp.prepare().then(() => {
 	var cartRoutes   = require('./routes/cart');
   var orderRoutes   = require('./routes/order');
   var paymentRoutes   = require('./routes/payment');
-  //var twilioRoutes   = require('./routes/twilio');
-
+ 
 	// routes ======================================================================
   app.use('/auth', authRoutes);
   app.use('/catererPublished', catererPublishedRoutes);
@@ -77,7 +76,6 @@ nextApp.prepare().then(() => {
   app.use('/cart', cartRoutes);
   app.use('/order', orderRoutes);
   app.use('/payment', paymentRoutes);
- // app.use('/twilio', twilioRoutes);
 
   app.get('/sitemap.xml', function(req, res) {
     sitemap.toXML( function (err, xml) {

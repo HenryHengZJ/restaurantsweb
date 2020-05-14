@@ -7,8 +7,6 @@ const crypto = require('crypto');
 var mail = require('../../nodeMailerWithTemp');
 var ObjectId = require('mongodb').ObjectID;
 var bcrypt   = require('bcrypt-nodejs');
-var twiliocall = require('../../twilioAction')
-const VoiceResponse = require('twilio').twiml.VoiceResponse;
 require('dotenv').config();
 
 router.post('/customersignup', (req, res) => {

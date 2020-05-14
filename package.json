@@ -83,7 +83,6 @@
     "redux-devtools-extension": "^2.13.8",
     "sitemap": "^2.2.0",
     "stripe": "^7.1.0",
-    "twilio": "^3.31.0",
     "universal-cookie": "^3.1.0",
     "webpack": "^4.28.3"
   }
