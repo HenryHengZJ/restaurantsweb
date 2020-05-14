@@ -46,7 +46,7 @@
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
-    "mongoose": "^5.5.3",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "next": "^8.1.0",
     "next-compose-plugins": "^2.1.1",
