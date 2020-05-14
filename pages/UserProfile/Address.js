@@ -42,6 +42,7 @@ import Layout from '../../components/Layout';
 import Router from 'next/router'
 import axios from "axios";
 import apis from "../../apis";
+import color from "../../assets/color"
 import {server} from "../../config"
 import Select from "react-select";
 import Lottie from 'react-lottie';
@@ -70,7 +71,7 @@ const customStyles = {
     return {
       ...styles,
       cursor: "pointer",
-      backgroundColor: isFocused ? "#20a8d8" : "white",
+      backgroundColor: isFocused ? color.primary : "white",
       color: isFocused ? "white" : "black",
       lineHeight: 2,
       fontSize: 16,

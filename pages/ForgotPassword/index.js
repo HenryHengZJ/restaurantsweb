@@ -136,7 +136,7 @@ class ForgotPassword extends Component {
     <Layout title={"Forgot Password"}>
     <NextSeo
         config={{
-          title: 'Forgot Password | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          title: 'Forgot Password | Restaurant',
         }}
       />
     <div style={{backgroundColor: 'white'}}>

@@ -41,6 +41,7 @@ import Layout from '../../components/Layout';
 import Router from 'next/router'
 import axios from "axios";
 import apis from "../../apis";
+import color from "../../assets/color"
 import moment from "moment";
 import { DateRangePicker, DateRange } from 'react-date-range';
 import {server} from "../../config"
@@ -446,7 +447,7 @@ class Order extends Component {
               style={{
                 marginBottom: 5,
                 fontWeight: "500",
-                color: "#20a8d8",
+                color: color.primary,
                 overflow: "hidden"
               }}
             >
@@ -500,7 +501,7 @@ class Order extends Component {
           <Col>
             <Card
               style={{
-                borderColor: "#20a8d8"
+                borderColor: color.primary
               }}
             >
               <CardBody style={{ margin: 0, padding: 10 }}>
@@ -508,7 +509,7 @@ class Order extends Component {
                   style={{
                     marginTop: 5,
                     textAlign: "center",
-                    color: "#20a8d8"
+                    color: color.primary
                   }}
                 >
                   {this.capitalizeFirstLetter(selectedOrderItem.orderType)}
@@ -629,7 +630,7 @@ class Order extends Component {
               style={{
                 marginBottom: 5,
                 fontWeight: "500",
-                color: "#20a8d8",
+                color: color.primary,
                 overflow: "hidden"
               }}
             >
@@ -969,7 +970,7 @@ class Order extends Component {
             paddingRight: 20,
             paddingLeft: menutitle === "Lunch Orders" ? 0 : 20,
             fontWeight: "600",
-            color: this.state.selectedOrderTable === menutitle ? "#FF5722" : "black",
+            color: this.state.selectedOrderTable === menutitle ? color.secondary : "black",
             fontSize: 15
           }}
         >
@@ -980,7 +981,7 @@ class Order extends Component {
             height: 2,
             width: "100%",
             backgroundColor:
-              this.state.selectedOrderTable === menutitle ? "#FF5722" : "transparent"
+              this.state.selectedOrderTable === menutitle ? color.secondary : "transparent"
           }}
         />
       </NavItem>
@@ -1019,7 +1020,7 @@ class Order extends Component {
                 style={{
                   color: "#fff",
                   borderColor: "#fff",
-                  backgroundColor: "#20a8d8"
+                  backgroundColor: color.primary
                 }}
                 caret
               >
@@ -1070,7 +1071,7 @@ class Order extends Component {
                 style={{
                   color: "#fff",
                   borderColor: "#fff",
-                  backgroundColor: "#20a8d8"
+                  backgroundColor: color.primary
                 }}
                 caret
               >

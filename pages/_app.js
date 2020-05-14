@@ -6,34 +6,29 @@ import NextSeo from 'next-seo';
 
 // let's create a configuration for next-seo
 const DEFAULT_SEO = {
-  title: 'FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
-  description: 'FoodieBee, Ireland first catering marketplace platform. We provide wide ranges of restaurants and local caterers suitable for corporate caterings such as breakfast, lunch, events, and meetings. Order online for free through FoodieBee.',
+  title: 'Koyomari Sushi Bar - The Japanese Flavour',
+  description: 'Koyomari Sushi Bar - The Japanese Flavour',
   openGraph: {
     type: 'website',
     locale: 'en_IE',
-    url: 'https://www.foodiebee.eu',
-    title: 'FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
-    description: 'FoodieBee, Ireland first catering marketplace platform. We provide wide ranges of restaurants and local caterers suitable for corporate caterings such as breakfast, lunch, events, and meetings. Order online for free through FoodieBee.',
+    url: 'https://www.restaurant.herokuapp.com',
+    title: 'Koyomari Sushi Bar - The Japanese Flavour',
+    description: 'Koyomari Sushi Bar - The Japanese Flavour',
     images: [
       {
-        url: 'https://foodiebeegeneralphoto.s3-eu-west-1.amazonaws.com/FoodieBee_coverphoto.jpg',
+        url: 'https://foodiebeegeneralphoto.s3-eu-west-1.amazonaws.com/welcome_pic.jpg',
         width: 2896,
         height: 1448,
-        alt: 'FoodieBee Catering',
+        alt: 'Koyomari Sushi Bar',
       },
       {
         url: 'https://foodiebeegeneralphoto.s3-eu-west-1.amazonaws.com/FoodieBee_logo.png',
         width: 441,
         height: 387,
-        alt: 'FoodieBee Logo',
+        alt: 'Koyomari Sushi Bar',
       },
     ],
-    site_name: 'FoodieBee.eu',
-  },
-  twitter: {
-    handle: '@FoodiebeeIE',
-    site: '@FoodiebeeIE',
-    cardType: 'summary_large_image',
+    site_name: '',
   },
 };
 

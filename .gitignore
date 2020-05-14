@@ -4,5 +4,7 @@
 /package-lock.json
 .env
 .next
+.history
+.vscode
 /newrelic.js
 /newrelic_agent.log

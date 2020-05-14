@@ -1,5 +1,14 @@
 export default {
-
+	sushi1: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/01_Sushi.jpg",
+	sushi2: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/02_Sushi.jpg",
+	sushi3: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/03_Sushi.jpg",
+	sushi4: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/04_Sushi.jpg",
+	sushi5: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/05_Sushi.jpg",
+	sushi6: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/06_Sushi.jpg",
+	shopping_cart: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/shopping_cart.jpg",
+	welcome_pic: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/welcome_pic_compressed.jpg",
+	welcome_pic_2: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/welcome_pic_2.jpg",
+	allcuisine_black: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/allcuisine_black.png",
     allcuisine_black: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/allcuisine_black.png",
 	american: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/american.jpg",
 	americanexpress: "https://s3-eu-west-1.amazonaws.com/foodiebeegeneralphoto/americanexpress.png",

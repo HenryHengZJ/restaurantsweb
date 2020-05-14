@@ -2,7 +2,7 @@
 export default {
 
     /*Daily Menu API*/
-    GETdailyMenu: "/dailyMenu/getDailyMenu",
+    GETdailyMenu: "/company/getdailycaterer",
 
     /*Published Caterer API*/
     GETcatererprofile: "/catererPublished/getcatererprofile",
@@ -28,9 +28,9 @@ export default {
     GETcaterer_review: "/review/get_caterer_review",
 
     /*Lunch Order API*/
-    GETlunchorder: "/lunchorder/getlunchorder",
-    POSTlunchaddorder: "/lunchorder/addlunchorder",
-    PUTupdatelunchorder: "/lunchorder/updatelunchorder",
+    GETlunchorder: "/lunchOrder/getlunchorder",
+    POSTlunchaddorder: "/lunchOrder/addlunchorder",
+    PUTupdatelunchorder: "/lunchOrder/updatelunchorder",
 
     /*Order API*/
     GETorder: "/order/getorder",

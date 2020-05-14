@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import NavBar from '../../components/NavBar';
 import Hero from './Hero';
-import Restaurants from './Restaurants';
-import Occasion from './Occasion';
-import Features from './Features';
-import Caterer from './Caterer';
+import Menu from './Menu';
+import VisitUs from './VisitUs';
 import Footer from '../../components/Footer'
-import Shops from './Shops';
 import AboutUs from './AboutUs';
-import Testimonial from './Testimonial';
 import Router from 'next/router'
 import Layout from '../../components/Layout'
 import NextSeo from 'next-seo';
@@ -18,7 +14,9 @@ class LandingPage extends Component {
   constructor(props) {
     super(props);
 
-    this.refObj = React.createRef();
+    this.refObj1 = React.createRef();
+    this.refObj2 = React.createRef();
+    this.refObj3 = React.createRef();
 
   }
   
@@ -29,25 +27,19 @@ class LandingPage extends Component {
     })
   }
 
-  findFoodNow(e) {
+  aboutUsClicked(e) {
     e.preventDefault()
-    this.refObj.current.scrollIntoView({behavior: 'smooth'});
+    this.refObj1.current.scrollIntoView({behavior: 'smooth'});
   }
 
-  restaurantClicked(e) {
+  menuClicked(e) {
     e.preventDefault()
-    this.refObj.current.scrollIntoView({behavior: 'smooth'});
+    this.refObj2.current.scrollIntoView({behavior: 'smooth'});
   }
 
-  registerCatererClicked(e) {
+  contactClicked(e) {
     e.preventDefault()
-    Router.push({
-      pathname: '/caterersignup'
-    })
-  }
-
-  showPlaceDetails(address) {
-    this.setState({ address, searchAddressInvalid: false });
+    this.refObj3.current.scrollIntoView({behavior: 'smooth'});
   }
 
   render() {
@@ -55,17 +47,18 @@ class LandingPage extends Component {
       <Layout>
         <NextSeo
           config={{
-            title: 'FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+            title: 'Restaurant',
           }}
         />
         <div id="app">
-          <div ref={this.refObj} > </div>
-          <NavBar theme={'dark'} catering={false} landingpage={true} signIn={e=>this.signIn(e)}/>
+          <NavBar theme={'dark'} aboutUsClicked={e=>this.aboutUsClicked(e)} menuClicked={e=>this.menuClicked(e)} contactClicked={e=>this.contactClicked(e)} signIn={e=>this.signIn(e)}/>
           <Hero/>
-          <Features findFoodNow={e=>this.findFoodNow(e)}/>
-          <Restaurants restaurantClicked={e=>this.restaurantClicked(e)}/>
-          <Testimonial/>
-          <AboutUs/>
+          <div ref={this.refObj1} > </div>
+          <AboutUs />
+          <div ref={this.refObj2} > </div>
+          <Menu />
+          <div ref={this.refObj3} > </div>
+          <VisitUs/>
           <Footer />
         </div>
       </Layout>

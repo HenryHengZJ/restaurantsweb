@@ -165,7 +165,7 @@ class ResetPassword extends Component {
     <Layout title={"Reset Password"}>
       <NextSeo
         config={{
-          title: 'Reset Password | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          title: 'Reset Password | Restaurant',
         }}
       />
       <div style={{backgroundColor: 'white'}}>

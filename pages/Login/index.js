@@ -9,6 +9,7 @@ import Layout from '../../components/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios';
 import apis from "../../apis";
+import color from "../../assets/color"
 import {server} from "../../config"
 import NextSeo from 'next-seo';
 
@@ -117,7 +118,7 @@ class Login extends Component {
       <Layout title={'Login'}>
         <NextSeo
           config={{
-            title: 'Login | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+            title: 'Login | Restaurant',
           }}
         />
         <div style={{backgroundColor: 'white'}}>
@@ -148,7 +149,7 @@ class Login extends Component {
                       {this.state.invalidUser ? <Label style={{color: 'red', marginBottom: 20, fontSize: 13}}>Invalid email / password</Label> : null }
                       <Row>
                         <Col xs="6" md="6">
-                          <Button style={{backgroundColor: '#20a8d8'}} onClick={e => this.login(e)} color="primary" className="px-4">Login</Button>
+                          <Button style={{backgroundColor: color.primary}} onClick={e => this.login(e)} color="primary" className="px-4">Login</Button>
                         </Col>
                         <Col xs="6" md="6" >
                           <Button onClick={e => this.forgotpasswordClicked(e)} style={{boxShadow: 'none', background: 'none', fontWeight: '500'}} color="link" className="px-4">Forgot password?</Button>
@@ -160,7 +161,7 @@ class Login extends Component {
                 </Col>
 
                 <Col xs="12" md="6">
-                  <Card style={{backgroundColor: "#20a8d8"}} className="text-white py-4" >
+                  <Card style={{backgroundColor: color.primary}} className="text-white py-4" >
                     <CardBody className="text-center">
                       <div>
                         <h2>Sign up</h2>

@@ -42,6 +42,7 @@ import Router from 'next/router'
 import "./styles.css"
 import axios from "axios";
 import apis from "../../apis";
+import color from "../../assets/color"
 import {server} from "../../config"
 import Cards from 'react-credit-cards';
 import {

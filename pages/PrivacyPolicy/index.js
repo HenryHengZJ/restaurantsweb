@@ -29,7 +29,7 @@ class PrivacyPolicy extends Component {
           title: "1. Contact Details",
           descrip: [
             `If you have any queries or requests concerning this privacy policy or how we handle your data more generally, please get in touch with us using the following details.
-              - By contacting our general customer services team at: support@foodiebee.eu
+              - By contacting our general customer services team at: support@Restaurant.eu
               `
           ]
         },
@@ -52,13 +52,13 @@ class PrivacyPolicy extends Component {
           title: "3. Information We Collect From You",
           descrip: [
             `As part of our commitment to the privacy of our customers and visitors to our Sites more generally, we want to be clear about the sorts of information we will collect from you.
-            When you visit the Sites or make a FoodieBee order through the Sites, you are asked to provide information about yourself including your name, contact details, delivery address, order details and payment information such as credit or debit card information.
+            When you visit the Sites or make a Restaurant order through the Sites, you are asked to provide information about yourself including your name, contact details, delivery address, order details and payment information such as credit or debit card information.
             
             We also collect information about your usage of the Sites and information about you from any messages you post to the Sites or when you contact us or provide us with feedback, including via e-mail, letter, phone or chat function. If you contact us by phone, we record the call for training and service improvement purposes, and make notes in relation to your call.
             
             We collect technical information from your mobile device or computer, such as its operating system, the device and connection type and the IP address from which you are accessing our Sites.
             
-            We also collect technical information about your use of our services through a mobile device, for example, carrier, location data and performance data such as mobile payment methods, interaction with other retail technology such as use of NFC Tags, QR Codes and/or use of mobile vouchers. Unless you have elected to remain anonymous through your device and/or platform settings, this information may be collected and used by us automatically if you use the service through your mobile device(s) via any FoodieBee mobile application, through your mobile's browser or otherwise.
+            We also collect technical information about your use of our services through a mobile device, for example, carrier, location data and performance data such as mobile payment methods, interaction with other retail technology such as use of NFC Tags, QR Codes and/or use of mobile vouchers. Unless you have elected to remain anonymous through your device and/or platform settings, this information may be collected and used by us automatically if you use the service through your mobile device(s) via any Restaurant mobile application, through your mobile's browser or otherwise.
             
             We process health information about you only where you volunteer and consent to this, for example if you specify any food allergies.
             `
@@ -81,11 +81,11 @@ class PrivacyPolicy extends Component {
               - to enable our customer support team to help you with any enquiries or complaints in the most efficient way possible;
               - to contact you for your views and feedback on our services and to notify you if there are any important changes or developments to the Sites or our services, including letting you know that our services are operating in a new area, where you have asked us to do so;
               - to analyse your activity on the Sites so that we can administer, support, improve and develop our business and for statistical and analytical purposes and to help us to prevent fraud;
-              - to enforce our contractual terms with you and any other agreement, and for the exercise or defence of legal claims and to protect the rights of FoodieBee, restaurant partners, riders, or others (including to prevent fraud);
+              - to enforce our contractual terms with you and any other agreement, and for the exercise or defence of legal claims and to protect the rights of Restaurant, restaurant partners, riders, or others (including to prevent fraud);
               - if you submit comments and feedback regarding the Sites and the services, we may use such comments and feedback on the Sites and in any marketing or advertising materials. We will only identify you for this purpose by your first name and the city in which you live; and
               - where you have chosen to receive push notifications from us through our mobile application, we may send you push notifications relating to the services that you have requested from us and information about our services and offers. You can choose to stop receiving push notifications from us at any time by changing your preferences on your mobile device.
 
-              We will also analyse data about your use of our services from your location data to create profiles relating to you and for you. This means that we may make certain assumptions about what you may be interested in and use this, for example, to send you more tailored marketing communications, to present you with restaurants that we think you will prefer, or to let you know about special offers or products which we think you may be interested in (including FoodieBee for Business). This activity is referred to as profiling. You have certain rights in relation to this type of processing. Please see 'Your Rights' section below for more information. Where we rely on legitimate interest as a basis for processing your personal information, we carry out a ‘balancing test’ to ensure that our processing is necessary and that your fundamental rights of privacy are not outweighed by our legitimate interests. You can find out more information about these balancing tests by contacting us using the details above.
+              We will also analyse data about your use of our services from your location data to create profiles relating to you and for you. This means that we may make certain assumptions about what you may be interested in and use this, for example, to send you more tailored marketing communications, to present you with restaurants that we think you will prefer, or to let you know about special offers or products which we think you may be interested in (including Restaurant for Business). This activity is referred to as profiling. You have certain rights in relation to this type of processing. Please see 'Your Rights' section below for more information. Where we rely on legitimate interest as a basis for processing your personal information, we carry out a ‘balancing test’ to ensure that our processing is necessary and that your fundamental rights of privacy are not outweighed by our legitimate interests. You can find out more information about these balancing tests by contacting us using the details above.
 
               Where we are under a legal obligation to do so we may use your information to:
               -	create a record of your order(s);
@@ -94,18 +94,18 @@ class PrivacyPolicy extends Component {
           ]
         },
         {
-          title: "5. FoodieBee For Business",
+          title: "5. Restaurant For Business",
           descrip: [
             `
-            We also process your information to determine whether you may be interested in hearing about our FoodieBee for Business service and, if your employer signs up for FoodieBee for Business, to make this service available to you.
+            We also process your information to determine whether you may be interested in hearing about our Restaurant for Business service and, if your employer signs up for Restaurant for Business, to make this service available to you.
             
-            Where we think you are using your FoodieBee account for business purposes and your company may be interested in our FoodieBee for Business service, where appropriate, we may contact you as a representative of your business (by email or telephone) to let you know about this service. We do this as it's in our legitimate business interests. You have the right to object to receiving these types of communications, which you can do by responding to our emails to unsubscribe or by contacting us using the contact details in this privacy policy.
+            Where we think you are using your Restaurant account for business purposes and your company may be interested in our Restaurant for Business service, where appropriate, we may contact you as a representative of your business (by email or telephone) to let you know about this service. We do this as it's in our legitimate business interests. You have the right to object to receiving these types of communications, which you can do by responding to our emails to unsubscribe or by contacting us using the contact details in this privacy policy.
             
-            If your employer signs up for FoodieBee for Business, we will contact you to let you know that the FoodieBee for Business service is available to you. If you would like to take up your employer’s offer to use FoodieBee for Business, we will tag your FoodieBee account as having a FoodieBee for Business allowance. For both these activities we are acting as a data processor on behalf of your employer (who is the controller of this information). For more information, please contact your employer.
+            If your employer signs up for Restaurant for Business, we will contact you to let you know that the Restaurant for Business service is available to you. If you would like to take up your employer’s offer to use Restaurant for Business, we will tag your Restaurant account as having a Restaurant for Business allowance. For both these activities we are acting as a data processor on behalf of your employer (who is the controller of this information). For more information, please contact your employer.
             
-            When you use FoodieBee for Business, then:
+            When you use Restaurant for Business, then:
             -	we will process your information for the purposes set out in section 4 above. We will be the controller of this information; and
-            -	we will also share personal data relating to your order (such as the order date and time, the payment amount and the restaurant with which the order was placed) with your employer. FoodieBee and your employer will both be separate controllers of this information.
+            -	we will also share personal data relating to your order (such as the order date and time, the payment amount and the restaurant with which the order was placed) with your employer. Restaurant and your employer will both be separate controllers of this information.
             `
           ]
         },
@@ -120,7 +120,7 @@ class PrivacyPolicy extends Component {
           descrip: [
             `
             Where you have given your consent or where we have a justifiable reason for doing so (and are permitted to do so by law) we will use your information to let you know about our other products and services that may be of interest to you and we may contact you to do so by email or phone. You can control your email marketing preferences by:
-            •	visiting our website www.foodiebee.ie, or mobile application;
+            •	visiting our website www.Restaurant.ie, or mobile application;
             •	clicking on "Account" (for our website this is under the drop-down menu); and
             •	scrolling down to "Marketing Preferences".
             `
@@ -138,7 +138,7 @@ class PrivacyPolicy extends Component {
             
             The checks and decisions that are made look at various components including known industry indicators of fraud which our expert fraud detection provider makes available to us, as well as fraud patterns we have detected on our Sites. When combined, these generate an automated score indicating the likelihood of a fraudulent transaction. If our systems indicate a high score for you, then we may decline an order or even block you from our services. The specific fraud indicators are dynamic so will change depending on what types of fraud are being detected in the wider world, country and our Sites at any particular time.
             
-            You have certain rights in respect of this activity - please see 'Your Rights' section below for more information. Our fraud detection is in place to protect all of our customers as well as FoodieBee. You have the right to contest any fraud decision made about you and to be given more information about why any such decision was made by contacting us as set out in section 1 above.
+            You have certain rights in respect of this activity - please see 'Your Rights' section below for more information. Our fraud detection is in place to protect all of our customers as well as Restaurant. You have the right to contest any fraud decision made about you and to be given more information about why any such decision was made by contacting us as set out in section 1 above.
             `
           ]
         },
@@ -167,7 +167,7 @@ class PrivacyPolicy extends Component {
             The information we collect about you will be transferred to and stored on our servers located within the EU. We are very careful and transparent about who else your information is shared with.
             
             Sharing your information internally:
-            -	We share your information with other FoodieBee group companies only where necessary for the purposes set out in section 4.
+            -	We share your information with other Restaurant group companies only where necessary for the purposes set out in section 4.
             
             Sharing your information with third parties:
             We share your information with third party service providers. The types of third party service providers whom we share your information with includes:
@@ -178,14 +178,14 @@ class PrivacyPolicy extends Component {
             -	Customer support partners: who will help us to resolve any issues you may have with our services; and
             -	Marketing and advertising partners: so that they can ensure that you see advertising which is more relevant to you and send you email marketing on our behalf.
 
-            FoodieBee will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this privacy policy when it is transferred to third parties. If our business enters into a joint venture with, purchases or is sold to or merged with another business entity, your information may be disclosed or transferred to the target company, our new business partners or owners or their advisors. We may also share your information:
+            Restaurant will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this privacy policy when it is transferred to third parties. If our business enters into a joint venture with, purchases or is sold to or merged with another business entity, your information may be disclosed or transferred to the target company, our new business partners or owners or their advisors. We may also share your information:
             -	if we are under a duty to disclose or share your information in order to comply with (and/or where we believe we are under a duty to comply with) any legal obligation or regulatory requirement. This includes exchanging information with other companies and other organisations for the purposes of fraud protection and prevention;
             -	in order to enforce our contractual terms with you and any other agreement;
-            -	to protect the rights of FoodieBee, restaurant partners, riders, or others, including to prevent fraud; and
+            -	to protect the rights of Restaurant, restaurant partners, riders, or others, including to prevent fraud; and
             -	with such third parties as we reasonably consider necessary in order to prevent crime, e.g. the police.
             
             International transfers of data:
-            -	In some cases the personal data we collect from you might be processed outside the European Economic Area ("EEA"), such as the United States, the Philippines and the countries in which FoodieBee operates (which are set out on www.FoodieBee.ie). These countries may not have the same protections for your personal data as the EEA has. However, we are obliged to ensure that the personal data that is processed by us and our suppliers outside of the EEA is protected in the same ways as it would be if it was processed within the EEA. There are therefore certain safeguards in place when your data is processed outside of the EEA.
+            -	In some cases the personal data we collect from you might be processed outside the European Economic Area ("EEA"), such as the United States, the Philippines and the countries in which Restaurant operates (which are set out on www.Restaurant.ie). These countries may not have the same protections for your personal data as the EEA has. However, we are obliged to ensure that the personal data that is processed by us and our suppliers outside of the EEA is protected in the same ways as it would be if it was processed within the EEA. There are therefore certain safeguards in place when your data is processed outside of the EEA.
             -	We ensure a similar degree of protection is afforded to it by ensuring at least one of the following safeguards is implemented:
               1.	your personal data is transferred to countries that have been deemed to provide an adequate level of protection for personal data by the European Commission;
               2.	we use the EU approved Standard Contractual Clauses; and
@@ -227,7 +227,7 @@ class PrivacyPolicy extends Component {
         {
           title: "14. Complaints",
           descrip: [
-            "If you’re not satisfied with our response to any complaint or believe our processing of your information does not comply with data protection law, you can make a complaint to the Information Commissioner’s Office (ICO). FoodieBee Tech Limited, 301, the Windmill, Dock Road, Limerick, Ireland."
+            "If you’re not satisfied with our response to any complaint or believe our processing of your information does not comply with data protection law, you can make a complaint to the Information Commissioner’s Office (ICO). Restaurant Tech Limited, 301, the Windmill, Dock Road, Limerick, Ireland."
           ]
         }
       ]
@@ -285,7 +285,7 @@ class PrivacyPolicy extends Component {
       <Layout title={'Privacy Policy'}>
       <NextSeo
         config={{
-          title: 'Privacy Policy | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          title: 'Privacy Policy | Restaurant',
         }}
       />
       <div style={{backgroundColor: 'white'}}>
@@ -296,9 +296,9 @@ class PrivacyPolicy extends Component {
             <Col style={{ textAlign: "start", marginTop: 50, marginBottom: 50 }} xs="12">
               <h2 style={{ fontSize: 34 }}>Privacy Policy</h2>
               <h4 style={{ marginTop: 50, fontSize: 16 }}>
-                FoodieBee Tech Limited ("we", "our", "us" or "FoodieBee") is
+                Restaurant Tech Limited ("we", "our", "us" or "Restaurant") is
                 committed to protecting the privacy of all users of our website
-                FoodieBee.ie, or mobile applications (together, the "Sites").
+                Restaurant.ie, or mobile applications (together, the "Sites").
                 Please read the following privacy policy that explains how we
                 use and protect your information. We'll be the "data controller"
                 of the information you provide to us.

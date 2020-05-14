@@ -1,67 +1,51 @@
-import React from "react";
+import React from 'react';
+import { Button, Row, Col, Card, CardBody, Table} from 'reactstrap';
+import './styles.css'
+import PropTypes from 'prop-types';
+import Link from 'next/link';
 import img from "../../assets/img"
-import { Button, Row, Col, Container, Card, CardBody, Table } from "reactstrap";
-import "./styles.css";
-import Router from 'next/router'
 
-class AboutUs extends React.Component {
-    constructor(props) {
-      super(props);
-    }
-
-    buttonClicked = () => {
-        Router.push(`/aboutus`)
-    }
-  
-    render() {
-        return (
-          <section
-            style={{
-                paddingTop: 30,
-                paddingBottom: 50,
-                backgroundSize: 'cover',
-                backgroundImage: 'url(' + img.golunch_wallpaper2 + ')'
-            }}
-            id="Caterer"
-            className="white"
-            >
-            <Container>
-                <Row>
-                <Col style={{ color:"white", textAlign: "center", marginTop: 50}} xs="12" md="12">
-                    <h2 style={{ marginTop: 20, fontSize: 34 }}>About FoodieBee</h2>
-                    <p style={{ fontSize: 18, letterSpacing: 2, marginTop: 30, }}>
-                    FoodieBee is the first corporate catering marketplace platform in Ireland
-                    that specialize in connecting corporate clients with restaurant
-                    catering services. We are revolutionizing the traditional catering market with virtual catering.
-                    </p>
-
-                    <div className="text-center">
-                    <Button
-                        style={{
-                        fontSize: 18,
-                        height: 50,
-                        marginTop: 30,
-                        marginBottom: 30
-                        }}
-                        className="bg-primary"
-                        size="lg"
-                        color="primary"
-                        href="/aboutus"
-                        onClick={() => this.buttonClicked()}
-                    >
-                        Learn More
-                    </Button>
-                    </div>
-                </Col>
-                <Col style={{ marginTop: 20, textAlign: "center" }} xs="12" md="6">
-                   
-                </Col>
-              
-                </Row>
-            </Container>
-            </section>
-        );
-    }
+const propTypes = {
+  children: PropTypes.node,
 };
 
-export default AboutUs;
+const defaultProps = {};
+
+class Caterer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <section style={{backgroundColor: 'white'}} id="Caterer" className="white">
+        <div className="container">
+          <Row style={{marginTop: 60, marginBottom: 20}}>
+            <Col style={{marginTop: 10}} xs="12" md="6" > 
+              <h2 style={{fontSize: 40, fontWeight: 700, color: 'black'}}>Who are we?</h2>
+              <p style={{marginTop: 30, fontSize: 20, fontWeight: 600, marginRight: 20 }}>
+                Japanese food, where the dining experience is not only about the actual food consumed, but also the presentation, the design, the sheer beauty of what you're eating. From the traditional to the modern, from the quick to the drawn-out, we offer you the best Japanese food.
+              </p>
+   
+            </Col>
+
+            <Col xs="12" md="6" >
+              <div style={{width: '100%', height: 280, position: 'relative', overflow: 'hidden', borderRadius: '5%'}}>
+                <img style={{ objectFit:'cover', width: '100%', height: '100%', }} src={img.welcome_pic_2} alt=""/>
+              </div>
+            </Col>
+
+          </Row>
+
+
+        </div>
+      </section>
+    );
+  }
+};
+
+
+Caterer.propTypes = propTypes;
+Caterer.defaultProps = defaultProps;
+
+export default Caterer;

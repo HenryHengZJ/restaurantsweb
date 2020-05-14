@@ -337,7 +337,7 @@ class Register extends Component {
       <Layout title={'Register'}>
         <NextSeo
           config={{
-            title: 'Register | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+            title: 'Register | Restaurant',
           }}
         />
         <div style={{backgroundColor: 'white'}}>

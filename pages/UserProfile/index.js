@@ -40,7 +40,6 @@ import Layout from '../../components/Layout';
 import Account from './Account'
 import Address from './Address'
 import Order from './Order'
-import Review from './Review'
 import Payment from './Payment'
 import moment from "moment";
 import { format, addDays, subDays } from 'date-fns';
@@ -48,6 +47,7 @@ import Router from 'next/router'
 import {server} from "../../config"
 import axios from "axios";
 import apis from "../../apis";
+import color from "../../assets/color"
 import { StripeProvider, Elements } from 'react-stripe-elements'
 import "./styles.css"
 import 'react-toastify/dist/ReactToastify.css';
@@ -91,10 +91,9 @@ class UserProfile extends Component {
       menuDropDownOpen: false,
       menutitle: [
         "Account Info",
+        "Address",
         "Orders",
         "Payment Methods",
-        "Company Address",
-        "Reviews",
       ], 
       orderdata: null,
       stripe: null,
@@ -190,7 +189,7 @@ class UserProfile extends Component {
             paddingRight: 20,
             paddingLeft: menutitle === "Account Info" ? 0 : 20,
             fontWeight: "600",
-            color: this.state.selectedMenu === menutitle ? "#20a8d8" : "black",
+            color: this.state.selectedMenu === menutitle ? color.primary : "black",
             fontSize: 15
           }}
         >
@@ -201,7 +200,7 @@ class UserProfile extends Component {
             height: 2,
             width: "100%",
             backgroundColor:
-              this.state.selectedMenu === menutitle ? "#20a8d8" : "transparent"
+              this.state.selectedMenu === menutitle ? color.primary : "transparent"
           }}
         />
       </NavItem>
@@ -214,7 +213,7 @@ class UserProfile extends Component {
     )
   }
 
-  renderWorkAddress() {
+  renderAddress() {
     return (
       <Address/>
     )
@@ -236,12 +235,6 @@ class UserProfile extends Component {
     );
   }
 
-  renderReviewTable() {
-    return (
-      <Review/>
-    );
-  }
-
   ////////////////////////////////////////////////Render Modal////////////////////////////////////////////////////////
 
   
@@ -259,7 +252,7 @@ class UserProfile extends Component {
             }}
             caret
           >
-          <Label style={{ cursor: 'pointer', fontSize: 15, fontWeight: '600', paddingLeft:5, textAlign:'start', color: '#20a8d8', height:12, width: '98%'}}>{this.state.selectedMenu}</Label> 
+          <Label style={{ cursor: 'pointer', fontSize: 15, fontWeight: '600', paddingLeft:5, textAlign:'start', color: color.primary, height:12, width: '98%'}}>{this.state.selectedMenu}</Label> 
           </DropdownToggle>
           <DropdownMenu style={{width: '100%'}}>
             <DropdownItem onClick={() => this.navItemClicked("Account Info")}>Account Info</DropdownItem>
@@ -301,7 +294,6 @@ class UserProfile extends Component {
                   {this.renderNavItem(this.state.menutitle[1])}
                   {this.renderNavItem(this.state.menutitle[2])}
                   {this.renderNavItem(this.state.menutitle[3])}
-                  {this.renderNavItem(this.state.menutitle[4])}
                 </Nav>
               </Col> : null}
 
@@ -311,8 +303,7 @@ class UserProfile extends Component {
                 {this.state.selectedMenu === "Account Info" ? this.renderAccountInfo() :
                 this.state.selectedMenu === "Orders" ? this.renderOrderTable() :
                 this.state.selectedMenu === "Payment Methods" ? this.renderPaymentMethods() :
-                this.state.selectedMenu === "Company Address" ? this.renderWorkAddress() :
-                this.state.selectedMenu === "Reviews" ? this.renderReviewTable() : null}
+                this.state.selectedMenu === "Address" ? this.renderAddress() : null}
               </Col>
 
             </Row>

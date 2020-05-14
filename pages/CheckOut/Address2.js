@@ -32,6 +32,7 @@ import { Calendar } from "react-date-range";
 import moment from "moment";
 import axios from "axios";
 import apis from "../../apis";
+import color from "../../assets/color"
 import {server} from "../../config"
 import { timeRanges } from  "../../utils"
 import { listCounties } from "../../utils";
@@ -164,9 +165,9 @@ class Address2 extends Component {
         <Card
           onClick={() => this.handleSelectedSearchedAddress()}
           style={{
-            borderColor: this.state.searchedAddressSelected ? "#20a8d8" : null,
+            borderColor: this.state.searchedAddressSelected ? color.primary : null,
             cursor: "pointer",
-            boxShadow: this.state.searchedAddressSelected ? "1px 1px 3px #20a8d8" : "0px 0px 0px #9E9E9E"
+            boxShadow: this.state.searchedAddressSelected ? `1px 1px 3px ${color.primary}` : "0px 0px 0px #9E9E9E"
           }}
           className="p-4"
         >
@@ -194,11 +195,11 @@ class Address2 extends Component {
             onClick={() => this.handleSelectedAddress(i)}
             style={{
               borderColor:
-                this.state.selectedAddressIndex === i ? "#20a8d8" : null,
+                this.state.selectedAddressIndex === i ? color.primary : null,
               cursor: "pointer",
               boxShadow:
                 this.state.selectedAddressIndex === i
-                  ? "1px 1px 3px #20a8d8"
+                  ? `1px 1px 3px ${color.primary}`
                   : "0px 0px 0px #9E9E9E"
             }}
             className="p-4"

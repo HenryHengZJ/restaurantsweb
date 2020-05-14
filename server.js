@@ -32,7 +32,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 nextApp.prepare().then(() => {
   const app = express();
-  var sitemap = sm.createSitemap ({
+  /*var sitemap = sm.createSitemap ({
     hostname: 'https://foodiebee.eu',
     cacheTime: 600000,        // 600 sec - cache purge period
     urls: [
@@ -45,7 +45,7 @@ nextApp.prepare().then(() => {
       { url: '/privacypolicy',  changefreq: 'monthly',  priority: 0.3 },
       { url: '/caterersignup',  changefreq: 'monthly',  priority: 0.7 },
     ]
-  });
+  });*/
   // express code here
   // (optional) only made for logging and
   // bodyParser, parses the request body to be a readable json format
@@ -58,7 +58,6 @@ nextApp.prepare().then(() => {
   //app.use(express.static(path.join(__dirname, 'client/build')));
 
   // router files ===============================================================
-	var testRoutes   = require('./routes/test');
 	var authRoutes   = require('./routes/auth');
   var catererPublishedRoutes   = require('./routes/catererPublished');
   var catererRoutes   = require('./routes/caterer');
@@ -66,16 +65,10 @@ nextApp.prepare().then(() => {
 	var menuPublishedRoutes   = require('./routes/menuPublished');
 	var cartRoutes   = require('./routes/cart');
   var orderRoutes   = require('./routes/order');
-  var lunchorderRoutes   = require('./routes/lunchorder');
   var paymentRoutes   = require('./routes/payment');
-  var reviewRoutes   = require('./routes/review');
   var twilioRoutes   = require('./routes/twilio');
-  var dailyMenuRoutes = require('./routes/dailyMenu');
-  var lunchMenuPublishedRoutes = require('./routes/lunchMenuPublished');
-  var companyRoutes = require('./routes/company');
 
 	// routes ======================================================================
-	app.use('/test', testRoutes);
   app.use('/auth', authRoutes);
   app.use('/catererPublished', catererPublishedRoutes);
   app.use('/caterer', catererRoutes);
@@ -83,14 +76,9 @@ nextApp.prepare().then(() => {
 	app.use('/menuPublished', menuPublishedRoutes);
   app.use('/cart', cartRoutes);
   app.use('/order', orderRoutes);
-  app.use('/lunchorder', lunchorderRoutes);
   app.use('/payment', paymentRoutes);
-  app.use('/review', reviewRoutes);
   app.use('/twilio', twilioRoutes);
-  app.use('/dailyMenu', dailyMenuRoutes);
-  app.use('/lunchMenuPublished', lunchMenuPublishedRoutes);
-  app.use('/company', companyRoutes);
-  
+
   app.get('/sitemap.xml', function(req, res) {
     sitemap.toXML( function (err, xml) {
         if (err) {
@@ -118,21 +106,8 @@ nextApp.prepare().then(() => {
     res.status(200).json({});
   }) 
 
-  app.get('/catering', (req,res) => {
-    return nextApp.render(req, res, '/CateringLandingPage',  req.query )
-  })  
- 
-  app.get('/searchcaterer', (req,res) => {
-    console.log("searchcaterer")
-    return nextApp.render(req, res, '/SearchCaterer',  req.query )
-  })  
-
-  app.get('/searchlunch', (req,res) => {
-    return nextApp.render(req, res, '/SearchLunch',  req.query )
-  })  
-
-  app.get('/catererdetail/:id', (req,res) => {
-    return nextApp.render(req, res, '/CatererDetail', { id: req.params.id })
+  app.get('/menudetail', (req,res) => {
+    return nextApp.render(req, res, '/MenuDetail', { id: req.params.id })
   }) 
 
   app.get('/login', (req,res) => {
@@ -142,22 +117,6 @@ nextApp.prepare().then(() => {
   app.get('/register', (req,res) => {
     return nextApp.render(req, res, '/Register', req.query)
   }) 
-
-  app.get('/findcompany', (req,res) => {
-    return nextApp.render(req, res, '/FindCompany', req.query)
-  }) 
-
-  app.get('/addcompany', (req,res) => {
-    return nextApp.render(req, res, '/AddCompany', req.query)
-  }) 
-
-  app.get('/caterersignup', (req,res) => {
-    return nextApp.render(req, res, '/CatererSignUp')
-  })
-  
-  app.get('/catererlogin', (req,res) => {
-    return nextApp.render(req, res, '/CatererLogin')
-  })
 
   app.get('/checkout/:cartID/:catererID', (req,res) => {
     return nextApp.render(req, res, '/CheckOut', { cartID: req.params.cartID, catererID: req.params.catererID })
@@ -177,14 +136,6 @@ nextApp.prepare().then(() => {
     return nextApp.render(req, res, '/ResetPassword',  { resetPasswordToken: req.params.resetPasswordToken } )
   })  
 
-  app.get('/aboutus', (req,res) => {
-    return nextApp.render(req, res, '/AboutUs')
-  })  
-
-  app.get('/contactus', (req,res) => {
-    return nextApp.render(req, res, '/ContactUs')
-  }) 
-  
   app.get('/termscondition', (req,res) => {
     return nextApp.render(req, res, '/TermsCondition')
   })  

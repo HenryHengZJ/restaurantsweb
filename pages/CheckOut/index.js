@@ -37,6 +37,7 @@ import { Calendar } from "react-date-range";
 import moment from "moment";
 import axios from "axios";
 import apis from "../../apis";
+import color from "../../assets/color"
 import {server} from "../../config"
 import { timeRanges } from  "../../utils"
 import DateTime from "./DateTime"
@@ -432,7 +433,7 @@ class CheckOut extends Component {
             paddingRight: 20,
             paddingLeft: menutitle === "Account Info" ? 0 : 20,
             fontWeight: "600",
-            color: disabled ? 'rgba(0,0,0,0.3)' : this.state.selectedMenu === menutitle ? "#20a8d8" : "black",
+            color: disabled ? 'rgba(0,0,0,0.3)' : this.state.selectedMenu === menutitle ? color.primary : "black",
             fontSize: 15
           }}
         >
@@ -443,7 +444,7 @@ class CheckOut extends Component {
             height: 2,
             width: "100%",
             backgroundColor:
-              this.state.selectedMenu === menutitle ? "#20a8d8" : "transparent"
+              this.state.selectedMenu === menutitle ? color.primary : "transparent"
           }}
         />
       </NavItem>
@@ -478,18 +479,21 @@ class CheckOut extends Component {
         <Col xs="12" md="10">
           <Card style={{ boxShadow: "1px 1px 3px #9E9E9E" }} className="p-4">
             <CardBody className="p-4">
-              <p>Login or Register on FoodieBee</p>
+              <p style={{fontWeight: '600'}}>Login or Register on FoodieBee</p>
               <Row>
                 <Col>
                   <Button
                     style={{
                       paddingTop: 10,
                       paddingBottom: 10,
-                      marginTop: 20
+                      marginTop: 20,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      backgroundColor: color.primary,
+                      color: 'white'
                     }}
-                    color="primary"
                     block
-                    onClick={(e) => this.logIn(e)}
+                   // onClick={(e) => this.logIn(e)}
                   >
                     Login
                   </Button>
@@ -499,12 +503,15 @@ class CheckOut extends Component {
                     style={{
                       paddingTop: 10,
                       paddingBottom: 10,
-                      marginTop: 20
+                      marginTop: 20,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: color.primary,
+                      borderColor: color.primary
                     }}
                     outline
-                    color="primary"
                     block
-                    onClick={(e) => this.signUp(e)}
+                 //   onClick={(e) => this.signUp(e)}
                   >
                     Register
                   </Button>
@@ -580,16 +587,14 @@ class CheckOut extends Component {
                 style={{
                   marginBottom: 5,
                   fontWeight: "500",
-                  color: "#20a8d8",
-                  overflow: "hidden"
+                  color: color.primary,
+                  overflow: "hidden",
+                  fontSize: 16
                 }}
               >
                 {cartitem[i].title}
               </p>
             </Dotdotdot>
-            <p style={{ fontStyle: 'italic', marginBottom: 5, textSize: 13, opacity: 0.7 }}>
-              serves {cartitem[i].serveperunit}
-            </p>
             {
               typeof cartitem[i].selection === 'undefined' ? null : 
               this.renderCartSelection(cartitem[i].selection)
@@ -600,7 +605,7 @@ class CheckOut extends Component {
             }
           </td>
 
-          <td style={{ width: "20%", textAlign: "end" }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
+          <td style={{ width: "20%", textAlign: "end", fontWeight: '500', color: 'black', fontSize: 16 }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
             €{Number(cartitem[i].totalprice).toFixed(2)}
           </td>
         </tr>
@@ -618,12 +623,12 @@ class CheckOut extends Component {
           <Table borderless>
             <tbody>
               <tr>
-                <td
-                  style={{ fontSize: 16, textAlign: "start" }}
+              <td
+                  style={{ fontSize: 16, textAlign: "start", fontWeight: '500', color: 'black' }}
                 >
                   Delivery Fee
                 </td>
-                <td style={{ fontSize: 16, textAlign: "end" }}>
+                <td style={{ fontSize: 16, textAlign: "end", fontWeight: '500', color: 'black'}}>
                   €{Number(this.state.deliveryfee).toFixed(2)}
                 </td>
               </tr>
@@ -644,11 +649,11 @@ class CheckOut extends Component {
           <tbody>
             <tr>
               <td
-                style={{ fontSize: 16, fontWeight: "600", textAlign: "start" }}
+                style={{ fontSize: 18, fontWeight: "600", textAlign: "start" }}
               >
                 TOTAL
               </td>
-              <td style={{ fontSize: 16, fontWeight: "600", textAlign: "end" }}>
+              <td style={{ fontSize: 18, fontWeight: "600", textAlign: "end" }}>
                 €{this.state.cartToBeOrder ? Number(this.state.cartToBeOrder[0].totalOrderPrice).toFixed(2) : null}
               </td>
             </tr>
@@ -743,19 +748,12 @@ class CheckOut extends Component {
       >
         <CardHeader
           style={{
-            backgroundColor: "rgba(13, 152, 186, 0.8)",
+            background: `linear-gradient(to right, ${color.primary}, ${color.primaryLight})`,
             textAlign: "center"
           }}
         >
-          <Label
-            style={{
-              marginTop: 5,
-              fontWeight: "600",
-              color: "white",
-              fontSize: 15
-            }}
-          >
-            Your Order
+          <Label style={{ fontWeight: "600", color: "white", fontSize: 17, marginTop: 5 }}>
+            Cart Items
           </Label>
         </CardHeader>
 
@@ -882,7 +880,7 @@ class CheckOut extends Component {
       <Layout title={'Checkout'}>
       <NextSeo
         config={{
-          title: 'Checkout | FoodieBee - Corporate Catering Services and Marketplace | Local Caterers',
+          title: 'Checkout | Restaurant',
         }}
       />
       <div style={{ backgroundColor: "white" }}>
