@@ -63,17 +63,6 @@ import { inject, observer } from 'mobx-react'
 @observer
 
 class MenuDetail extends Component {
-  
-  static async getInitialProps({query: { id }}) {
-    return {
-      
-    };
-  }
-
-  componentWillMount() {
-
-  }
-
 
   constructor(props) {
     super(props);
@@ -252,7 +241,7 @@ class MenuDetail extends Component {
   }
 
   getCatererMenu= () => {
-    var headers = {
+    /*var headers = {
       'Content-Type': 'application/json',
     }
 
@@ -270,12 +259,13 @@ class MenuDetail extends Component {
       })
       .catch((error) => {
         this.restructureMenu();
-      });
+      });*/
+      this.restructureMenu();
   }
 
   
   getCustomerCart= () => {
-    var headers = {
+    /*var headers = {
       'Content-Type': 'application/json',
     }
 
@@ -296,7 +286,8 @@ class MenuDetail extends Component {
       })
       .catch((error) => {
         this.getSessionStorage()
-      });
+      });*/
+      this.getSessionStorage()
   }
 
 
@@ -587,9 +578,7 @@ class MenuDetail extends Component {
       deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
-   // alert(JSON.stringify(cartReadyToOrder))
-
-    var headers = {
+    /*var headers = {
       'Content-Type': 'application/json',
     }
 
@@ -618,6 +607,14 @@ class MenuDetail extends Component {
           })
         } 
       });
+      */
+     this.setState({
+      cartitem: newCartItem,
+      cartloading: false
+    },() => {
+      this.toggleMenuModal()
+      this.addToSessionStorage()
+    })
   }
 
   updateOrderType = () => {
@@ -635,7 +632,7 @@ class MenuDetail extends Component {
       deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
-    var headers = {
+    /*var headers = {
       'Content-Type': 'application/json',
     }
 
@@ -660,7 +657,13 @@ class MenuDetail extends Component {
             this.addToSessionStorage()
           })
         } 
-      }); 
+      });*/
+
+      this.setState({
+        cartloading: false
+      },() => {
+        this.addToSessionStorage()
+      }) 
   }
 
   updateCart = () => {
@@ -709,9 +712,7 @@ class MenuDetail extends Component {
       deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
-  //  alert(JSON.stringify(cartReadyToOrder))
-
-    var headers = {
+    /*var headers = {
       'Content-Type': 'application/json',
     }
 
@@ -739,7 +740,15 @@ class MenuDetail extends Component {
             this.addToSessionStorage()
           })
         } 
-      }); 
+      }); */
+
+      this.setState({
+        cartitem: newCartItem,
+        cartloading: false
+      },() => {
+        this.toggleMenuModal()
+        this.addToSessionStorage()
+      })
   }
 
   deleteCart = (index) => {
@@ -763,15 +772,13 @@ class MenuDetail extends Component {
       deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
-  //  alert(JSON.stringify(cartReadyToOrder))
-
     var headers = {
       'Content-Type': 'application/json',
     }
 
     if (newCartItem.length > 0) {
      
-      var url = apis.UPDATEcart;
+      /*var url = apis.UPDATEcart;
 
       if (cartToBeOrder.length > 0) {
         url = url + "?_id=" + cartToBeOrder[0]._id;
@@ -795,10 +802,18 @@ class MenuDetail extends Component {
               this.addToSessionStorage()
             })
           } 
-        }); 
+        }); */
+
+        this.setState({
+          cartitem: newCartItem,
+          cartloading: false
+        },() => {
+         // this.toggleMenuModal()
+          this.addToSessionStorage()
+        })
     }
     else {
-      var url = apis.DELETEcart;
+      /*var url = apis.DELETEcart;
 
       if (cartToBeOrder.length > 0) {
         url = url + "?_id=" + cartToBeOrder[0]._id;
@@ -820,7 +835,14 @@ class MenuDetail extends Component {
                 this.deleteSessionStorage()
             })
           } 
-        }); 
+        }); */
+
+        this.setState({
+          cartitem: newCartItem,
+          cartloading: false
+        },() => {
+            this.deleteSessionStorage()
+        })
     }
   };
 

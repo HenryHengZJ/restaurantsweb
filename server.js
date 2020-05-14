@@ -107,7 +107,7 @@ nextApp.prepare().then(() => {
   }) 
 
   app.get('/menudetail', (req,res) => {
-    return nextApp.render(req, res, '/MenuDetail', { id: req.params.id })
+    return nextApp.render(req, res, '/MenuDetail')
   }) 
 
   app.get('/login', (req,res) => {

@@ -67,7 +67,7 @@ class Restaurants extends Component {
     for(let i = 0; i < occasions.length; i++){
       itemsarray.push(
         <Col key={i} xs="12" sm="6" md="6" lg="4">
-          <Card style={{cursor: 'pointer', marginTop:0,  boxShadow: 'none', borderWidth: 0, backgroundColor: 'transparent'}} onClick={e => this.getStarted()}>
+          <Card style={{cursor: 'pointer', marginTop:0,  boxShadow: 'none', borderWidth: 0, backgroundColor: 'transparent'}}  onClick={() => this.getStarted()}>
             <CardBody style={{  position:'relative', padding: 0, margin: 20}}>
               <img style={{ borderRadius: 10, objectFit:'cover', width: '100%', height: 250 }} src={occasions[i].src} alt={occasions[i].alt} />
               <p style={{ textAlign: 'center', fontSize: 20, fontWeight: 600, marginTop: 10}} >{occasions[i].title}</p>
@@ -104,7 +104,7 @@ class Restaurants extends Component {
                   backgroundColor: color.primary,
                   padding: 15
                 }}
-                onClick={e => this.getStarted()}
+                onClick={() => this.getStarted()}
               >
                 VIEW FULL MENU
               </Button> 

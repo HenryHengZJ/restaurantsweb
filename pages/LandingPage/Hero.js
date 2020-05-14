@@ -54,7 +54,7 @@ class Hero extends React.Component {
                 <Col style={{padding: 0,}} xs="10" sm="10" md="4" lg="4">
                  
                       <Button
-                        onClick={e => this.getStarted()}
+                        onClick={() => this.getStarted()}
                         block
                         style={{
                           height: "100%",
