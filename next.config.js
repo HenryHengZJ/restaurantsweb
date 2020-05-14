@@ -18,7 +18,8 @@ withSass(
 
 const nextConfig = {
   publicRuntimeConfig: {
-    NODE_ENV: process.env.NODE_ENV,
+    NODE_DEV: process.env.NODE_DEV,
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     STIRPE_CLIENT_KEY: process.env.STIRPE_CLIENT_KEY
   }
 };

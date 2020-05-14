@@ -11,7 +11,7 @@
     "build": "next build",
     "heroku-postbuild": "next build",
     "start": "node server.js",
-    "prod_start": "SET NODE_ENV=production & node server.js",
+    "prod_start": "SET NODE_DEV=production & node server.js",
     "export": "next export"
   },
   "author": "Henry Heng",
