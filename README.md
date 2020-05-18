@@ -4,9 +4,9 @@
 =======
 This is a fullstack web application for restaurants online ordering.
 
-![alt-text](https://github.com/HenryHengZJ/restaurantsweb/blob/master/restaurantsweb_1.jpg)
-![alt-text](https://github.com/HenryHengZJ/restaurantsweb/blob/master/restaurantsweb_2.jpg)
-![alt-text](https://github.com/HenryHengZJ/restaurantsweb/blob/master/restaurantsweb_3.jpg)
+![alt-text](https://github.com/HenryHengZJ/restaurantsweb/blob/master/restaurantsweb_1.JPG)
+![alt-text](https://github.com/HenryHengZJ/restaurantsweb/blob/master/restaurantsweb_2.JPG)
+![alt-text](https://github.com/HenryHengZJ/restaurantsweb/blob/master/restaurantsweb_3.JPG)
 
 
 ## Available Scripts
