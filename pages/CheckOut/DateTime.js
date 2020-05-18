@@ -34,6 +34,7 @@ import Layout from '../../components/Layout';
 import { Calendar } from "react-date-range";
 import moment from "moment";
 import axios from "axios";
+import color from "../../assets/color"
 import apis from "../../apis";
 import {server} from "../../config"
 import { timeRanges } from  "../../utils"
@@ -58,6 +59,7 @@ class DateTime extends Component {
       dropDownDate: false,
       catererNotAvailable: false,
       isProceedAvailable: true,
+      pickupTimeArry: [],
     };
 
     this.time = timeRanges()
@@ -82,6 +84,30 @@ class DateTime extends Component {
         })
     }
 
+    this.formatTime();
+
+  }
+
+  formatTime = () => {
+    var newtime = []
+
+    for (let i = 0; i < this.time.length; i++) {
+      var time = parseInt(this.time[i].replace(":",""))
+      var current_time = parseInt(moment().format("HHmm"))
+      var newtimechild = {}
+      if (time < current_time) {
+        newtimechild.disabled = true
+      }
+      else {
+        newtimechild.disabled = false
+      }
+      newtimechild.time = this.time[i]
+      newtime.push(newtimechild)
+    }
+
+    this.setState({
+      pickupTimeArry: newtime
+    })
   }
 
   toggleDateDropDown = () => {
@@ -150,53 +176,26 @@ class DateTime extends Component {
           <Card style={{ boxShadow: "1px 1px 3px #9E9E9E" }} className="p-4">
             <CardBody className="p-4">
               <Form>
-                <h5>Date & Time</h5>
+                <h5>Time</h5>
                 <div style={{ marginTop: 30 }} />
+                {this.props.orderType === "delivery" ?
                 <FormGroup style={{ marginTop: 10 }}>
-                  <h6>Date</h6>
-                  <UncontrolledDropdown
-                    isOpen={this.state.dropDownDate}
-                    toggle={() => this.toggleDateDropDown()}
+                  <h6>Estimated Delivery Time</h6>
+                  <Label
+                    style={{
+                      marginTop: 10,
+                      fontSize: 18,
+                      textAlign: "start",
+                      fontWeight: '600',
+                      color: color.secondary,
+                    }}
                   >
-                    <DropdownToggle
-                      style={{
-                        height: 40,
-                        width: "100%",
-                        color: "rgba(0,0,0, 0.5)",
-                        borderColor: "rgba(211,211,211, 0.5)",
-                        backgroundColor: "white"
-                      }}
-                      caret
-                    >
-                      <Label
-                        style={{
-                          cursor: "pointer",
-                          fontSize: 15,
-                          paddingLeft: 5,
-                          textAlign: "start",
-                          color:
-                            this.state.selectedDate === "" ? "gray" : "black",
-                          height: 12,
-                          width: "98%"
-                        }}
-                      >
-                        {this.state.selectedDate === ""
-                          ? "Select Date"
-                          : this.state.selectedDate}
-                      </Label>
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      <div>
-                        <Calendar
-                          onChange={this.handleDateChange.bind(this)}
-                          minDate={this.state.maxDate}
-                        />
-                      </div>
-                    </DropdownMenu>
-                  </UncontrolledDropdown>
-                </FormGroup>
+                    {moment(new Date().setMinutes(new Date().getMinutes() + this.props.deliveryTime)).format("HH:mm A")}
+                  </Label>
+                </FormGroup> : null }
+                {this.props.orderType === "pickup" ?
                 <FormGroup style={{ marginTop: 10 }}>
-                  <h6>Time</h6>
+                  <h6>Collection Time</h6>
                   <Input
                     value={this.state.selectedTime}
                     onChange={e => this.handleTimeChange(e)}
@@ -211,17 +210,18 @@ class DateTime extends Component {
                     <option value="" disabled>
                       Select Time
                     </option>
-                    {this.time.map(time => (
+                    {this.state.pickupTimeArry.map(time => (
                       <option
-                        style={{ color: "black" }}
-                        key={time}
-                        value={time}
+                        style={{ color: time.disabled ? color.lightGrey : "black" }}
+                        key={time.time}
+                        value={time.time}
+                        disabled={time.disabled}
                       >
-                        {time}
+                        {time.time}
                       </option>
                     ))}
                   </Input>
-                </FormGroup>
+                </FormGroup> : null }
 
                 {this.state.catererNotAvailable ?
                 <p style={{color:'red', marginTop: 10, fontSize: 14}}>
@@ -234,10 +234,13 @@ class DateTime extends Component {
                   style={{
                     paddingTop: 10,
                     paddingBottom: 10,
-                    marginTop: 20
+                    marginTop: 20,
+                    backgroundColor: color.secondaryLight,
+                    color: 'white',
+                    fontWeight: '600',
+                    fontSize: 16
                   }}
                   className="float-right"
-                  color="success"
                   disabled = {!this.state.isProceedAvailable ? true : false}
                   onClick={() => this.props.datetimeProceedClick(this.state.selectedDate, this.state.selectedTime)}
                 >

@@ -36,6 +36,7 @@ import {server} from "../../config"
 import { timeRanges } from  "../../utils"
 import { listCounties } from "../../utils";
 import Cookies from 'js-cookie';
+import color from "../../assets/color"
 import PropTypes from 'prop-types';
 import AutoCompleteAddress from '../../components/AutoCompleteAddress'
 
@@ -173,62 +174,22 @@ class Address extends Component {
   renderNewAddress() {
     return (
       <Form style={{ marginTop: 20 }}>
-        <FormGroup style={{ marginTop: 10 }}>
-          <h6>Building / Company Name</h6>
-          <Input
-            style={{fontSize:15, paddingLeft: 20, paddingRight: 20, paddingTop: 20, paddingBottom: 20, color: this.state.addressName === "" ? null : 'black'}}
-            value={this.state.addressName}
-            onChange={e => this.handleAddressName(e)}
-            type="text"
-            placeholder="Building / Company Name"
-            autoComplete="addressname"
-            invalid={this.state.isAddressNameEmpty ? true : false}
-          />
-          <FormFeedback className="help-block">
-            Please enter Building or Company Name
-          </FormFeedback>
-        </FormGroup>
 
         <FormGroup style={{ marginTop: 10 }}>
           <h6>Address</h6>
-          <UncontrolledDropdown isOpen={this.state.dropDownAddress}  toggle={() => this.toggleDropDownAddress()}>
-            <DropdownToggle
-              style={{
-                height: 40,
-                width: '100%',
-                color: "rgba(0,0,0, 0.5)",
-                borderColor: "rgba(211,211,211, 0.5)",
-                backgroundColor: "white",
-              }}
-              caret
-            > 
-            
-              <Label style={{ padding:0, margin: 0, cursor: "pointer", overflow: "hidden", fontSize: 15, marginRight:5, textAlign:'start', color: this.state.location === "" ? 'gray' : 'black', width: '90%' }}>
-              {this.state.selectedAddress}
-              </Label>
-            
-            </DropdownToggle>
-            <DropdownMenu style={{width: '100%'}}>
-              <Row style={{width: '100%'}}>
-                <Col style={{paddingRight: 0}} xs="10">
-                  <AutoCompleteAddress 
-                    borderRadius = {5}
-                    borderColor = 'rgba(211,211,211, 0.5)'
-                    paddingLeft = {10}
-                    paddingRight = {10}
-                    paddingTop = {5}
-                    paddingBottom = {5}
-                    fontSize = {15}
-                    color = 'black'
-                    height = {40}
-                    onPlaceChanged={this.showPlaceDetails.bind(this)} />
-                </Col>
-                <Col xs="2">
-                  <Button onClick={() => this.saveAddress()} style={{ height: '100%'}} className="bg-primary" color="primary">Save</Button>
-                </Col>
-              </Row>
-            </DropdownMenu>
-          </UncontrolledDropdown>
+        
+            <AutoCompleteAddress 
+              borderRadius = {5}
+              borderColor = 'rgba(211,211,211, 0.5)'
+              paddingLeft = {10}
+              paddingRight = {10}
+              paddingTop = {5}
+              paddingBottom = {5}
+              fontSize = {15}
+              color = 'black'
+              height = {40}
+              onPlaceChanged={this.showPlaceDetails.bind(this)} />
+               
         </FormGroup>
       </Form>
     );
@@ -260,10 +221,13 @@ class Address extends Component {
                 style={{
                     paddingTop: 10,
                     paddingBottom: 10,
-                    marginTop: 20
+                    marginTop: 20,
+                    backgroundColor: color.secondaryLight,
+                    color: 'white',
+                    fontWeight: '600',
+                    fontSize: 16
                 }}
                 className="float-right"
-                color="success"
                 disabled={this.state.isProceedAvailable ? false : true}
                 onClick={() => this.addressClicked()}
                 >

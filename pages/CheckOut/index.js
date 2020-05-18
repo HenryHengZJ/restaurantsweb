@@ -90,8 +90,8 @@ class CheckOut extends Component {
       name: "",
       isNameEmpty: false,
       isNextButtonActive: false,
-      menutitle: ["Date & Time", "Address", "Payment"],
-      selectedMenu: "Date & Time",
+      menutitle: ["Time", "Address", "Payment"],
+      selectedMenu: "Time",
       catererID: null,
       deliveryfee: null,
       fetchedmenu: null,
@@ -101,6 +101,7 @@ class CheckOut extends Component {
       cartloading: true,
       stripe: null,
       deliveryhours: null,
+      deliveryTime: null,
       location: null,
       disableDateTime: false,
       disableAddress: true,
@@ -143,7 +144,7 @@ class CheckOut extends Component {
   }
 
   getCustomerCart= () => {
-    var headers = {
+    /*var headers = {
       'Content-Type': 'application/json',
     }
 
@@ -168,11 +169,12 @@ class CheckOut extends Component {
       })
       .catch((error) => {
         this.getSessionStorage()
-      });
+      });*/
+      this.getSessionStorage()
   }
 
   getCatererDetail= () => {
-    var headers = {
+    /*var headers = {
       'Content-Type': 'application/json',
     }
 
@@ -193,7 +195,11 @@ class CheckOut extends Component {
         } 
       })
       .catch((error) => {
-      });
+      });*/
+      this.setState({
+        deliveryfee: 3,
+        deliveryTime: 30,
+      })
   }
   
   getSessionStorage = () => {
@@ -263,7 +269,7 @@ class CheckOut extends Component {
  
   datetimeProceedClick = (selectedDate, selectedTime) => {
     this.setState({
-      selectedMenu: this.state.cartToBeOrder !== null ? this.state.cartToBeOrder[0].orderType === 'delivery' ? "Address" : "Payment" : "Date & Time",
+      selectedMenu: this.state.cartToBeOrder !== null ? this.state.cartToBeOrder[0].orderType === 'delivery' ? "Address" : "Payment" : "Time",
       disableAddress: false,
       disabledPayment: this.state.cartToBeOrder !== null ? this.state.cartToBeOrder[0].orderType === 'delivery' ? true : false : true,
       selectedDate,
@@ -301,18 +307,23 @@ class CheckOut extends Component {
 
     var orderData = this.state.cartToBeOrder[0]
     const deliveryDate = moment(this.state.selectedDate, "dddd, DD/MM/YY").toDate();
-    orderData.deliverydate = deliveryDate
-    orderData.deliverytime = this.state.selectedTime
+ //   orderData.deliverydate = deliveryDate
+    orderData.deliveryTime = this.state.selectedTime
     orderData.orderItem = this.state.cartitem
     orderData.orderStatus = "pending"
+    orderData.orderType = this.state.orderType
     orderData.paymentType = this.state.makepaymentdetails.paymentType
     orderData.paymentIntentID = paymentIntentID
     orderData.paymentStatus = "incomplete"
-    delete orderData._id
 
-    if ( this.state.formatted_address !== "") {
-      orderData.deliveryaddress = this.state.formatted_address
+    if (this.state.orderType === "delivery" &&  this.state.formatted_address !== "") {
+      orderData.deliveryTime = this.state.selectedTime
+      orderData.deliveryAddress = this.state.formatted_address
     }
+    else  if (this.state.orderType === "pickup") {
+      orderData.pickupTime = this.state.selectedTime
+    }
+    delete orderData._id
 
     var headers = {
       'Content-Type': 'application/json',
@@ -467,9 +478,9 @@ class CheckOut extends Component {
     );
   }
 
-  renderDateTime() {
+  renderTime() {
     return (
-      <DateTime deliveryhours={this.state.deliveryhours} disabledAddressPayment={() => this.disabledAddressPayment()} datetimeProceedClick={(selectedDate, selectedTime) => this.datetimeProceedClick(selectedDate, selectedTime)}/>
+      <DateTime orderType={this.state.orderType} deliveryTime={this.state.deliveryTime} deliveryhours={this.state.deliveryhours} disabledAddressPayment={() => this.disabledAddressPayment()} datetimeProceedClick={(selectedDate, selectedTime) => this.datetimeProceedClick(selectedDate, selectedTime)}/>
     );
   }
 
@@ -479,7 +490,7 @@ class CheckOut extends Component {
         <Col xs="12" md="10">
           <Card style={{ boxShadow: "1px 1px 3px #9E9E9E" }} className="p-4">
             <CardBody className="p-4">
-              <p style={{fontWeight: '600'}}>Login or Register on FoodieBee</p>
+              <p style={{fontWeight: '600'}}>Login or Register</p>
               <Row>
                 <Col>
                   <Button
@@ -605,8 +616,8 @@ class CheckOut extends Component {
             }
           </td>
 
-          <td style={{ width: "20%", textAlign: "end", fontWeight: '500', color: 'black', fontSize: 16 }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
-            €{Number(cartitem[i].totalprice).toFixed(2)}
+          <td style={{ width: "20%", textAlign: "end", fontWeight: '500', color: 'black', fontSize: 16 }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalunitprice, cartitem[i].instruction)}>
+            €{Number(cartitem[i].totalunitprice).toFixed(2)}
           </td>
         </tr>
       );
@@ -909,8 +920,8 @@ class CheckOut extends Component {
                   </Col>
 
                   <Col style={{ marginTop: 20 }} xs="12">
-                    {this.state.selectedMenu === "Date & Time"
-                      ? this.state.userName === "" ? this.renderInvalidUser() : this.renderDateTime()
+                    {this.state.selectedMenu === "Time"
+                      ? this.state.userName === "" ? this.renderInvalidUser() : this.renderTime()
                       : this.state.selectedMenu === "Address"
                       ? this.state.userName === "" ? this.renderInvalidUser() : this.renderAddress()
                       : this.state.selectedMenu === "Payment"

@@ -42,7 +42,7 @@ export function listCounties() {
 export function timeRanges() {
   var timerange = [];
   var countval = 0
-  for(var x = 500; x < 2400; x+=30) {
+  for(var x = 1200; x < 2400; x+=30) {
     if (countval === 2) {
       x = (x + 100) - 60
       countval = 0

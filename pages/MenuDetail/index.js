@@ -94,6 +94,7 @@ class MenuDetail extends Component {
       cartToBeOrder: [],
       fetchedmenu: [
         {
+          _id: "123",
           title: "Ebi Furai",
           category: 'Side Dishes',
           descrip: "Deep fried king prawns coated in seasonal breadcrumbs served with sweet Japanese sauce",
@@ -101,6 +102,7 @@ class MenuDetail extends Component {
           priceperunit: 5.9,
         },
         {
+          _id: "123",
           title: "Yasai Gyoza",
           category: 'Side Dishes',
           descrip: "Finely chopped seasonal vegetables dumpling steamed and then pan fried, served with traditional gyoza sauce",
@@ -108,6 +110,7 @@ class MenuDetail extends Component {
           priceperunit: 6.8,
         },
         {
+          _id: "123",
           title: "Yakitori",
           category: 'Side Dishes',
           descrip: "Chicken and spring onion grilled on skewer served with yakitori sauce",
@@ -115,6 +118,7 @@ class MenuDetail extends Component {
           priceperunit: 6.9,
         },
         {
+          _id: "123",
           title: "Sake / Salmon Nigiri",
           category: 'Sushi Nigiri',
           descrip: "Rice ball served with a slice of filling (2 pcs)",
@@ -122,6 +126,7 @@ class MenuDetail extends Component {
           priceperunit: 4,
         },
         {
+          _id: "123",
           title: "Suzuki / Sea Bass Nigiri",
           category: 'Sushi Nigiri',
           descrip: "Rice ball served with a slice of filling. (2 pcs)",
@@ -129,6 +134,7 @@ class MenuDetail extends Component {
           priceperunit: 5,
         },
         {
+          _id: "123",
           title: "Ebi / Prawn Nigiri",
           category: 'Sushi Nigiri',
           descrip: "Rice ball served with a slice of filling. (2 pcs)",
@@ -136,13 +142,35 @@ class MenuDetail extends Component {
           priceperunit: 4,
         },
         {
+          _id: "123",
           title: "Yasai Tempura Set",
           category: 'Tempura Set',
           descrip: "Sweet potato, aubergine, shitake mushroom, asparagus, carrot, lotus roots, green paper and onion coated in a light crispy batter. Served with steamed rice, miso soup",
           markitem: [],
           priceperunit: 12.9,
+          selection: [
+            {
+              selectioncategory: "Meat",
+              selectionmaxnum: 1,
+              selectionitem: [
+                {
+                  selectionitemtitle: "Chicken",
+                  selectionitemprice: 0,
+                },
+                {
+                  selectionitemtitle: "Beef",
+                  selectionitemprice: 2,
+                },
+                {
+                  selectionitemtitle: "Prawn",
+                  selectionitemprice: 2,
+                }
+              ]
+            }
+          ],
         },
         {
+          _id: "123",
           title: "Seafood Tempura",
           category: 'Tempura Set',
           descrip: "Fresh mix seafood coated in a light crispy batter served with steamed rice, miso soup",
@@ -150,6 +178,7 @@ class MenuDetail extends Component {
           priceperunit: 13.9,
         },
         {
+          _id: "123",
           title: "Tempura Moriawase",
           category: 'Tempura Set',
           descrip: "Assorted mix vegetable and fresh seafood coated in a light crispy batter served with steam rice, miso soup",
@@ -157,6 +186,7 @@ class MenuDetail extends Component {
           priceperunit: 13.9,
         },
         {
+          _id: "123",
           title: "Teppan Chicken Teriyaki",
           category: 'Teppan Teriyaki',
           descrip: "Grilled 8oz of chicken breast served with stir fried vegetables and sweet teriyaki sauce",
@@ -164,6 +194,7 @@ class MenuDetail extends Component {
           priceperunit: 13.9,
         },
         {
+          _id: "123",
           title: "Teppan Salmon Teriyaki",
           category: 'Teppan Teriyaki',
           descrip: "Grilled fresh supreme of salmon served with stir fried vegetables and sweet teriyaki sauce",
@@ -171,6 +202,7 @@ class MenuDetail extends Component {
           priceperunit: 15.9,
         },
         {
+          _id: "123",
           title: "Teppan Beef Teriyaki",
           category: 'Teppan Teriyaki',
           descrip: "Grilled 9oz prime Irish strip loin steak served with stir fried vegetables and sweet teriyaki sauce",
@@ -330,12 +362,12 @@ class MenuDetail extends Component {
     }
   };
 
-  cartItemClicked = (_id, quantity, selection, totalprice, instruction) => {
+  cartItemClicked = (_id, quantity, selection, totalunitprice, instruction) => {
     var menuindex = this.state.fetchedmenu.findIndex(x => x._id==_id);
     this.setState({
       menuModalOpen: !this.state.menuModalOpen,
       activeMenu: this.state.fetchedmenu[menuindex],
-      selectedPrice: totalprice,
+      selectedPrice: totalunitprice,
       selectedSelection: typeof selection === 'undefined' ? [] : selection,
       selectedQuantity: quantity,
       specialInstructionOpen: typeof instruction === 'undefined' ? false : true,
@@ -403,7 +435,7 @@ class MenuDetail extends Component {
         var singlemenuprice = fetchedmenu[index].priceperunit
         var quantitychosen = cartitem[i].quantity
        // cartTotalPrice =  cartTotalPrice + (quantitychosen * singlemenuprice);
-        cartTotalPrice =  cartTotalPrice + cartitem[i].totalprice;
+        cartTotalPrice =  cartTotalPrice + cartitem[i].totalunitprice;
       }
       else {
         cartTotalPrice =  cartTotalPrice;
@@ -423,7 +455,7 @@ class MenuDetail extends Component {
 
   calculateMenuTotalPrice = (priceperunit) => {
     const {selectedQuantity, selectedSelection, selectedPrice} = this.state
-    var totalprice = selectedPrice;
+    var totalunitprice = selectedPrice;
     var totalSelectedSelectionPrice = 0;
 
     for (let i = 0; i < selectedSelection.length; i++) { 
@@ -433,10 +465,10 @@ class MenuDetail extends Component {
     }
 
     priceperunit = priceperunit + totalSelectedSelectionPrice;
-    totalprice = priceperunit * selectedQuantity;
+    totalunitprice = priceperunit * selectedQuantity;
   
     this.setState({
-      selectedPrice: totalprice
+      selectedPrice: totalunitprice
     })
   }
 
@@ -449,7 +481,7 @@ class MenuDetail extends Component {
         var singlemenuprice = fetchedmenu[index].priceperunit
         var quantitychosen = cartitem[i].quantity
        // cartTotalPrice =  cartTotalPrice + (quantitychosen * singlemenuprice);
-        cartTotalPrice =  cartTotalPrice + cartitem[i].totalprice;
+        cartTotalPrice =  cartTotalPrice + cartitem[i].totalunitprice;
       }
       else {
         cartTotalPrice =  cartTotalPrice;
@@ -550,10 +582,11 @@ class MenuDetail extends Component {
 
     var cartInnerItem = {
       title: activeMenu.title,
-      serveperunit: activeMenu.serveperunit,
+      descrip: activeMenu.descrip,
       menuID: activeMenu._id,
+      priceperunit: activeMenu.priceperunit,
       quantity: selectedQuantity,
-      totalprice: itemprice,
+      totalunitprice: itemprice,
     }
 
     if (specialInstruction !== '') {
@@ -683,10 +716,10 @@ class MenuDetail extends Component {
     }
 
     if (selectedSelection.selectedPrice === 0) {
-      updateCartInnerItem.totalprice = activeMenu.priceperunit
+      updateCartInnerItem.totalunitprice = activeMenu.priceperunit
     }
     else {
-      updateCartInnerItem.totalprice = selectedPrice
+      updateCartInnerItem.totalunitprice = selectedPrice
     }
 
     if (specialInstruction !== '') {
@@ -708,7 +741,7 @@ class MenuDetail extends Component {
       orderType: orderType,
       catererID: restaurantInfo.catererID,
       cartitem: newCartItem,
-      totalOrderPrice: this.calculateCartReadyToBeOrderPrice(updateCartInnerItem.totalprice),
+      totalOrderPrice: this.calculateCartReadyToBeOrderPrice(updateCartInnerItem.totalunitprice),
       deliveryfee: this.state.restaurantInfo.deliveryfee
     }
 
@@ -759,7 +792,7 @@ class MenuDetail extends Component {
     
     const {selectedPrice, selectedSelection, selectedQuantity, activeMenu, specialInstruction, cartToBeOrder, orderType, restaurantInfo} = this.state;
 
-    var itemprice = 0 - this.state.cartitem[index].totalprice
+    var itemprice = 0 - this.state.cartitem[index].totalunitprice
     var newCartItem = this.state.cartitem.slice();
     newCartItem.splice(index, 1)
 
@@ -1318,7 +1351,7 @@ class MenuDetail extends Component {
 
     for (let i = 0; i < selection.length; i++) {
       itemsarray.push(
-        <p key={i} style={{textSize: 13, opacity: 0.7, margin: 0 }}>
+        <p key={i} style={{textSize: 13, opacity: 1, margin: 0 }}>
           <span>&#8226;</span> {selection[i].selectioncategory}:
           {this.renderCartSelectionItem(selection[i].selectionitem)}
         </p>
@@ -1333,7 +1366,7 @@ class MenuDetail extends Component {
 
     for (let i = 0; i < 1; i++) {
       itemsarray.push(
-        <p key={i} style={{ textSize: 13, opacity: 0.7, margin: 0 }}>
+        <p key={i} style={{ textSize: 13, opacity: 1, margin: 0 }}>
           <span>&#8226;</span> Instruction:
           <div>
             <Label style={{ cursor: 'pointer', opacity: 0.7, }}>
@@ -1347,7 +1380,7 @@ class MenuDetail extends Component {
     return <div>{itemsarray}</div>;
   }
 
-  renderTableItems() {
+  renderCartTableItems() {
     var itemarray = [];
 
     var cartitem = this.state.cartitem;
@@ -1355,10 +1388,10 @@ class MenuDetail extends Component {
     for (let i = 0; i < cartitem.length; i++) {
       itemarray.push(
         <tr style={{cursor: 'pointer',}}>
-          <td style={{  fontWeight: "500", cursor: 'pointer', fontSize: 16 }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
+          <td style={{  fontWeight: "500", cursor: 'pointer', fontSize: 16 }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalunitprice, cartitem[i].instruction)}>
             {cartitem[i].quantity}
           </td>
-          <td style={{  textAlign: "start", cursor: 'pointer' }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
+          <td style={{  textAlign: "start", cursor: 'pointer' }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalunitprice, cartitem[i].instruction)}>
             <Dotdotdot clamp={2}>
               <p
                 style={{
@@ -1383,8 +1416,8 @@ class MenuDetail extends Component {
             }
           </td>
 
-          <td style={{ width: "20%", textAlign: "start", cursor: 'pointer', fontWeight: '500', color: 'black', fontSize: 16 }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalprice, cartitem[i].instruction)}>
-            €{Number(cartitem[i].totalprice).toFixed(2)}
+          <td style={{ width: "20%", textAlign: "start", cursor: 'pointer', fontWeight: '500', color: 'black', fontSize: 16 }} onClick={() => this.cartItemClicked(cartitem[i].menuID, cartitem[i].quantity, cartitem[i].selection, cartitem[i].totalunitprice, cartitem[i].instruction)}>
+            €{Number(cartitem[i].totalunitprice).toFixed(2)}
           </td>
           <td
             style={{
@@ -1415,7 +1448,7 @@ class MenuDetail extends Component {
   renderNotEmptyCart() {
     return (
       <CardBody style={{ textAlign: "center" }}>
-        <Table borderless>{this.renderTableItems()}</Table>
+        <Table borderless>{this.renderCartTableItems()}</Table>
 
         <Row>
           <Col>

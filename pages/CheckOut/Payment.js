@@ -49,6 +49,7 @@ import "./styles.css"
 import PropTypes from 'prop-types';
 import ContentLoader, { Facebook } from "react-content-loader";
 import img from "../../assets/img"
+import color from "../../assets/color"
 import 'react-toastify/dist/ReactToastify.css';
 
 const propTypes = {
@@ -99,6 +100,7 @@ class Payment extends Component {
       })
       .catch((error) => {
           this.setState({
+            empty: true,
             loading: false
           })
       });
@@ -403,14 +405,14 @@ class Payment extends Component {
         </Col>
         <Col xs="12">
           <p
-            style={{ fontSize: 15, letterSpacing: 1.2, marginTop: 20, marginBottom:20 }}
+            style={{ fontSize: 15, marginTop: 20, marginBottom:20 }}
           >
             You have no saved cards yet.
           </p>
         </Col>
         <Col xs="12">
-          <Button disabled={this.state.loading ? true : false} onClick={() => this.togglePaymentCardModal()} style={{paddingTop:10, paddingBottom: 10}} color="primary" >Add Payment Card</Button>
-          <Button disabled className="float-right" style={{paddingTop:10, paddingBottom: 10}} color="success" >Continue to Check Out</Button>
+          <Button disabled={this.state.loading ? true : false} onClick={() => this.togglePaymentCardModal()} style={{paddingTop:10, paddingBottom: 10, backgroundColor: color.primary, color: 'white', fontSize: 16, fontWeight: '600' }} >Add Payment Card</Button>
+          <Button disabled className="float-right" style={{paddingTop:10, paddingBottom: 10, backgroundColor: color.secondary, color: 'white', fontSize: 16, fontWeight: '600'}} color="success" >Continue to Check Out</Button>
         </Col>
       </Row>
     );

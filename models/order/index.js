@@ -17,29 +17,31 @@ var selectionSchema = mongoose.Schema({
 });
 
 var cartSchema = mongoose.Schema({
-	title: String,
-	serveperunit: Number,
-	quantity: Number,
-	instruction: String,
 	menuID: ObjectId,
-	totalprice: Number,
+	title: String,
+	descrip: String,
+	quantity: Number,
+	priceperunit: Number,
+	instruction: String,
+	totalunitprice: Number,
+	src: String,
 	selection: [selectionSchema],
 });
 
 var orderSchema = mongoose.Schema({
+	orderNumber: String,
 	orderItem: [cartSchema],
-	catererID: ObjectId,
 	customerID: ObjectId,
-	deliveryfee: Number,
+	customerType: String,
 	totalOrderPrice: Number,
 	orderType: String,
 	orderStatus: String,
-	paymentType: String,
-	deliveryaddress: String,
-	deliverydate: Date,
-	deliverytime: String,
 	paymentIntentID: String,
+	paymentType: String,
 	paymentStatus: String,
+	pickupTime: Date,
+	deliveryTime: Date,
+	deliveryAddress: String,
 }, {
     timestamps: true
 });
