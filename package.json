@@ -61,7 +61,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pretty-checkbox": "^3.0.3",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "react": "^16.8.6",
     "react-content-loader": "^4.2.1",
     "react-cookie": "^4.0.0",
