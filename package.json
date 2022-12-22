@@ -43,7 +43,7 @@
     "google-map-react": "^1.1.5",
     "handlebars": "^4.1.2",
     "js-cookie": "^2.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
